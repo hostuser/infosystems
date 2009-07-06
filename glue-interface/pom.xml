@@ -10,13 +10,6 @@
 	<artifactId>glue-interface</artifactId>
 	<version>0.4-SNAPSHOT</version>
 
-	<repositories>
-		<repository>
-			<id>VPAC maven repository</id>
-			<url>http://hudson.vpac.org/maven_repository</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>external.glue-interface</groupId>

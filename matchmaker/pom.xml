@@ -11,14 +11,6 @@
   <description>ARCS Matchmaker (aka very simple metascheduler)</description>
   
   
-  <repositories>
-		<repository>
-			<id>VPAC maven repository</id>
-			<url>http://hudson.vpac.org/maven_repository</url>
-		</repository>
-  </repositories>
-	
-	
   <dependencies>  
   	<!-- <dependency>
       <groupId>au.edu.sapac.grid</groupId>
