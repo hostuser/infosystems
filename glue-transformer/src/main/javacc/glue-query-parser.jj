@@ -1,0 +1,248 @@
+options {
+  STATIC=false;
+  IGNORE_CASE=true;
+  ERROR_REPORTING=true;
+  BUILD_TOKEN_MANAGER=true;
+  SANITY_CHECK=true;
+  TOKEN_MANAGER_USES_PARSER=true;
+}
+PARSER_BEGIN(GLUEQueryParser)
+package au.edu.sapac.grid.glueschema.transform;
+
+import au.edu.sapac.grid.glueschema.util.GLUEClassMapper;
+import au.edu.sapac.grid.glueschema.util.XPathQueryHelper;
+import au.edu.sapac.grid.glueschema.transform.GLUERequirement;
+import java.io.StringReader;
+
+public class GLUEQueryParser {
+  private GLUERequirement glueRequirement;
+  public static void main(String[] args)
+      throws ParseException, TokenMgrError {
+    System.out.print("GLUE Schema Query: ");
+    GLUEQueryParser parser = new GLUEQueryParser(System.in);
+    System.out.println("Equivalent XPath Query: " + parser.parseStdIn());
+  }
+}
+PARSER_END(GLUEQueryParser)
+
+SKIP: {" "}
+TOKEN: /* RESERVED TOKENS */
+{
+	<EOL: "\n"|"\r"|"\r\n">	
+  | <AND: "and">
+  | <OR: "or">
+  | <GET: "get">
+  | <WHERE: "where">
+  | <GREATERTHAN: ">">
+  | <LESSERTHAN: "<">
+  | <NOTEQUAL: "!=">
+  | <EQUAL: "=">
+  | <GREATEROREQUAL: ">=">
+  | <LESSEROREQUAL: "<=">
+  | <LIKE: "like">
+  | <AMPERSAND: "&">
+  | <TRUE: "true">
+  | <FALSE: "false">
+  | <LPAREN: "(">
+  | <RPAREN: ")">
+}
+TOKEN: 
+{ 
+  <STRING: "'" (~["'"])+ "'"> 
+  | <NUMBER: (<DIGIT>)+ | (<DIGIT>)+"."(<DIGIT>)+ | (<DIGIT>)+"." | "."(<DIGIT>)+>  
+  | <GLUEFIELD: (<CHAR>)+"."(<CHAR>)+(<DIGIT>)*>
+  | <GLUEENTITY: (<CHAR>)+>
+  | <#CHAR: (["a"-"z"])+>
+  | <#DIGIT: (["0"-"9"])+>
+}
+
+String parseStdIn():
+{
+	String xpathQuery;
+}
+{
+  xpathQuery = parse()
+  <EOL>
+  { 
+  	return xpathQuery; 
+  }
+}
+
+String parse():
+{
+	Token entityToBeReturned;
+    try {
+      Class glueRequirementClass = Class.forName(
+        GLUEClassMapper.getClass("SiteRequirement"));
+      glueRequirement = (GLUERequirement)glueRequirementClass.newInstance();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    }
+}
+{
+  <GET>
+  entityToBeReturned = <GLUEENTITY>
+  (
+  <WHERE>
+  RequirementCondition()
+  )?
+  { 
+        return XPathQueryHelper.getXPathForStringEntity(
+	                glueRequirement.getXPathQueryString(entityToBeReturned.toString()),
+ 	                                entityToBeReturned.toString());  
+  }
+}
+
+void RequirementCondition():
+{  }
+{
+  MixedCondition()
+  (
+    <AND>
+    MixedCondition()
+  )*
+}
+
+void MixedCondition():
+{  
+    String xpathQuery;
+    GLUEQueryCondition condition;
+}
+{
+  condition = SingleCondition()
+  {
+    glueRequirement.processCondition(condition);
+  }
+  /*
+  |
+  <LPAREN>
+  { 
+    // need to process the output of group condition
+  }
+  GroupCondition()
+  <RPAREN>
+  */
+}
+
+void GroupCondition():
+{ 
+    String glueFieldRestriction;
+    GLUEQueryCondition condition;
+    String xpathQuery = "";
+    Token andOrToken;
+    // need to check if condition are the same if not throw an 
+    // an exception 
+}
+{
+  condition = SingleCondition()
+  { 
+    // process the condition and convert to xpath 
+    // xpathQuery = something
+    // save glueField to the glueFieldRestriction for this GroupCondition
+    glueFieldRestriction = condition.getOperand1();
+  }
+  (
+    andOrToken = AndOr()
+    condition = SingleCondition()
+    {
+      if (condition.getOperand1().equals(glueFieldRestriction)) {
+        // do some further processing of the current xpath query
+        // xpathQuery = new xpath
+      }
+      else {
+        throw new ParseException("Group condition does not contain the same GLUE fields");
+      }
+    }
+  )*
+}
+
+GLUEQueryCondition SingleCondition():
+{ 
+    Token glueFieldToken, relOpToken, glueFieldValueToken; 
+    String relOp;
+    String glueFieldValue;
+    GLUEQueryCondition condition;
+}
+{
+  glueFieldToken = <GLUEFIELD>
+  relOpToken = RelativeOperator()
+  glueFieldValueToken = GlueFieldValues()
+  { 
+    if (glueFieldValueToken.kind == GLUEQueryParserConstants.STRING && 
+  	    !(relOpToken.kind == GLUEQueryParserConstants.EQUAL ||
+  	    relOpToken.kind == GLUEQueryParserConstants.NOTEQUAL ||
+  	    relOpToken.kind == GLUEQueryParserConstants.LIKE)) {
+  	  // then this is not acceptable
+  	  throw new ParseException("Error on token column " + relOpToken.beginColumn + ". Only '=' and '!=' operators are allowed for string and boolean comparisons");
+    }
+    if ((glueFieldValueToken.kind == GLUEQueryParserConstants.TRUE ||
+  	    glueFieldValueToken.kind == GLUEQueryParserConstants.FALSE) && 
+  	    !(relOpToken.kind == GLUEQueryParserConstants.EQUAL ||
+  	    relOpToken.kind == GLUEQueryParserConstants.NOTEQUAL)) {
+  	  // then this is not acceptable
+  	  throw new ParseException("Error on token column " + relOpToken.beginColumn + ". Only '=' and '!=' operators are allowed for boolean comparisons");
+    }
+    return new GLUEQueryCondition(glueFieldToken.toString(), relOpToken.toString(), glueFieldValueToken.toString());
+  }
+}
+
+Token AndOr():
+{ 
+    Token t;
+}
+{
+  t = <AND>
+  { return t; }
+  |
+  t = <OR>
+  { return t; }
+}
+
+Token RelativeOperator():
+{
+    Token t;
+}
+{
+  t = <GREATERTHAN>
+  { return t; }
+  |
+  t = <LESSERTHAN>
+  { return t; }
+  |
+  t = <EQUAL>
+  { return t; }
+  |
+  t = <NOTEQUAL>
+  { return t; }
+  |
+  t = <LIKE>
+  { return t; }
+  |
+  t = <GREATEROREQUAL>
+  { return t; }
+  |
+  t = <LESSEROREQUAL>
+  { return t; }
+}
+
+Token GlueFieldValues():
+{
+    Token t;
+}
+{
+  t = <TRUE>
+  { return t; }
+  |
+  t = <FALSE>
+  { return t; }
+  |
+  t = <STRING>
+  { return t; }
+  |
+  t = <NUMBER>
+  { return t; }
+}

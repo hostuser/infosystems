@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- GLUE Schema 1.2 - mapping to XML Schema            -->
+<!-- Author: Gerson Galang (gerson.galang@sapac.edu.au) -->
+<!-- Institution: SAPAC - Australia                     -->
+<!-- License: see LICENSE file for EGEE Middleware      -->
+<!-- Revision number: 2 date: 28 March 2008             -->
+<xs:schema xmlns="http://grid.apac.edu.au/glueschema/Spec/V12/R2" xmlns:glue="http://forge.cnaf.infn.it/glueschema/Spec/V12/R2" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://grid.apac.edu.au/glueschema/Spec/V12/R2" elementFormDefault="qualified">
+	
+	<!-- Lets include the original (official) GLUE 1.2 schema, modified to use a SubClusterType -->
+	<xs:import namespace="http://forge.cnaf.infn.it/glueschema/Spec/V12/R2" schemaLocation="GLUESchema12R2.xsd"/>
+	<!-- Now lets define the SoftwarePackage type. -->
+	<xs:complexType name="SoftwarePackageType">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string" minOccurs="0"/>
+			<xs:element name="Version" type="xs:string" minOccurs="0"/>
+			<xs:element name="Path" type="xs:string" minOccurs="0"/>
+			<xs:element name="QueueResource" type="xs:string" minOccurs="0"/>
+			<xs:element name="Module" type="xs:string" minOccurs="0"/>
+			<xs:element name="SerialAvail" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="ParallelAvail" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="ParallelMaxCPUs" type="xs:integer" minOccurs="0"/>
+                        <xs:element name="SupportedParallelType" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                        <xs:element name="LicenseType" type="xs:string" minOccurs="0"/>
+			<xs:element name="TotalCPUSeats" type="xs:integer" minOccurs="0"/>
+			<xs:element name="FreeCPUSeats" type="xs:integer" minOccurs="0"/>
+			<xs:element name="TotalJobSeats" type="xs:integer" minOccurs="0"/>
+			<xs:element name="FreeJobSeats" type="xs:integer" minOccurs="0"/>
+			<xs:element name="TotalUserSeats" type="xs:integer" minOccurs="0"/>
+			<xs:element name="FreeUserSeats" type="xs:integer" minOccurs="0"/>
+			<xs:element name="ACL" type="glue:ACLType" minOccurs="0"/>
+			<xs:element name="VOView" type="SoftPackVOViewType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="SoftwareExecutable" type="SoftwareExecutableType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Data" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Key" type="xs:string"/>
+						<xs:element name="Value" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="LocalID" type="glue:LocalIDType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="SoftwareExecutableType">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string" minOccurs="0"/>
+			<xs:element name="Path" type="xs:string" minOccurs="0"/>
+			<xs:element name="SerialAvail" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="ParallelAvail" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="ParallelMaxCPUs" type="xs:integer" minOccurs="0"/>
+			<xs:element name="ParallelType" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="LocalID" type="glue:LocalIDType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="SoftPackVOViewType">
+		<xs:sequence>
+			<xs:element name="ACL" type="glue:ACLType" minOccurs="0"/>
+			<xs:element name="TotalCPUSeats" type="xs:integer" minOccurs="0"/>
+			<xs:element name="FreeCPUSeats" type="xs:integer" minOccurs="0"/>
+			<xs:element name="TotalJobSeats" type="xs:integer" minOccurs="0"/>
+			<xs:element name="FreeJobSeats" type="xs:integer" minOccurs="0"/>
+			<xs:element name="TotalUserSeats" type="xs:integer" minOccurs="0"/>
+			<xs:element name="FreeUserSeats" type="xs:integer" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="LocalID" type="glue:LocalIDType" use="required"/>
+	</xs:complexType>
+
+	<!-- this is so the software map can get SoftwarePackage from this namespace -->
+	<xs:element name="SoftwarePackage" type="SoftwarePackageType"/>
+
+	<!-- Now lets define the APACSubCluster type. -->
+	<xs:complexType name="APACSubClusterType">
+		<xs:complexContent>
+			<xs:extension base="glue:SubClusterType">
+				<xs:sequence>
+					<xs:element ref="SoftwarePackage" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

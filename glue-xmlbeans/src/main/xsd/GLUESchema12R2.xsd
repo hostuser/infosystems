@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- GLUE Schema 1.2 - mapping to XML Schema                  -->
+<!-- Author: Sergio Andreozzi (sergio.andreozzi@cnaf.infn.it) -->
+<!-- Institution: INFN - Italy                                -->
+<!-- License: see LICENSE file for EGEE Middleware            -->
+<!-- Revision number: 2 date: 22 May 2006                -->
+<xs:schema xmlns="http://forge.cnaf.infn.it/glueschema/Spec/V12/R2" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://forge.cnaf.infn.it/glueschema/Spec/V12/R2" elementFormDefault="qualified">
+	<!-- simple types definition -->
+	<xs:simpleType name="UniqueIDType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="LocalIDType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="DirType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<!-- enumerations definition -->
+	<xs:simpleType name="ServiceStatusEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="OK"/>
+			<xs:enumeration value="Warning"/>
+			<xs:enumeration value="Critical"/>
+			<xs:enumeration value="Unknown"/>
+			<xs:enumeration value="Other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="JobStatusEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Queued"/>
+			<xs:enumeration value="Running"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CEStatusEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Production"/>
+			<xs:enumeration value="Queueing"/>
+			<xs:enumeration value="Draining"/>
+			<xs:enumeration value="Closed"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LRMSTypeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="OpenPBS"/>
+			<xs:enumeration value="LSF"/>
+			<xs:enumeration value="Condor"/>
+			<xs:enumeration value="BQS"/>
+			<xs:enumeration value="CondorG"/>
+			<xs:enumeration value="FBSNG"/>
+			<xs:enumeration value="Torque"/>
+			<xs:enumeration value="PBSPro"/>
+			<xs:enumeration value="SGE"/>
+			<xs:enumeration value="NQE"/>
+			<xs:enumeration value="fork"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LRMSTypeOpenEnum">
+		<xs:union memberTypes="LRMSTypeEnum xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="ServiceTypeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="org.glite.wms"/>
+			<xs:enumeration value="org.glite.rgma.LatestProducer"/>
+			<xs:enumeration value="org.glite.rgma.StreamProducer"/>
+			<xs:enumeration value="org.glite.rgma.DBProducer"/>
+			<xs:enumeration value="org.glite.rgma.CanonicalProducer"/>
+			<xs:enumeration value="org.glite.rgma.Archiver"/>
+			<xs:enumeration value="org.glite.rgma.Consumer"/>
+			<xs:enumeration value="org.glite.rgma.Registry"/>
+			<xs:enumeration value="org.glite.rgma.Schema"/>
+			<xs:enumeration value="org.glite.rgma.Browser"/>
+			<xs:enumeration value="org.glite.rgma.PrimaryProducer"/>
+			<xs:enumeration value="org.glite.rgma.SecondaryProducer"/>
+			<xs:enumeration value="org.glite.rgma.OnDemandProducer"/>
+			<xs:enumeration value="org.glite.voms"/>
+			<xs:enumeration value="org.glite.FiremanCatalog"/>
+			<xs:enumeration value="org.glite.SEIndex"/>
+			<xs:enumeration value="org.glite.Metadata"/>
+			<xs:enumeration value="org.glite.ChannelManagement"/>
+			<xs:enumeration value="org.glite.FileTransfer"/>
+			<xs:enumeration value="org.glite.FileTransferStats"/>
+			<xs:enumeration value="org.glite.ChannelAgent"/>
+			<xs:enumeration value="org.glite.KeyStore"/>
+			<xs:enumeration value="org.glite.FAS"/>
+			<xs:enumeration value="org.glite.gliteIO"/>
+			<xs:enumeration value="SRM"/>
+			<xs:enumeration value="gsiftp"/>
+			<xs:enumeration value="org.edg.local-replica-catalog"/>
+			<xs:enumeration value="org.edg.replica-metadata-catalog"/>
+			<xs:enumeration value="org.edg.SE"/>
+			<xs:enumeration value="it.infn.GridICE"/>
+			<xs:enumeration value="MyProxy"/>
+			<xs:enumeration value="GUMS"/>
+			<xs:enumeration value="GridCat"/>
+			<xs:enumeration value="edu.caltech.cacr.monalisa"/>
+			<xs:enumeration value="OpenSSH"/>
+			<xs:enumeration value="MDS-GIIS"/>
+			<xs:enumeration value="BDII"/>
+			<xs:enumeration value="RLS"/>
+			<xs:enumeration value="data-location-interface"/>
+			<xs:enumeration value="pbs.torque.server"/>
+			<xs:enumeration value="pbs.torque.maui"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ServiceTypeOpenEnum">
+		<xs:union memberTypes="ServiceTypeEnum xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="SEAccessProtocolEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="gsiftp"/>
+			<xs:enumeration value="nfs"/>
+			<xs:enumeration value="afs"/>
+			<xs:enumeration value="rfio"/>
+			<xs:enumeration value="gsirfio"/>
+			<xs:enumeration value="dcap"/>
+			<xs:enumeration value="gsidcap"/>
+			<xs:enumeration value="root"/>
+			<xs:enumeration value="https"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SEAccessProtocolOpenEnum">
+		<xs:union memberTypes="SEAccessProtocolEnum xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="SEControlProtocolEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SRM"/>
+			<xs:enumeration value="org.edg.SE"/>
+			<xs:enumeration value="classic"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SEControlProtocolOpenEnum">
+		<xs:union memberTypes="SEControlProtocolEnum xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="SEArchitectureEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="disk"/>
+			<xs:enumeration value="tape"/>
+			<xs:enumeration value="multidisk"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SATypeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="volatile"/>
+			<xs:enumeration value="durable"/>
+			<xs:enumeration value="permanent"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--complex types definition -->
+	<xs:complexType name="ACLType">
+		<xs:sequence>
+			<xs:element name="Rule" type="xs:string" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="JobType">
+		<xs:sequence>
+			<xs:element name="GlobalID" type="xs:string" minOccurs="0"/>
+			<xs:element name="LocalOwner" type="xs:string" minOccurs="0"/>
+			<xs:element name="GlobalOwner" type="xs:string" minOccurs="0"/>
+			<xs:element name="Status" type="JobStatusEnum" minOccurs="0"/>
+			<xs:element name="SchedulerSpecific" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="LocalID" type="LocalIDType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="SEAccessProtocolType">
+		<xs:sequence>
+			<xs:element name="Endpoint" type="xs:anyURI" minOccurs="0"/>
+			<xs:element name="Type" type="SEAccessProtocolOpenEnum" minOccurs="0"/>
+			<xs:element name="Version" type="xs:string" minOccurs="0"/>
+			<xs:element name="Capability" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="LocalID" type="LocalIDType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="SEControlProtocolType">
+		<xs:sequence>
+			<xs:element name="Endpoint" type="xs:anyURI" minOccurs="0"/>
+			<xs:element name="Type" type="SEControlProtocolOpenEnum" minOccurs="0"/>
+			<xs:element name="Version" type="xs:string" minOccurs="0"/>
+			<xs:element name="Capability" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="LocalID" type="LocalIDType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="OperatingSystemType">
+		<xs:attribute name="Name" type="xs:string"/>
+		<xs:attribute name="Release" type="xs:string"/>
+		<xs:attribute name="Version" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="ProcessorType">
+		<xs:attribute name="Vendor" type="xs:string"/>
+		<xs:attribute name="Model" type="xs:string"/>
+		<xs:attribute name="ClockSpeed" type="xs:integer"/>
+		<xs:attribute name="InstructionSet" type="xs:string"/>
+		<xs:attribute name="OtherDescription" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="ProcessorFullType">
+		<xs:complexContent>
+			<xs:extension base="ProcessorType">
+				<xs:attribute name="CacheL1" type="xs:integer"/>
+				<xs:attribute name="CacheL1I" type="xs:integer"/>
+				<xs:attribute name="CacheL1D" type="xs:integer"/>
+				<xs:attribute name="CacheL2" type="xs:integer"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="LoadType">
+		<xs:attribute name="Last1Min" type="xs:integer"/>
+		<xs:attribute name="Last5Min" type="xs:integer"/>
+		<xs:attribute name="Last15Min" type="xs:integer"/>
+	</xs:complexType>
+	<xs:complexType name="HostArchitectureType">
+		<xs:attribute name="PlatformType" type="xs:string"/>
+		<xs:attribute name="SMPSize" type="xs:integer"/>
+	</xs:complexType>
+	<xs:complexType name="HostArchitectureFullType">
+		<xs:complexContent>
+			<xs:extension base="HostArchitectureType">
+				<xs:attribute name="SMTSize" type="xs:integer"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="MainMemoryType">
+		<xs:attribute name="RAMSize" type="xs:integer"/>
+		<xs:attribute name="VirtualSize" type="xs:integer"/>
+	</xs:complexType>
+	<xs:complexType name="MainMemoryFullType">
+		<xs:complexContent>
+			<xs:extension base="MainMemoryType">
+				<xs:attribute name="RAMAvailable" type="xs:integer"/>
+				<xs:attribute name="VirtualAvailable" type="xs:integer"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="NetworkAdapterType">
+		<xs:attribute name="InboundIP" type="xs:boolean"/>
+		<xs:attribute name="OutboundIP" type="xs:boolean"/>
+	</xs:complexType>
+	<xs:complexType name="NetworkAdapterFullType">
+		<xs:complexContent>
+			<xs:extension base="NetworkAdapterType">
+				<xs:attribute name="Name" type="xs:string"/>
+				<xs:attribute name="IPAddress" type="xs:string"/>
+				<xs:attribute name="MTU" type="xs:integer"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BenchmarkType">
+		<xs:attribute name="SI00" type="xs:integer"/>
+		<xs:attribute name="SF00" type="xs:integer"/>
+	</xs:complexType>
+	<xs:complexType name="RunTimeEnvType">
+		<xs:sequence>
+			<xs:element name="Variable" type="xs:string" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FileSystemType">
+		<xs:attribute name="Name" type="xs:string"/>
+		<xs:attribute name="Root" type="xs:string"/>
+		<xs:attribute name="Size" type="xs:integer"/>
+		<xs:attribute name="AvailableSpace" type="xs:integer"/>
+		<xs:attribute name="ReadOnly" type="xs:boolean"/>
+		<xs:attribute name="Type" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="StorageDeviceType">
+		<xs:attribute name="Name" type="xs:string"/>
+		<xs:attribute name="Type" type="xs:string"/>
+		<xs:attribute name="TransferRate" type="xs:integer"/>
+		<xs:attribute name="Size" type="xs:integer"/>
+	</xs:complexType>
+	<xs:complexType name="StoragePartitionType">
+		<xs:attribute name="Name" type="xs:string"/>
+		<xs:attribute name="Size" type="xs:string"/>
+		<xs:attribute name="RateRate" type="xs:integer"/>
+		<xs:attribute name="WriteRate" type="xs:integer"/>
+	</xs:complexType>
+	<xs:complexType name="CEVOViewType">
+		<xs:sequence>
+			<xs:element name="ACL" type="ACLType" minOccurs="0"/>
+			<xs:element name="RunningJobs" type="xs:integer" minOccurs="0"/>
+			<xs:element name="WaitingJobs" type="xs:integer" minOccurs="0"/>
+			<xs:element name="TotalJobs" type="xs:integer" minOccurs="0"/>
+			<xs:element name="FreeJobSlots" type="xs:integer" minOccurs="0"/>
+			<xs:element name="EstimatedResponseTime" type="xs:integer" minOccurs="0"/>
+			<xs:element name="WorstResponseTime" type="xs:integer" minOccurs="0"/>
+			<xs:element name="DefaultSE" type="xs:string" minOccurs="0"/>
+			<xs:element name="ApplicationDir" type="xs:string" minOccurs="0"/>
+			<xs:element name="DataDir" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="LocalID" type="LocalIDType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ComputingElementType">
+		<xs:sequence>
+			<xs:element name="InformationServiceURL" type="xs:anyURI" minOccurs="0"/>
+			<xs:element name="Name" type="xs:string" minOccurs="0"/>
+			<xs:element name="LRMSType" type="LRMSTypeOpenEnum" minOccurs="0"/>
+			<xs:element name="LRMSVersion" type="xs:string" minOccurs="0"/>
+			<xs:element name="GRAMVersion" type="xs:string" minOccurs="0"/>
+			<xs:element name="HostName" type="xs:string" minOccurs="0"/>
+			<xs:element name="GateKeeperPort" type="xs:integer" minOccurs="0"/>
+			<xs:element name="JobManager" type="xs:string" minOccurs="0"/>
+			<xs:element name="ContactString" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ApplicationDir" type="DirType" minOccurs="0"/>
+			<xs:element name="DataDir" type="DirType" minOccurs="0"/>
+			<xs:element name="DefaultSE" type="xs:string" minOccurs="0"/>
+			<xs:element name="Status" type="CEStatusEnum" minOccurs="0"/>
+			<xs:element name="RunningJobs" type="xs:integer" minOccurs="0"/>
+			<xs:element name="WaitingJobs" type="xs:integer" minOccurs="0"/>
+			<xs:element name="TotalJobs" type="xs:integer" minOccurs="0"/>
+			<xs:element name="EstimatedResponseTime" type="xs:integer" minOccurs="0"/>
+			<xs:element name="WorstResponseTime" type="xs:integer" minOccurs="0"/>
+			<xs:element name="FreeJobSlots" type="xs:integer" minOccurs="0"/>
+			<xs:element name="MaxWallClockTime" type="xs:integer" minOccurs="0"/>
+			<xs:element name="MaxCPUTime" type="xs:integer" minOccurs="0"/>
+			<xs:element name="MaxTotalJobs" type="xs:integer" minOccurs="0"/>
+			<xs:element name="MaxRunningJobs" type="xs:integer" minOccurs="0"/>
+			<xs:element name="Priority" type="xs:integer" minOccurs="0"/>
+			<xs:element name="AssignedJobSlots" type="xs:integer" minOccurs="0"/>
+			<xs:element name="ACL" type="ACLType" minOccurs="0"/>
+			<xs:element name="Job" type="JobType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="VOView" type="CEVOViewType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="UniqueID" type="UniqueIDType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="SubClusterType">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string" minOccurs="0"/>
+			<xs:element name="PhysicalCPUs" type="xs:integer" minOccurs="0"/>
+			<xs:element name="LogicalCPUs" type="xs:integer" minOccurs="0"/>
+			<xs:element name="TmpDir" type="DirType" minOccurs="0"/>
+			<xs:element name="WNTmpDir" type="DirType" minOccurs="0"/>
+			<xs:element name="OperatingSystem" type="OperatingSystemType" minOccurs="0"/>
+			<xs:element name="Processor" type="ProcessorType" minOccurs="0"/>
+			<xs:element name="NetworkAdapter" type="NetworkAdapterType" minOccurs="0"/>
+			<xs:element name="MainMemory" type="MainMemoryType" minOccurs="0"/>
+			<xs:element name="Architecture" type="HostArchitectureType" minOccurs="0"/>
+			<xs:element name="Benchmark" type="BenchmarkType" minOccurs="0"/>
+			<xs:element name="Location" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Name" type="xs:string" minOccurs="0"/>
+						<xs:element name="Version" type="xs:string" minOccurs="0"/>
+						<xs:element name="Path" type="xs:string" minOccurs="0"/>
+					</xs:sequence>
+					<xs:attribute name="LocalID" type="LocalIDType" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RunTimeEnv" type="RunTimeEnvType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="UniqueID" type="UniqueIDType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StorageAreaType">
+		<xs:sequence>
+			<xs:element name="Path" type="DirType" minOccurs="0"/>
+			<xs:element name="Type" type="SATypeEnum" minOccurs="0"/>
+			<xs:element name="Quota" type="xs:integer" minOccurs="0"/>
+			<xs:element name="MinFileSize" type="xs:integer" minOccurs="0"/>
+			<xs:element name="MaxFileSize" type="xs:integer" minOccurs="0"/>
+			<xs:element name="MaxData" type="xs:integer" minOccurs="0"/>
+			<xs:element name="MaxNumFiles" type="xs:integer" minOccurs="0"/>
+			<xs:element name="MaxPinDuration" type="xs:integer" minOccurs="0"/>
+			<xs:element name="UsedSpace" type="xs:integer" minOccurs="0"/>
+			<xs:element name="AvailableSpace" type="xs:integer" minOccurs="0"/>
+			<xs:element name="ACL" type="ACLType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="LocalID" type="LocalIDType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="CESEBindType">
+		<xs:attribute name="CEUniqueID" type="UniqueIDType" use="required"/>
+		<xs:attribute name="SEUniqueID" type="UniqueIDType" use="required"/>
+		<xs:attribute name="MountInfo" type="xs:string" use="optional"/>
+		<xs:attribute name="Weight" type="xs:integer" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="Service2ServiceType">
+		<xs:attribute name="Service1UniqueID" type="UniqueIDType" use="required"/>
+		<xs:attribute name="Service2UniqueID" type="UniqueIDType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ClusterType">
+		 <xs:sequence>
+			  <xs:element name="Name" type="xs:string" minOccurs="0"/>
+			  <xs:element name="TmpDir" type="DirType" minOccurs="0"/>
+			  <xs:element name="WNTmpDir" type="DirType" minOccurs="0"/>
+			  <xs:element name="ComputingElement" type="ComputingElementType" maxOccurs="unbounded"/>
+			  <xs:element name="SubCluster" type="SubClusterType" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="UniqueID" type="UniqueIDType" use="required"/>
+	 </xs:complexType>
+		<xs:complexType name="ServiceType">
+			<xs:sequence>
+				<xs:element name="Name" type="xs:string" minOccurs="0"/>
+				<xs:element name="Type" type="ServiceTypeOpenEnum" minOccurs="0"/>
+				<xs:element name="Version" type="xs:string" minOccurs="0"/>
+				<xs:element name="Endpoint" type="xs:anyURI" minOccurs="0"/>
+				<xs:element name="Status" type="ServiceStatusEnum" minOccurs="0"/>
+				<xs:element name="StatusInfo" type="xs:string" minOccurs="0"/>
+				<xs:element name="WSDL" type="xs:anyURI" minOccurs="0"/>
+				<xs:element name="Semantics" type="xs:anyURI" minOccurs="0"/>
+				<xs:element name="StartTime" type="xs:dateTime" minOccurs="0"/>
+				<xs:element name="Owner" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="Data" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Key" type="xs:string"/>
+							<xs:element name="Value" type="xs:string"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="UniqueID" type="UniqueIDType" use="required"/>
+		</xs:complexType>
+		<xs:complexType name="StorageElementType">
+			<xs:sequence>
+				<xs:element name="InformationServiceURL" type="xs:anyURI" minOccurs="0"/>
+				<xs:element name="SizeTotal" type="xs:integer" minOccurs="0"/>
+				<xs:element name="SizeFree" type="xs:integer" minOccurs="0"/>
+				<xs:element name="Architecture" type="SEArchitectureEnum" minOccurs="0"/>
+				<xs:element name="StorageArea" type="StorageAreaType" maxOccurs="unbounded"/>
+				<xs:element name="AccessProtocol" type="SEAccessProtocolType" maxOccurs="unbounded"/>
+				<xs:element name="ControlProtocol" type="SEControlProtocolType" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="UniqueID" type="UniqueIDType" use="required"/>
+		</xs:complexType>
+		<xs:complexType name="HostType">
+			<xs:sequence>
+				<xs:element name="Name" type="xs:string" minOccurs="0"/>
+				<xs:element name="UpTime" type="xs:integer" minOccurs="0"/>
+				<xs:element name="Architecture" type="HostArchitectureFullType" minOccurs="0"/>
+				<xs:element name="MainMemory" type="MainMemoryFullType" minOccurs="0"/>
+				<xs:element name="OperatingSystem" type="OperatingSystemType" minOccurs="0"/>
+				<xs:element name="Processor" type="ProcessorFullType" minOccurs="0"/>
+				<xs:element name="Load" type="LoadType" minOccurs="0"/>
+				<xs:element name="NetworkAdapter" type="NetworkAdapterFullType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="Benchmark" type="BenchmarkType" minOccurs="0"/>
+				<xs:element name="RunTimeEnv" type="RunTimeEnvType" minOccurs="0"/>
+				<xs:element name="StorageDevice" type="StorageDeviceType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="StoragePartition" type="StoragePartitionType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="LocalFileSystem" type="FileSystemType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="RemoteFileSystem" type="FileSystemType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="StorageDevice2StoragePartition" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="StorageDeviceName" type="xs:string" use="required"/>
+						<xs:attribute name="StoragePartitionName" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="StoragePartition2FileSystem" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="StoragePartitionName" type="xs:string" use="required"/>
+						<xs:attribute name="FileSystemName" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="UniqueID" type="UniqueIDType" use="required"/>
+		</xs:complexType>
+	
+	 <xs:complexType name="SiteType">
+			<xs:sequence>
+				<xs:element name="Name" type="xs:string" minOccurs="0"/>
+				<xs:element name="Description" type="xs:string" minOccurs="0"/>
+				<xs:element name="UserSupportContact" type="xs:string" minOccurs="0"/>
+				<xs:element name="SysAdminContact" type="xs:string" minOccurs="0"/>
+				<xs:element name="SecurityContact" type="xs:string" minOccurs="0"/>
+				<xs:element name="Location" type="xs:string" minOccurs="0"/>
+				<xs:element name="Latitude" type="xs:double" minOccurs="0"/>
+				<xs:element name="Longitude" type="xs:double" minOccurs="0"/>
+				<xs:element name="Web" type="xs:anyURI" minOccurs="0"/>
+				<xs:element name="Sponsor" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="OtherInfo" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="Cluster" type="ClusterType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="StorageElement" type="StorageElementType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="Service" type="ServiceType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="CESEBind" type="CESEBindType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="Service2Service" type="Service2ServiceType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="Host" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="UniqueID" type="UniqueIDType" use="required"/>
+		</xs:complexType>
+
+	<!-- complex elements definition -->
+	<xs:element name="Site" type="SiteType" />
+	<xs:element name="Cluster" type="ClusterType" /> 
+	<xs:element name="Service" type="ServiceType" />
+	<xs:element name="StorageElement" type="StorageElementType" />
+	<xs:element name="Host" type="HostType">
+		<xs:key name="StorageDeviceNameKey">
+			<!-- the storage device name is unique within an host -->
+			<xs:selector xpath=".//StorageDevice"/>
+			<xs:field xpath="@Name"/>
+		</xs:key>
+		<xs:key name="StoragePartitionNameKey">
+			<!-- the storage partition name is unique within an host -->
+			<xs:selector xpath=".//StoragePartition"/>
+			<xs:field xpath="@Name"/>
+		</xs:key>
+		<xs:key name="FileSystemNameKey">
+			<!-- the file system  name is unique within an host -->
+			<xs:selector xpath=".//LocalFileSystem | .//RemoteFileSystem"/>
+			<xs:field xpath="@Name"/>
+		</xs:key>
+		<xs:key name="NetworkAdapterNameKey">
+			<!-- the file system  name is unique within an host -->
+			<xs:selector xpath=".//NetworkAdapter"/>
+			<xs:field xpath="@Name"/>
+		</xs:key>
+		<xs:keyref name="StoragePartition2FileSystemSP" refer="StoragePartitionNameKey">
+			<xs:selector xpath=".//StoragePartition2FileSystem"/>
+			<xs:field xpath="@StoragePartitionName"/>
+		</xs:keyref>
+		<xs:keyref name="StoragePartition2FileSystemFS" refer="FileSystemNameKey">
+			<xs:selector xpath=".//StoragePartition2FileSystem"/>
+			<xs:field xpath="@FileSystemName"/>
+		</xs:keyref>
+		<xs:keyref name="StorageDevice2StoragePartitionSD" refer="StorageDeviceNameKey">
+			<xs:selector xpath=".//StorageDevice2StoragePartition"/>
+			<xs:field xpath="@StorageDeviceName"/>
+		</xs:keyref>
+		<xs:keyref name="StorageDevice2StoragePartitionSP" refer="StoragePartitionNameKey">
+			<xs:selector xpath=".//StorageDevice2StoragePartition"/>
+			<xs:field xpath="@StoragePartitionName"/>
+		</xs:keyref>
+	</xs:element>
+</xs:schema>

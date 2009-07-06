@@ -1,0 +1,8 @@
+An extension to the GLUEQueryTransformer which allows users to handle
+entities specified in the APAC GLUE Schema extensions.
+
+example queries:
+get ComputingElement where SoftwarePackage.Name='mrbayes' and ComputingElement.FreeJobSlots>=4
+
+note:
+  SoftwarePackage.Version is a string and not a number so the string comparison rule will apply here

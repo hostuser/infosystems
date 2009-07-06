@@ -1,0 +1,25 @@
+Current GLUE Schema Query library functionalities:
+get <glueentity> [where <requirement-condition>]
+
+where requirement-condition:
+<single-condition> [and <single-condition>]
+
+where single-condition:
+<glueentity.gluefield> <relop> <value>
+
+where relop:
+>, <, !=, =, >=, <=
+
+where value:
+string enclosed with single quotes
+number (int or double)
+boolean
+
+example queries:
+get Site
+get Site where ComputingElement.Name='hydra@hydra'
+get ComputingElement where Site.Name='SAPAC' and ComputingElement.FreeJobSlots>=4
+
+a few things to note: 
+  <gluefield> value is case sensitive.
+  string and boolean comparisons can only use a <relop> of "=" and "!="
