@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.vpac.grisu.model.GridResource;
+import org.vpac.grisu.model.info.GridResource;
 
 public class GridResourceBackendImpl implements Rankable, Comparable, GridResource {
 	

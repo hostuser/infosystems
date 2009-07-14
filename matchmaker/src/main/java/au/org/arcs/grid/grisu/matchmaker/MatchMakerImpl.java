@@ -15,11 +15,11 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.vpac.grisu.control.Environment;
 import org.vpac.grisu.control.ServiceInterface;
-import org.vpac.grisu.js.model.JobSubmissionProperty;
-import org.vpac.grisu.js.model.utils.JsdlHelpers;
-import org.vpac.grisu.model.GridResource;
+import org.vpac.grisu.model.info.GridResource;
+import org.vpac.grisu.model.job.JobSubmissionProperty;
+import org.vpac.grisu.settings.Environment;
+import org.vpac.grisu.utils.JsdlHelpers;
 import org.w3c.dom.Document;
 
 import au.edu.sapac.grid.mds.QueryClient;

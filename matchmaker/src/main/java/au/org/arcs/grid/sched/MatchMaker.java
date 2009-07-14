@@ -3,8 +3,8 @@ package au.org.arcs.grid.sched;
 import java.util.List;
 import java.util.Map;
 
-import org.vpac.grisu.js.model.JobSubmissionProperty;
-import org.vpac.grisu.model.GridResource;
+import org.vpac.grisu.model.info.GridResource;
+import org.vpac.grisu.model.job.JobSubmissionProperty;
 import org.w3c.dom.Document;
 
 public interface MatchMaker {
