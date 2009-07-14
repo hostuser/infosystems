@@ -14,6 +14,7 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.vpac.grisu.control.Environment;
+import org.vpac.grisu.control.InformationManager;
 import org.vpac.grisu.control.JobConstants;
 import org.vpac.grisu.js.model.utils.SubmissionLocationHelpers;
 
