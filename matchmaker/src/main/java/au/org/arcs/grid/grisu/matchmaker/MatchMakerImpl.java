@@ -15,11 +15,6 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.vpac.grisu.control.ServiceInterface;
-import org.vpac.grisu.model.info.GridResource;
-import org.vpac.grisu.model.job.JobSubmissionProperty;
-import org.vpac.grisu.settings.Environment;
-import org.vpac.grisu.utils.JsdlHelpers;
 import org.w3c.dom.Document;
 
 import au.edu.sapac.grid.mds.QueryClient;
@@ -28,6 +23,10 @@ import au.org.arcs.grid.sched.MatchMaker;
 import au.org.arcs.grid.sched.RankingAlgorithm;
 import au.org.arcs.grid.sched.SimpleResourceRankingAlgorithm;
 import au.org.arcs.grid.sched.util.PluginLoader;
+import au.org.arcs.mds.Constants;
+import au.org.arcs.mds.GridResource;
+import au.org.arcs.mds.JobSubmissionProperty;
+import au.org.arcs.mds.JsdlHelpers;
 
 public class MatchMakerImpl implements MatchMaker {
 	
@@ -38,13 +37,13 @@ public class MatchMakerImpl implements MatchMaker {
 	private RankingAlgorithm rankingAlgorithm = null;
 	
 	// TODO: get PluginLoader working with MatchMaker and RankingAlgorithm
-	public MatchMakerImpl() {
-		this(new SimpleResourceRankingAlgorithm());		
+	public MatchMakerImpl(String mdsCacheDirectory) {
+		this(new SimpleResourceRankingAlgorithm(), mdsCacheDirectory);		
 	}
 	
-	public MatchMakerImpl(RankingAlgorithm rankingAlgorithm) {
+	public MatchMakerImpl(RankingAlgorithm rankingAlgorithm, String mdsCacheDirectory) {
 		this.rankingAlgorithm = rankingAlgorithm;
-		mdsClient = new QueryClient(Environment.getGrisuDirectory().toString());
+		mdsClient = new QueryClient(mdsCacheDirectory);
 	}
 	
 	public void setRankingAlgorithm(RankingAlgorithm rankingAlgorithm) {		
@@ -130,7 +129,7 @@ public class MatchMakerImpl implements MatchMaker {
 			gridResource.setApplicationName(applicationName);
 			
 			// if software version is specified...
-			if (StringUtils.isNotBlank(applicationVersion) && ! ServiceInterface.NO_VERSION_INDICATOR_STRING.equals(applicationVersion) ) {
+			if (StringUtils.isNotBlank(applicationVersion) && ! Constants.NO_VERSION_INDICATOR_STRING.equals(applicationVersion) ) {
 				gridResource.setDesiredSoftwareVersionInstalled(true);
 			}
 						
@@ -245,7 +244,7 @@ public class MatchMakerImpl implements MatchMaker {
         	Map<JobSubmissionProperty, String> jobProperties = new HashMap<JobSubmissionProperty, String>();
         	jobProperties.put(JobSubmissionProperty.APPLICATIONNAME, "java");
 
-            List<GridResource> gridResources = new MatchMakerImpl().findMatchingResources(jobProperties, "/ARCS/NGAdmin");
+            List<GridResource> gridResources = new MatchMakerImpl(System.getProperty("user.home")).findMatchingResources(jobProperties, "/ARCS/NGAdmin");
     		for (GridResource i : gridResources) {
     			System.out.println(i);
     		}
@@ -262,7 +261,7 @@ public class MatchMakerImpl implements MatchMaker {
         	javax.xml.parsers.DocumentBuilderFactory dbf = javax.xml.parsers.DocumentBuilderFactory.newInstance();
             javax.xml.parsers.DocumentBuilder db = dbf.newDocumentBuilder();
             doc = db.parse(docFile);
-            List<GridResource> gridResources = new MatchMakerImpl().findMatchingResources(doc, "/ARCS/NGAdmin");
+            List<GridResource> gridResources = new MatchMakerImpl(System.getProperty("user.home")).findMatchingResources(doc, "/ARCS/NGAdmin");
     		for (GridResource i : gridResources) {
     			System.out.println(i);
     		}

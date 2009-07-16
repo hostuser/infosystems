@@ -13,12 +13,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.vpac.grisu.control.JobConstants;
-import org.vpac.grisu.model.info.InformationManager;
-import org.vpac.grisu.settings.Environment;
-import org.vpac.grisu.utils.SubmissionLocationHelpers;
 
 import au.edu.sapac.grid.mds.QueryClient;
+import au.org.arcs.mds.Constants;
+import au.org.arcs.mds.InformationManager;
+import au.org.arcs.mds.SubmissionLocationHelpers;
 
 /**
  * Mds information manager that can uses Gersons mds infosystems library (http://projects.arcs.org.au/trac/infosystems/) to
@@ -32,11 +31,14 @@ import au.edu.sapac.grid.mds.QueryClient;
  */
 public class CachedMdsInformationManager implements InformationManager {
 
-	private static CachedMdsInformationManager singleton = new CachedMdsInformationManager();
+	private static CachedMdsInformationManager singleton = null;
 
 	public static final Long MAX_CACHE_LIFETIME_IN_MS = new Long(1000 * 60 * 10);
 
-	public static InformationManager getDefaultCachedMdsInformationManager() {
+	public static InformationManager getDefaultCachedMdsInformationManager(String mdsCacheDirectory) {
+		if ( singleton == null ) {
+			singleton = new CachedMdsInformationManager(mdsCacheDirectory);
+		}
 		return singleton;
 	}
 
@@ -73,8 +75,9 @@ public class CachedMdsInformationManager implements InformationManager {
 	
 	private Date lastUpdated = null;
 
-	public CachedMdsInformationManager() {
-		client = new QueryClient(Environment.getGrisuDirectory().toString());
+	public CachedMdsInformationManager(String mdsCacheFileDirectory) {
+//		client = new QueryClient(Environment.getGrisuDirectory().toString());
+		client = new QueryClient(mdsCacheFileDirectory);
 		lastUpdated = new Date();
 	}
 
@@ -264,7 +267,7 @@ public class CachedMdsInformationManager implements InformationManager {
 
 		possiblyResetCache();
 
-		if (JobConstants.NON_VO_FQAN.equals(fqan)) {
+		if (Constants.NON_VO_FQAN.equals(fqan)) {
 			return getAllSubmissionLocations();
 		}
 
@@ -428,11 +431,11 @@ public class CachedMdsInformationManager implements InformationManager {
 			String version, String site) {
 		Map<String, String> codeDetails = new HashMap<String, String>();
 
-		codeDetails.put(JobConstants.MDS_MODULES_KEY, client.getModuleNameOfCodeAtSite(site,
+		codeDetails.put(Constants.MDS_MODULES_KEY, client.getModuleNameOfCodeAtSite(site,
 				application, version));
-		codeDetails.put(JobConstants.MDS_SERIAL_AVAIL_KEY, Boolean.toString(client
+		codeDetails.put(Constants.MDS_SERIAL_AVAIL_KEY, Boolean.toString(client
 				.isSerialAvailForCodeAtSite(site, application, version)));
-		codeDetails.put(JobConstants.MDS_PARALLEL_AVAIL_KEY, Boolean.toString(client
+		codeDetails.put(Constants.MDS_PARALLEL_AVAIL_KEY, Boolean.toString(client
 				.isParallelAvailForCodeAtSite(site, application, version)));
 		String[] executables = client.getExeNameOfCodeAtSite(site, application,
 				version);
@@ -442,7 +445,7 @@ public class CachedMdsInformationManager implements InformationManager {
 			if (i < executables.length - 1)
 				exeStrBuff.append(",");
 		}
-		codeDetails.put(JobConstants.MDS_EXECUTABLES_KEY, exeStrBuff.toString());
+		codeDetails.put(Constants.MDS_EXECUTABLES_KEY, exeStrBuff.toString());
 		return codeDetails;
 	}
 
@@ -718,7 +721,7 @@ public class CachedMdsInformationManager implements InformationManager {
 	
 	public static void main(String[] args) {
 		
-		CachedMdsInformationManager info = new CachedMdsInformationManager();
+		CachedMdsInformationManager info = new CachedMdsInformationManager(System.getProperty("user.home"));
 		
 		String[] allAppsOnGrid = info.getAllApplicationsOnGrid();
 		Arrays.sort(allAppsOnGrid);
@@ -751,7 +754,7 @@ public class CachedMdsInformationManager implements InformationManager {
 				String exe = null;
 				for ( String version : allVersionsOnSite ) {
 					Map<String, String> appDetails = info.getApplicationDetails(app, version, siteTemp);
-					exe = appDetails.get(JobConstants.MDS_EXECUTABLES_KEY);
+					exe = appDetails.get(Constants.MDS_EXECUTABLES_KEY);
 					if ( exe.contains(",") ) {
 						for ( String exeTemp : exe.split(",") ) {
 							allExecutables.add(exeTemp);

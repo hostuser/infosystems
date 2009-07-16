@@ -3,9 +3,8 @@ package au.org.arcs.grid.sched;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
-import org.vpac.grisu.model.info.GridResource;
+import au.org.arcs.mds.GridResource;
 
 public class GridResourceBackendImpl implements Rankable, Comparable, GridResource {
 	

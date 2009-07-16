@@ -9,7 +9,6 @@ import java.util.TreeSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vpac.grisu.control.ServiceInterface;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -17,6 +16,7 @@ import au.edu.sapac.grid.glueschema.transform.GLUEQueryTransformer;
 import au.edu.sapac.grid.glueschema.transform.GLUEQueryTransformerFactory;
 import au.edu.sapac.grid.glueschema.transform.ParseException;
 import au.edu.sapac.grid.glueschema.transform.UnknownGLUESchemaVersion;
+import au.org.arcs.mds.Constants;
 import au.org.arcs.mds.GridInfoInterface;
 
 public class QueryClient implements GridInfoInterface {
@@ -641,7 +641,7 @@ public class QueryClient implements GridInfoInterface {
     	             
  	  	String xpathQuery;
  	    try {
- 	    	if ( StringUtils.isBlank(version) || ServiceInterface.NO_VERSION_INDICATOR_STRING.equals(version) ) {
+ 	    	if ( StringUtils.isBlank(version) || Constants.NO_VERSION_INDICATOR_STRING.equals(version) ) {
 	         	xpathQuery = 
 	         		transformer.transform("get Cluster where ACL.Rule='" + fqan + "' and " +
 	         				"SoftwarePackage.Name='" + code + "'");
@@ -920,7 +920,7 @@ public class QueryClient implements GridInfoInterface {
 
         String xpathQuery;
         try {
-        	if ( StringUtils.isBlank(version) || ServiceInterface.NO_VERSION_INDICATOR_STRING.equals(version) ) {
+        	if ( StringUtils.isBlank(version) || Constants.NO_VERSION_INDICATOR_STRING.equals(version) ) {
         	xpathQuery = transformer.transform(
       				"get ComputingElement where Site.Name='" + site + 
       				"' and SoftwarePackage.Name='" + code + "'"
@@ -1181,7 +1181,7 @@ public class QueryClient implements GridInfoInterface {
         
         String xpathQuery;
         String xpathQueryString;
-        if ( version == null || version.length() == 0 || ServiceInterface.NO_VERSION_INDICATOR_STRING.equals(version)) {
+        if ( version == null || version.length() == 0 || Constants.NO_VERSION_INDICATOR_STRING.equals(version)) {
         	throw new RuntimeException("Version is not specified.");
         } else {
         	xpathQueryString = "get SoftwarePackage where Site.Name='" + site + 
@@ -1215,7 +1215,7 @@ public class QueryClient implements GridInfoInterface {
         String xpathQuery;
         String xpathQueryString;
         
-        if (version == null || version.length() == 0 || ServiceInterface.NO_VERSION_INDICATOR_STRING.equals(version) ) {
+        if (version == null || version.length() == 0 || Constants.NO_VERSION_INDICATOR_STRING.equals(version) ) {
         	throw new RuntimeException("No version specified.");
         } else {
         	xpathQueryString = "get SoftwarePackage where Site.Name='" + site + 
@@ -1250,7 +1250,7 @@ public class QueryClient implements GridInfoInterface {
         
         String xpathQuery;
         
-        if ( version == null || version.length() == 0 || ServiceInterface.NO_VERSION_INDICATOR_STRING.equals(version)) {
+        if ( version == null || version.length() == 0 || Constants.NO_VERSION_INDICATOR_STRING.equals(version)) {
         	throw new RuntimeException("No version specified.");
         }
  	    try {

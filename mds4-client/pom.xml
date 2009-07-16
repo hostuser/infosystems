@@ -132,12 +132,6 @@
 		</dependency>
 
 		<!-- for the InformationManager interface -->
-		<dependency>
-			<groupId>org.vpac.grisu</groupId>
-			<artifactId>grisu-commons</artifactId>
-			<version>0.3-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
 
 
 		<dependency>
@@ -163,6 +157,13 @@
 			<groupId>au.org.arcs.infosystems</groupId>
 			<artifactId>apacglue-transformer-ext</artifactId>
 			<version>0.4-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.4</version>
+			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

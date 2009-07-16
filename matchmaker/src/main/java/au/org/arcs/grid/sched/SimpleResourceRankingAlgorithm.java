@@ -1,6 +1,6 @@
 package au.org.arcs.grid.sched;
 
-import org.vpac.grisu.model.info.GridResource;
+import au.org.arcs.mds.GridResource;
 
 
 /**
