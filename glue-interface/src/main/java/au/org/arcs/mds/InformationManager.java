@@ -44,6 +44,14 @@ public interface InformationManager {
 	 * @return all the submission queues for the given application.
 	 */
 	String[] getAllSubmissionLocationsForApplication(String application);
+	
+	/**
+	 * Returns a list of all submissionlocations for the specified site.
+	 * 
+	 * @param site the name of the site
+	 * @return the submissionLocations
+	 */
+	String[] getAllSubmissionLocationsForSite(String site);
 
 	/**
 	 * Returns all the data locations (mount points) on the grid available for

@@ -58,7 +58,8 @@ public class CachedMdsInformationManager implements InformationManager {
 
 	private Map<String, String[]> allSubmissionQueuesPerVO = new HashMap<String, String[]>();
 	private Map<String, String[]> allSubmissionQueuesPerApplicationAndVersion = new HashMap<String, String[]>();
-
+	private Map<String, String[]> allSubmissionLocationsPerSite = new HashMap<String, String[]>();
+	
 	private String[] allApplicationsOnGrid = null;
 	private Map<String, String[]> allApplicationsOnSite = new HashMap<String, String[]>();
 	private Map<String, String[]> allApplicationsOnGridPerVO = new HashMap<String, String[]>();
@@ -96,7 +97,8 @@ public class CachedMdsInformationManager implements InformationManager {
 
 			allSubmissionQueuesPerVO = new HashMap<String, String[]>();
 			allSubmissionQueuesPerApplicationAndVersion = new HashMap<String, String[]>();
-
+			allSubmissionLocationsPerSite = new HashMap<String, String[]>();
+			
 			allApplicationsOnGrid = null;
 			allApplicationsOnSite = new HashMap<String, String[]>();
 			allApplicationsOnGridPerVO = new HashMap<String, String[]>();
@@ -787,6 +789,17 @@ public class CachedMdsInformationManager implements InformationManager {
 			System.out.println("---------------------------------------------------");
 			System.out.println();
 		}
+	}
+
+	public String[] getAllSubmissionLocationsForSite(String site) {
+
+			possiblyResetCache();
+
+			if (allSubmissionLocationsPerSite.get(site) == null) {
+				allSubmissionLocationsPerSite.put(site,
+						calculateAllApplicationsAtSite(site));
+			}
+			return allSubmissionLocationsPerSite.get(site);
 	}
 
 
