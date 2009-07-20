@@ -46,11 +46,6 @@
 			<version>1.1</version>
 		</dependency>
 		<dependency>
-			<groupId>xmlbeans</groupId>
-			<artifactId>xmlbeans</artifactId>
-			<version>2.3.0</version>
-		</dependency>
-		<dependency>
 			<groupId>external.jglobus</groupId>
 			<artifactId>puretls</artifactId>
 			<version>1.7.0</version>
