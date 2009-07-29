@@ -36,6 +36,7 @@ public class Constants {
 	public static final String FQAN_KEY = "fqan";
 //	public static final String JOB_STATUS_KEY = "status";
 	public static final String STAGING_FILE_SYSTEM_KEY = "stagingFileSystem";
+	public static final String SUBMISSION_TIME_KEY = "submissionTime";
 	
 	public static final String MDS_EXECUTABLES_KEY = "Executables";
 	public static final String MDS_MODULES_KEY = "Module";
