@@ -1,6 +1,6 @@
 package au.org.arcs.grid.sched;
 
-import au.org.arcs.mds.GridResource;
+import au.org.arcs.jcommons.interfaces.GridResource;
 
 
 /**

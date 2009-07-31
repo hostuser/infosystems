@@ -16,7 +16,6 @@
 	</repositories>
   
   <modules>
-  	<module>glue-interface</module>
   	<module>glue-xmlbeans</module>
   	<module>glue-transformer</module>
   	<module>apacglue-transformer-ext</module>

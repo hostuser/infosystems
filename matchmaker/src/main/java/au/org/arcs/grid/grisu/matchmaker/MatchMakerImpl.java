@@ -23,10 +23,10 @@ import au.org.arcs.grid.sched.MatchMaker;
 import au.org.arcs.grid.sched.RankingAlgorithm;
 import au.org.arcs.grid.sched.SimpleResourceRankingAlgorithm;
 import au.org.arcs.grid.sched.util.PluginLoader;
-import au.org.arcs.mds.Constants;
-import au.org.arcs.mds.GridResource;
-import au.org.arcs.mds.JobSubmissionProperty;
-import au.org.arcs.mds.JsdlHelpers;
+import au.org.arcs.jcommons.constants.Constants;
+import au.org.arcs.jcommons.constants.JobSubmissionProperty;
+import au.org.arcs.jcommons.interfaces.GridResource;
+import au.org.arcs.jcommons.utils.JsdlHelpers;
 
 public class MatchMakerImpl implements MatchMaker {
 	

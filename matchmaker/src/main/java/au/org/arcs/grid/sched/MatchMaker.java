@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.w3c.dom.Document;
 
-import au.org.arcs.mds.GridResource;
-import au.org.arcs.mds.JobSubmissionProperty;
+import au.org.arcs.jcommons.constants.JobSubmissionProperty;
+import au.org.arcs.jcommons.interfaces.GridResource;
 
 public interface MatchMaker {
 	

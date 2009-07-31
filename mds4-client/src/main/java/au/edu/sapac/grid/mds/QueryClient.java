@@ -16,8 +16,8 @@ import au.edu.sapac.grid.glueschema.transform.GLUEQueryTransformer;
 import au.edu.sapac.grid.glueschema.transform.GLUEQueryTransformerFactory;
 import au.edu.sapac.grid.glueschema.transform.ParseException;
 import au.edu.sapac.grid.glueschema.transform.UnknownGLUESchemaVersion;
-import au.org.arcs.mds.Constants;
-import au.org.arcs.mds.GridInfoInterface;
+import au.org.arcs.jcommons.constants.Constants;
+import au.org.arcs.jcommons.interfaces.GridInfoInterface;
 
 public class QueryClient implements GridInfoInterface {
 	

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import au.org.arcs.mds.GridResource;
+import au.org.arcs.jcommons.interfaces.GridResource;
 
 public class GridResourceBackendImpl implements Rankable, Comparable, GridResource {
 	

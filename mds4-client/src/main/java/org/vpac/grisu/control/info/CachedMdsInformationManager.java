@@ -15,9 +15,9 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 
 import au.edu.sapac.grid.mds.QueryClient;
-import au.org.arcs.mds.Constants;
-import au.org.arcs.mds.InformationManager;
-import au.org.arcs.mds.SubmissionLocationHelpers;
+import au.org.arcs.jcommons.constants.Constants;
+import au.org.arcs.jcommons.interfaces.InformationManager;
+import au.org.arcs.jcommons.utils.SubmissionLocationHelpers;
 
 /**
  * Mds information manager that can uses Gersons mds infosystems library (http://projects.arcs.org.au/trac/infosystems/) to
