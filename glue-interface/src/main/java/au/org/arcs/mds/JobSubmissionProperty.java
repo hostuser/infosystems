@@ -100,7 +100,8 @@ public enum JobSubmissionProperty {
 	 * A comma-seperated list of modules you want to load. This should only be
 	 * used in if you know what you are doing. Defaults to null.
 	 */
-	MODULES(Constants.MODULES_KEY, "");
+	MODULES(Constants.MODULES_KEY, ""), 
+	PBSDEBUG(Constants.PBSDEBUG_KEY, "");
 
 	private static final Map<String, JobSubmissionProperty> stringToJobPropertyMap = new HashMap<String, JobSubmissionProperty>();
 	static {

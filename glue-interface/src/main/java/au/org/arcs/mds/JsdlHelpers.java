@@ -1056,7 +1056,7 @@ public final class JsdlHelpers {
 	 * @return whether to enable pbs-debugging or not
 	 */
 	public static String getPbsDebugElement(final Document jsdl) {
-
+		
 		String expression = "/jsdl:JobDefinition/jsdl:JobDescription/jsdl-arcs:PbsDebug";
 		NodeList resultNodes = null;
 		try {

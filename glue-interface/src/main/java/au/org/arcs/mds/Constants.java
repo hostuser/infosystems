@@ -47,6 +47,7 @@ public class Constants {
 	
 	public static final String SEND_EMAIL_ON_JOB_START_ATTRIBUTE_KEY = "sendOnJobStart";
 	public static final String SEND_EMAIL_ON_JOB_END_ATTRIBUTE_KEY = "sendOnJobFinish";
+	public static final String PBSDEBUG_KEY = "pbsDebug";
 
 
 
