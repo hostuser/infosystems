@@ -6,7 +6,7 @@ import java.util.Set;
 
 import au.org.arcs.jcommons.interfaces.GridResource;
 
-public class GridResourceBackendImpl implements Rankable, Comparable, GridResource {
+public class GridResourceBackendImpl implements Rankable, GridResource {
 	
 	private String contactString;
 	private String jobManager;
@@ -253,10 +253,14 @@ public class GridResourceBackendImpl implements Rankable, Comparable, GridResour
 		return rankingAlgorithm.getRank(this);
 	}
 
-	public int compareTo(Object o) {
-		GridResourceBackendImpl anotherResource = (GridResourceBackendImpl)o;
-		return this.getRank() < anotherResource.getRank() ? 1 :
-			(this.getRank() == anotherResource.getRank() ? 0 : -1);
+	public int compareTo(GridResource o) {
+		//GridResourceBackendImpl anotherResource = (GridResourceBackendImpl)o;
+		return this.getRank() < o.getRank() ? 1 :
+			(this.getRank() == o.getRank() ? 0 : -1);
+	}
+	
+	public String toString() {
+		return queueName + " (Ranking: " + getRank() + ")";
 	}
 
 	/* (non-Javadoc)
@@ -271,7 +275,15 @@ public class GridResourceBackendImpl implements Rankable, Comparable, GridResour
 	}
 	
 	public boolean equals(Object o) {
-		GridResource anotherResource = (GridResource)o;
+		
+		GridResource anotherResource = null;
+		
+		try {
+			anotherResource = (GridResource)o;	
+		} catch (Exception e) {
+			return false;
+		}
+		
 		if (queueName.equals(anotherResource.getQueueName()) &&
 				jobManager.equals(anotherResource.getJobManager()) &&
 				contactString.equals(anotherResource.getContactString())) {
@@ -281,11 +293,7 @@ public class GridResourceBackendImpl implements Rankable, Comparable, GridResour
 	}
 	
 	public int hashCode() {
-		return queueName.hashCode() + jobManager.hashCode() + contactString.hashCode();
-	}
-	
-	public String toString() {
-		return "submission location: " + contactString + ":" + queueName + ":" + jobManager + "\n" + "\t rank: " + getRank();
+		return queueName.hashCode() + jobManager.hashCode() + contactString.hashCode() + 23 * getRank();
 	}
 
 	public Set<String> getAllExecutables() {
@@ -296,5 +304,10 @@ public class GridResourceBackendImpl implements Rankable, Comparable, GridResour
 	public void setAllExecutables(Set<String> allExecutables) {
 		this.allExecutables = allExecutables;
 	}
+
+//	public int compareTo(GridResource o) {
+//		// TODO Auto-generated method stub
+//		return 0;
+//	}
 
 }
