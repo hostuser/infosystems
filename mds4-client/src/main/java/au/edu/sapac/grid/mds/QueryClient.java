@@ -641,7 +641,9 @@ public class QueryClient implements GridInfoInterface {
     	             
  	  	String xpathQuery;
  	    try {
- 	    	if ( StringUtils.isBlank(version) || Constants.NO_VERSION_INDICATOR_STRING.equals(version) ) {
+ 	    	if ( StringUtils.isBlank(code) || Constants.GENERIC_APPLICATION_NAME.equals(code) ){
+ 	    		xpathQuery = transformer.transform("get Cluster where ACL.Rule='" + fqan + "'");
+ 	    	} else if ( StringUtils.isBlank(version) || Constants.NO_VERSION_INDICATOR_STRING.equals(version) ) {
 	         	xpathQuery = 
 	         		transformer.transform("get Cluster where ACL.Rule='" + fqan + "' and " +
 	         				"SoftwarePackage.Name='" + code + "'");

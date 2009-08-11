@@ -275,6 +275,10 @@ public class GridResourceBackendImpl implements Rankable, GridResource {
 	}
 	
 	public boolean equals(Object o) {
+
+		if ( o == null ) {
+			return false;
+		}
 		
 		GridResource anotherResource = null;
 		
