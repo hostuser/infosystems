@@ -254,9 +254,14 @@ public class GridResourceBackendImpl implements Rankable, GridResource {
 	}
 
 	public int compareTo(GridResource o) {
-		//GridResourceBackendImpl anotherResource = (GridResourceBackendImpl)o;
-		return this.getRank() < o.getRank() ? 1 :
-			(this.getRank() == o.getRank() ? 0 : -1);
+		
+		if ( this.getRank() < o.getRank() ) {
+			return Integer.MAX_VALUE;
+		} else if ( this.getRank() > o.getRank() ) {
+			return Integer.MIN_VALUE;
+		} else {
+			return this.getQueueName().compareTo(o.getQueueName());
+		}
 	}
 	
 	public String toString() {
