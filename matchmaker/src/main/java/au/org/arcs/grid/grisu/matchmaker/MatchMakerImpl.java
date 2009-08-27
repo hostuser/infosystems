@@ -115,11 +115,16 @@ public class MatchMakerImpl implements MatchMaker {
 				if (foundVOView) break;				
 			}
 			
+
 			// if the resource that we found doesn't have the minimum
 			// cpu requirements, check the next CE
-			if (foundVOView && freeJobSlots < totalCPURequirement
-					&& ceTypes[i].getMaxWallClockTime().intValue() < wallTimeRequirement)
+			int wall = ceTypes[i].getMaxWallClockTime().intValue();
+			if (! foundVOView || freeJobSlots < totalCPURequirement
+					|| ceTypes[i].getMaxWallClockTime().intValue() < wallTimeRequirement) {
+			
 				continue;
+				
+			}
 			
 			// else.. grab the other details we need from the CE, SubCluster, and
 			// Site elements
@@ -199,8 +204,7 @@ public class MatchMakerImpl implements MatchMaker {
 		return gridResources;
 	}
 	
-	public List<GridResource> findMatchingResources(Document jsdl, String fqan) {	
-	
+	public static Map<JobSubmissionProperty, String> generatePropertiesMap(Document jsdl) {
 		//TODO: probably a good idea to use reflection to load this matchmaker
 		// implementation if we want to provide other ways of matchmaking	
 	
@@ -225,7 +229,14 @@ public class MatchMakerImpl implements MatchMaker {
 		jobProperties.put(JobSubmissionProperty.APPLICATIONNAME, applicationName);
 		jobProperties.put(JobSubmissionProperty.APPLICATIONVERSION, applicationVersion);
 		
-		return findMatchingResources(jobProperties, fqan);
+		return jobProperties;
+	}
+	
+	public List<GridResource> findMatchingResources(Document jsdl, String fqan) {	
+	
+		
+		
+		return findMatchingResources(generatePropertiesMap(jsdl), fqan);
 
 	}
 	
