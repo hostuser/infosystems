@@ -13,7 +13,7 @@ import au.org.arcs.jcommons.interfaces.GridResource;
 
 public class CachedMatchMakerImpl implements MatchMaker {
 	
-	private final MatchMaker nonCached;
+	private final MatchMakerImpl nonCached;
 	
 	private Map<String, List<GridResource>> cacheMap = new HashMap<String, List<GridResource>>();
 	
@@ -21,8 +21,8 @@ public class CachedMatchMakerImpl implements MatchMaker {
 		this.nonCached = new MatchMakerImpl(mdsCacheDirectory);
 	}
 
-	public List<GridResource> findMatchingResources(
-			Map<JobSubmissionProperty, String> jobProperties, String fqan) {
+	private List<GridResource> findMatchingResources(
+			Map<JobSubmissionProperty, String> jobProperties, String fqan, boolean excludeResourcesWithLessCPUslotsFreeThanRequested) {
 		
 		StringBuffer key = new StringBuffer(fqan);
 		
@@ -31,25 +31,43 @@ public class CachedMatchMakerImpl implements MatchMaker {
 			key.append(jobProperties.get(prop));
 		}
 		
+		key.append(excludeResourcesWithLessCPUslotsFreeThanRequested);
+		
 		List<GridResource> result = cacheMap.get(key.toString());
 		if ( result == null ) {
-			result = nonCached.findMatchingResources(jobProperties, fqan);
+			result = nonCached.findMatchingResources(jobProperties, fqan, excludeResourcesWithLessCPUslotsFreeThanRequested);
 			cacheMap.put(key.toString(), result);
 		}
 		return result;
 	}
 
-	public List<GridResource> findMatchingResources(Document jsdl, String fqan) {
+	public List<GridResource> findAvailableResources(Document jsdl, String fqan) {
 
-		return findMatchingResources(MatchMakerImpl.generatePropertiesMap(jsdl), fqan);
+		return findMatchingResources(MatchMakerImpl.generatePropertiesMap(jsdl), fqan, true);
 		
 	}
-
+	
+	public List<GridResource> findAvailableResources(
+			Map<JobSubmissionProperty, String> jobProperties, String fqan) {
+		return findMatchingResources(jobProperties, fqan, true);
+	}
+	
 	public void setRankingAlgorithm(RankingAlgorithm rankingAlgorithm) {
 
 			nonCached.setRankingAlgorithm(rankingAlgorithm);
 	}
-	
+
+	public List<GridResource> findAllResources(
+			Map<JobSubmissionProperty, String> jobProperties, String fqan) {
+		
+		return findMatchingResources(jobProperties, fqan, false);
+	}
+
+	public List<GridResource> findAllResources(Document jsdl, String fqan) {
+		return findMatchingResources(MatchMakerImpl.generatePropertiesMap(jsdl), fqan, false);
+	}
+
+
 
 			
 
