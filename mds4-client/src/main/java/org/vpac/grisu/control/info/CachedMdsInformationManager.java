@@ -2,6 +2,7 @@ package org.vpac.grisu.control.info;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -135,7 +136,15 @@ public class CachedMdsInformationManager implements InformationManager {
 
 		possiblyResetCache();
 
-		return getAllHosts().get(host_or_url);
+		String temp = null;
+		try {
+			// I know, dodgy, but I don't have time to fuck around because of this crap
+			URL url = new URL(host_or_url.replace("gsiftp", "http"));
+			temp = url.getHost();
+		} catch (Exception e) {
+			temp = host_or_url;
+		}
+		return getAllHosts().get(temp);
 		// String site = client.getSiteForHost(getHost(host_or_url));
 		// return site;
 	}
