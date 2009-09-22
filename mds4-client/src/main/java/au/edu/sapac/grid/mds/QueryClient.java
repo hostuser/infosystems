@@ -18,6 +18,7 @@ import au.edu.sapac.grid.glueschema.transform.ParseException;
 import au.edu.sapac.grid.glueschema.transform.UnknownGLUESchemaVersion;
 import au.org.arcs.jcommons.constants.Constants;
 import au.org.arcs.jcommons.interfaces.GridInfoInterface;
+import au.org.arcs.jcommons.utils.SubmissionLocationHelpers;
 
 public class QueryClient implements GridInfoInterface {
 	
@@ -1111,6 +1112,15 @@ public class QueryClient implements GridInfoInterface {
         return executables;
     }
     
+    public String[] getExeNameOfCodeForSubmissionLocation(String subLoc, String code, String version) {
+    	
+    	String queue = SubmissionLocationHelpers.extractQueue(subLoc);
+    	String site = getSiteForHost(SubmissionLocationHelpers.extractHost(subLoc));
+    	
+    	return getExeNameOfCodeAtQueueAtSite(site, queue, code, version);
+    	
+    }
+    
     /**
      * Get the name of the executable to be run. This may or may not be same as
      * the name of the code. For instance 'List' maps to <code>ls</code>.
@@ -1178,17 +1188,21 @@ public class QueryClient implements GridInfoInterface {
      * @param version The version of the code
      * @return The name of the module needed
      */
-    public String getModuleNameOfCodeAtSite(String site, String code, String version) {
+    public String getModuleNameOfCodeForSubmissionLocation(String subLoc, String code, String version) {
     	String moduleName = null;
         
+    	String queue = SubmissionLocationHelpers.extractQueue(subLoc);
+    	String site = getSiteForHost(SubmissionLocationHelpers.extractHost(subLoc));
+    	
         String xpathQuery;
         String xpathQueryString;
         if ( version == null || version.length() == 0 || Constants.NO_VERSION_INDICATOR_STRING.equals(version)) {
         	throw new RuntimeException("Version is not specified.");
         } else {
         	xpathQueryString = "get SoftwarePackage where Site.Name='" + site + 
+    		"' and ComputingElement.Name='" + queue + 
 			"' and SoftwarePackage.Version='" + version + 
-				"' and SoftwarePackage.Name='" + code + "'";
+			"' and SoftwarePackage.Name='" + code + "'";
         }
  	    try {
           	xpathQuery = 
@@ -1211,9 +1225,13 @@ public class QueryClient implements GridInfoInterface {
         return moduleName;
     }
     
-    public boolean isSerialAvailForCodeAtSite(String site, String code, String version) {
+    public boolean isSerialAvailForCodeForSubmissionLocation(String subLoc, String code, String version) {
     	boolean serialAvail = true;
         
+    	
+    	String queue = SubmissionLocationHelpers.extractQueue(subLoc);
+    	String site = getSiteForHost(SubmissionLocationHelpers.extractHost(subLoc));
+    	
         String xpathQuery;
         String xpathQueryString;
         
@@ -1221,6 +1239,7 @@ public class QueryClient implements GridInfoInterface {
         	throw new RuntimeException("No version specified.");
         } else {
         	xpathQueryString = "get SoftwarePackage where Site.Name='" + site + 
+        		"' and ComputingElement.Name='" + queue + 
 				"' and SoftwarePackage.Version='" + version + 
   				"' and SoftwarePackage.Name='" + code + "'";
         }
@@ -1247,10 +1266,13 @@ public class QueryClient implements GridInfoInterface {
         return serialAvail;
     }
     
-    public boolean isParallelAvailForCodeAtSite(String site, String code, String version) {
+    public boolean isParallelAvailForCodeForSubmissionLocation(String subLoc, String code, String version) {
     	boolean parallelAvail = false;
         
         String xpathQuery;
+        
+        String queue = SubmissionLocationHelpers.extractQueue(subLoc);
+    	String site = getSiteForHost(SubmissionLocationHelpers.extractHost(subLoc));
         
         if ( version == null || version.length() == 0 || Constants.NO_VERSION_INDICATOR_STRING.equals(version)) {
         	throw new RuntimeException("No version specified.");
@@ -1259,7 +1281,8 @@ public class QueryClient implements GridInfoInterface {
           	xpathQuery = 
           		transformer.transform(
           				"get SoftwarePackage where Site.Name='" + site + 
-          				"' and SoftwarePackage.Version='" + version + 
+                		"' and ComputingElement.Name='" + queue + 
+        				"' and SoftwarePackage.Version='" + version + 
           				"' and SoftwarePackage.Name='" + code + "'");
           	logger.debug("xpath: " + xpathQuery);
  	    

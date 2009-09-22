@@ -430,16 +430,16 @@ public class CachedMdsInformationManager implements InformationManager {
 	 *      java.lang.String, java.lang.String)
 	 */
 	public Map<String, String> getApplicationDetails(String application,
-			String version, String site) {
+			String version, String subLoc) {
 		Map<String, String> codeDetails = new HashMap<String, String>();
 
-		codeDetails.put(Constants.MDS_MODULES_KEY, client.getModuleNameOfCodeAtSite(site,
+		codeDetails.put(Constants.MDS_MODULES_KEY, client.getModuleNameOfCodeForSubmissionLocation(subLoc,
 				application, version));
 		codeDetails.put(Constants.MDS_SERIAL_AVAIL_KEY, Boolean.toString(client
-				.isSerialAvailForCodeAtSite(site, application, version)));
+				.isSerialAvailForCodeForSubmissionLocation(subLoc, application, version)));
 		codeDetails.put(Constants.MDS_PARALLEL_AVAIL_KEY, Boolean.toString(client
-				.isParallelAvailForCodeAtSite(site, application, version)));
-		String[] executables = client.getExeNameOfCodeAtSite(site, application,
+				.isParallelAvailForCodeForSubmissionLocation(subLoc, application, version)));
+		String[] executables = client.getExeNameOfCodeForSubmissionLocation(subLoc, application,
 				version);
 		StringBuffer exeStrBuff = new StringBuffer();
 		for (int i = 0; i < executables.length; i++) {
@@ -447,6 +447,7 @@ public class CachedMdsInformationManager implements InformationManager {
 			if (i < executables.length - 1)
 				exeStrBuff.append(",");
 		}
+		
 		codeDetails.put(Constants.MDS_EXECUTABLES_KEY, exeStrBuff.toString());
 		return codeDetails;
 	}
