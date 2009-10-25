@@ -142,12 +142,12 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>au.org.arcs.infosystems</groupId>
-			<artifactId>glue-interface</artifactId>
-			<version>0.4-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>au.org.arcs.infosystems</groupId>-->
+<!--			<artifactId>glue-interface</artifactId>-->
+<!--			<version>0.4-SNAPSHOT</version>-->
+<!--			<scope>compile</scope>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>au.org.arcs.infosystems</groupId>
 			<artifactId>glue-xmlbeans</artifactId>
