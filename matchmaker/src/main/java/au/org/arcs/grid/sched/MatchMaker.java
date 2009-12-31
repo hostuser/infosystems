@@ -3,6 +3,7 @@ package au.org.arcs.grid.sched;
 import java.util.List;
 import java.util.Map;
 
+import org.vpac.grisu.control.info.RankingAlgorithm;
 import org.w3c.dom.Document;
 
 import au.org.arcs.jcommons.constants.JobSubmissionProperty;

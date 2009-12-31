@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.vpac.grisu.control.info.RankingAlgorithm;
 import org.w3c.dom.Document;
 
 import au.org.arcs.grid.sched.MatchMaker;
-import au.org.arcs.grid.sched.RankingAlgorithm;
 import au.org.arcs.jcommons.constants.JobSubmissionProperty;
 import au.org.arcs.jcommons.interfaces.GridResource;
 

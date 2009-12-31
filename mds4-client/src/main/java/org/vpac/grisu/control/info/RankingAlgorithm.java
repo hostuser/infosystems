@@ -1,4 +1,4 @@
-package au.org.arcs.grid.sched;
+package org.vpac.grisu.control.info;
 
 import au.org.arcs.jcommons.interfaces.GridResource;
 

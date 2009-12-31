@@ -1,4 +1,4 @@
-package au.org.arcs.grid.sched;
+package org.vpac.grisu.control.info;
 
 public interface Rankable {
 	
