@@ -9,6 +9,7 @@ import au.org.arcs.jcommons.interfaces.GridResource;
 public class GridResourceBackendImpl implements Rankable, GridResource {
 
 	private String contactString;
+        private String gramVersion;
 	private String jobManager;
 	private String queueName;
 
@@ -133,6 +134,10 @@ public class GridResourceBackendImpl implements Rankable, GridResource {
 		return contactString;
 	}
 
+        public String getGRAMVersion(){
+            return this.gramVersion;
+        }
+
 	/* (non-Javadoc)
 	 * @see au.org.arcs.grid.sched.GridResource#getFreeJobSlots()
 	 */
@@ -251,6 +256,10 @@ public class GridResourceBackendImpl implements Rankable, GridResource {
 	public void setContactString(String contactString) {
 		this.contactString = contactString;
 	}
+
+        public void setGRAMVersion(String gramVersion){
+            this.gramVersion = gramVersion;
+        }
 
 	public void setDesiredSoftwareVersionInstalled(boolean isDesiredSoftwareVersionInstalled) {
 		this.isDesiredSoftwareVersionInstalled = isDesiredSoftwareVersionInstalled;

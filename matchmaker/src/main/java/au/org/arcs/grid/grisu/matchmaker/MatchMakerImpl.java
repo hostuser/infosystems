@@ -198,7 +198,6 @@ public class MatchMakerImpl implements MatchMaker {
 		SiteType site = null;
 
 		for (ComputingElementType ceType : ceTypes) {
-
 			int freeJobSlots = 0;
 
 			boolean foundVOView = false;
@@ -321,7 +320,6 @@ public class MatchMakerImpl implements MatchMaker {
 			// attributes
 			// memory from SubCluster
 			// OS from SubCluster
-
 			gridResources.add(gridResource);
 		}
 

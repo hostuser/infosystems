@@ -366,6 +366,8 @@ public class CachedMdsInformationManager implements InformationManager {
 	//TODO this isn't tested at all!!!!!
 	public Map<String, GridResource> getAllGridResources() {
 
+                possiblyResetCache();
+            
 		if ( submissionLocationMap == null ) {
 
 			submissionLocationMap = new HashMap<String, GridResource>();
@@ -442,6 +444,7 @@ public class CachedMdsInformationManager implements InformationManager {
 				// assume that on ARCS grid, there will be only one contact string
 				// array
 				gr.setContactString(ceType.getContactStringArray(0));
+                                gr.setGRAMVersion(ceType.getGRAMVersion());
 				gr.setJobManager(ceType.getJobManager());
 				gr.setQueueName(ceType.getName());
 
@@ -842,6 +845,8 @@ public class CachedMdsInformationManager implements InformationManager {
 
 	public GridResource getGridResource(String submissionLocation) {
 
+                possiblyResetCache();
+                getAllGridResources();
 		return submissionLocationMap.get(submissionLocation);
 
 	}
@@ -947,6 +952,8 @@ public class CachedMdsInformationManager implements InformationManager {
 
 			cachedApplicationsPerExecutables = new HashMap<String, String[]>();
 
+                        submissionLocationMap = null;
+                        
 			lastUpdated = new Date();
 		}
 	}

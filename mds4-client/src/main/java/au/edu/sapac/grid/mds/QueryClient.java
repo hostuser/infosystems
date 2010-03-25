@@ -645,7 +645,7 @@ public class QueryClient implements GridInfoInterface {
  	    	if ( StringUtils.isBlank(fqan) ) {
  	    	
  	    		//TODO take code and version into account
- 	    		xpathQuery = transformer.transform("getCluster");
+ 	    		xpathQuery = transformer.transform("get Cluster");
  	    		
  	    		
  	    	} else if ( StringUtils.isBlank(code) || Constants.GENERIC_APPLICATION_NAME.equals(code) ){
@@ -689,23 +689,21 @@ public class QueryClient implements GridInfoInterface {
  	        		for (int j = 0; j < ceArrayTmp.length; j++) {
  	        			String[] ruleArray = ceArrayTmp[j].getACL().getRuleArray();
  	        			for (int k = 0; k < ruleArray.length; k++) {
- 	        				if (ruleArray[k].equals(fqan)) {
- 	        					myTreeSet.add(ceArrayTmp[j]);
- 	        					break;
- 	        				} 	        				
+ 	        				// if (ruleArray[k].equals(fqan)) {
+ 	        				myTreeSet.add(ceArrayTmp[j]);
+ 	        				break;
+                                        // }
  	        			}     			
  	        		}
  	        		//myTreeSet.add(it.infn.cnaf.forge.glueschema.spec.v12.r2.ClusterDocument
  	        		//		.Factory.parse(clusterEl).getCluster()); 	            
  	        	} catch (Exception e) {
- 	        		
  	        	}
  	        }	
  	        computingElements = myTreeSet.
  	        	toArray(new it.infn.cnaf.forge.glueschema.spec.v12.r2.ComputingElementType[myTreeSet.size()]);
  			
  	    } catch (ParseException e) {
- 	    	
  	    }
  	    return computingElements;
     }
