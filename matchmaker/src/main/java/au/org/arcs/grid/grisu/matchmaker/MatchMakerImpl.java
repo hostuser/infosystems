@@ -15,6 +15,7 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.globus.common.CoGProperties;
 import org.vpac.grisu.control.info.GridResourceBackendImpl;
 import org.vpac.grisu.control.info.RankingAlgorithm;
 import org.vpac.grisu.control.info.SimpleResourceRankingAlgorithm;
@@ -66,23 +67,28 @@ public class MatchMakerImpl implements MatchMaker {
 
 		return jobProperties;
 	}
+
 	public static void main(String[] args) {
-		test4();
+
+		CoGProperties.getDefault().setProperty(
+				CoGProperties.ENFORCE_SIGNING_POLICY, "false");
+
+		test5();
 	}
 
 	private static void test2() {
 
 		java.io.File docFile = new java.io.File(
-		"/home/gerson/.grisu/templates_available/mrbayessample.xml");
+				"/home/gerson/.grisu/templates_available/mrbayessample.xml");
 		Document doc = null;
 		try {
 			javax.xml.parsers.DocumentBuilderFactory dbf = javax.xml.parsers.DocumentBuilderFactory
-			.newInstance();
+					.newInstance();
 			javax.xml.parsers.DocumentBuilder db = dbf.newDocumentBuilder();
 			doc = db.parse(docFile);
-			List<GridResource> gridResources = new MatchMakerImpl(System
-					.getProperty("user.home")).findAvailableResources(doc,
-					"/ARCS/NGAdmin");
+			List<GridResource> gridResources = new MatchMakerImpl(
+					System.getProperty("user.home")).findAvailableResources(
+					doc, "/ARCS/NGAdmin");
 			for (GridResource i : gridResources) {
 				System.out.println(i);
 			}
@@ -98,15 +104,34 @@ public class MatchMakerImpl implements MatchMaker {
 				.getImplementationClass("RankingAlgorithm"));
 	}
 
+	private static void test5() {
+
+		try {
+			Map<JobSubmissionProperty, String> jobProperties = new HashMap<JobSubmissionProperty, String>();
+			jobProperties.put(JobSubmissionProperty.APPLICATIONNAME,
+					"ESyS-Particle");
+
+			List<GridResource> gridResources = new MatchMakerImpl(
+					System.getProperty("user.home")).findAvailableResources(
+					jobProperties, "/ARCS/AuScope");
+			for (GridResource i : gridResources) {
+				System.out.println(i);
+			}
+		} catch (Exception e) {
+			System.out.print("Problem parsing the file.");
+		}
+
+	}
+
 	private static void test4() {
 
 		try {
 			Map<JobSubmissionProperty, String> jobProperties = new HashMap<JobSubmissionProperty, String>();
 			jobProperties.put(JobSubmissionProperty.APPLICATIONNAME, "java");
 
-			List<GridResource> gridResources = new MatchMakerImpl(System
-					.getProperty("user.home")).findAvailableResources(
-							jobProperties, "/ARCS/NGAdmin");
+			List<GridResource> gridResources = new MatchMakerImpl(
+					System.getProperty("user.home")).findAvailableResources(
+					jobProperties, "/ARCS/NGAdmin");
 			for (GridResource i : gridResources) {
 				System.out.println(i);
 			}
@@ -177,9 +202,9 @@ public class MatchMakerImpl implements MatchMaker {
 		}
 
 		String applicationName = jobProperties
-		.get(JobSubmissionProperty.APPLICATIONNAME);
+				.get(JobSubmissionProperty.APPLICATIONNAME);
 		String applicationVersion = jobProperties
-		.get(JobSubmissionProperty.APPLICATIONVERSION);
+				.get(JobSubmissionProperty.APPLICATIONVERSION);
 
 		// if (
 		// ServiceInterface.NO_VERSION_INDICATOR_STRING.equals(applicationVersion)
@@ -190,8 +215,8 @@ public class MatchMakerImpl implements MatchMaker {
 		// find all the CEs that have software/version installed and permits
 		// VO fqan to run jobs on them
 		ComputingElementType[] ceTypes = mdsClient
-		.getComputingElementsForApplicationAndVO(applicationName,
-				applicationVersion, fqan);
+				.getComputingElementsForApplicationAndVO(applicationName,
+						applicationVersion, fqan);
 
 		List<GridResource> gridResources = new ArrayList<GridResource>();
 		GridResourceBackendImpl gridResource = null;
@@ -212,11 +237,9 @@ public class MatchMakerImpl implements MatchMaker {
 						// now that we found the voview, get the things we need
 						// from it like freejobslots
 						try {
-							freeJobSlots = voView.getFreeJobSlots()
-							.intValue();
+							freeJobSlots = voView.getFreeJobSlots().intValue();
 						} catch (Exception e) {
-							myLogger
-							.debug("Could not retrieve freejob slots for voview: "
+							myLogger.debug("Could not retrieve freejob slots for voview: "
 									+ voView.getDefaultSE());
 							freeJobSlots = 0;
 						}
@@ -255,7 +278,7 @@ public class MatchMakerImpl implements MatchMaker {
 			// if software version is specified...
 			if (StringUtils.isNotBlank(applicationVersion)
 					&& !Constants.NO_VERSION_INDICATOR_STRING
-					.equals(applicationVersion)) {
+							.equals(applicationVersion)) {
 				gridResource.setDesiredSoftwareVersionInstalled(true);
 			}
 
@@ -309,8 +332,8 @@ public class MatchMakerImpl implements MatchMaker {
 			Set<String> executables = new TreeSet<String>();
 			for (String version : appVersions) {
 				String[] executablesTemp = mdsClient
-				.getExeNameOfCodeAtQueueAtSite(site.getName(),
-						ceType.getName(), applicationName, version);
+						.getExeNameOfCodeAtQueueAtSite(site.getName(),
+								ceType.getName(), applicationName, version);
 				executables.addAll(Arrays.asList(executablesTemp));
 			}
 			;

@@ -9,7 +9,7 @@ import au.org.arcs.jcommons.interfaces.GridResource;
 public class GridResourceBackendImpl implements Rankable, GridResource {
 
 	private String contactString;
-        private String gramVersion;
+	private String gramVersion;
 	private String jobManager;
 	private String queueName;
 
@@ -76,9 +76,9 @@ public class GridResourceBackendImpl implements Rankable, GridResource {
 
 	public int compareTo(GridResource o) {
 
-		if ( this.getRank() < o.getRank() ) {
+		if (this.getRank() < o.getRank()) {
 			return Integer.MAX_VALUE;
-		} else if ( this.getRank() > o.getRank() ) {
+		} else if (this.getRank() > o.getRank()) {
 			return Integer.MIN_VALUE;
 		} else {
 			return this.getQueueName().compareTo(o.getQueueName());
@@ -88,21 +88,21 @@ public class GridResourceBackendImpl implements Rankable, GridResource {
 	@Override
 	public boolean equals(Object o) {
 
-		if ( o == null ) {
+		if (o == null) {
 			return false;
 		}
 
 		GridResource anotherResource = null;
 
 		try {
-			anotherResource = (GridResource)o;
+			anotherResource = (GridResource) o;
 		} catch (Exception e) {
 			return false;
 		}
 
-		if (queueName.equals(anotherResource.getQueueName()) &&
-				jobManager.equals(anotherResource.getJobManager()) &&
-				contactString.equals(anotherResource.getContactString())) {
+		if (queueName.equals(anotherResource.getQueueName())
+				&& jobManager.equals(anotherResource.getJobManager())
+				&& contactString.equals(anotherResource.getContactString())) {
 			return true;
 		}
 		return false;
@@ -113,116 +113,148 @@ public class GridResourceBackendImpl implements Rankable, GridResource {
 		return allExecutables;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getApplicationName()
 	 */
 	public String getApplicationName() {
 		return applicationName;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getAvailableApplicationVersion()
 	 */
 	public List<String> getAvailableApplicationVersion() {
 		return applicationVersions;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getContactString()
 	 */
 	public String getContactString() {
 		return contactString;
 	}
 
-        public String getGRAMVersion(){
-            return this.gramVersion;
-        }
+	public String getGRAMVersion() {
+		return this.gramVersion;
+	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getFreeJobSlots()
 	 */
 	public int getFreeJobSlots() {
 		return freeJobSlots;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getJobManager()
 	 */
 	public String getJobManager() {
 		return jobManager;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getMainMemoryRAMSize()
 	 */
 	public int getMainMemoryRAMSize() {
 		return mainMemoryRAMSize;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getMainMemoryVirtualSize()
 	 */
 	public int getMainMemoryVirtualSize() {
 		return mainMemoryVirtualSize;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getQueueName()
 	 */
 	public String getQueueName() {
 		return queueName;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getRank()
 	 */
 	public int getRank() {
 		return rankingAlgorithm.getRank(this);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getRunningJobs()
 	 */
 	public int getRunningJobs() {
 		return runningJobs;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getSiteLatitude()
 	 */
 	public double getSiteLatitude() {
 		return siteLatitude;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getSiteLongitude()
 	 */
 	public double getSiteLongitude() {
 		return siteLongitude;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getSiteName()
 	 */
 	public String getSiteName() {
 		return siteName;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getSmpSize()
 	 */
 	public int getSmpSize() {
 		return smpSize;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getTotalJobs()
 	 */
 	public int getTotalJobs() {
 		return totalJobs;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see au.org.arcs.grid.sched.GridResource#getWaitingJobs()
 	 */
 	public int getWaitingJobs() {
@@ -231,11 +263,15 @@ public class GridResourceBackendImpl implements Rankable, GridResource {
 
 	@Override
 	public int hashCode() {
-		return queueName.hashCode() + jobManager.hashCode() + contactString.hashCode() + 23 * getRank();
+		return queueName.hashCode() + jobManager.hashCode()
+				+ contactString.hashCode() + 23 * getRank();
 	}
 
-	/* (non-Javadoc)
-	 * @see au.org.arcs.grid.sched.GridResource#isDesiredSoftwareVersionInstalled()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * au.org.arcs.grid.sched.GridResource#isDesiredSoftwareVersionInstalled()
 	 */
 	public boolean isDesiredSoftwareVersionInstalled() {
 		return isDesiredSoftwareVersionInstalled;
@@ -257,11 +293,12 @@ public class GridResourceBackendImpl implements Rankable, GridResource {
 		this.contactString = contactString;
 	}
 
-        public void setGRAMVersion(String gramVersion){
-            this.gramVersion = gramVersion;
-        }
+	public void setGRAMVersion(String gramVersion) {
+		this.gramVersion = gramVersion;
+	}
 
-	public void setDesiredSoftwareVersionInstalled(boolean isDesiredSoftwareVersionInstalled) {
+	public void setDesiredSoftwareVersionInstalled(
+			boolean isDesiredSoftwareVersionInstalled) {
 		this.isDesiredSoftwareVersionInstalled = isDesiredSoftwareVersionInstalled;
 	}
 
@@ -323,12 +360,13 @@ public class GridResourceBackendImpl implements Rankable, GridResource {
 
 	@Override
 	public String toString() {
-		return queueName + " (Ranking: " + getRank() + ")";
+		return getSiteName() + " : " + getQueueName() + " (Ranking: "
+				+ getRank() + ")";
 	}
 
-	//	public int compareTo(GridResource o) {
-	//		// TODO Auto-generated method stub
-	//		return 0;
-	//	}
+	// public int compareTo(GridResource o) {
+	// // TODO Auto-generated method stub
+	// return 0;
+	// }
 
 }
