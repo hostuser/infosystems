@@ -214,13 +214,13 @@ public class MatchMakerImpl implements MatchMaker {
 
 		// find all the CEs that have software/version installed and permits
 		// VO fqan to run jobs on them
-		System.out.println(applicationName + " " + applicationVersion + " "
-				+ fqan);
+		// System.out.println(applicationName + " " + applicationVersion + " "
+		// + fqan);
 		ComputingElementType[] ceTypes = mdsClient
 				.getComputingElementsForApplicationAndVO(applicationName,
 						applicationVersion, fqan);
 
-		System.out.println("Length: " + ceTypes.length);
+		// System.out.println("Length: " + ceTypes.length);
 
 		List<GridResource> gridResources = new ArrayList<GridResource>();
 		GridResourceBackendImpl gridResource = null;
@@ -232,17 +232,17 @@ public class MatchMakerImpl implements MatchMaker {
 			boolean foundVOView = false;
 			CEVOViewType[] voViews = ceType.getVOViewArray();
 
-			System.out.println("CETYPE: ");
-			System.out.println("Elements: " + voViews.length);
-			System.out.println("Name: " + ceType.getName());
+			// System.out.println("CETYPE: ");
+			// System.out.println("Elements: " + voViews.length);
+			// System.out.println("Name: " + ceType.getName());
 
 			CEVOViewType voViewTmp = null;
 			for (CEVOViewType voView : voViews) {
-				System.out.println("VoView: " + voView);
+				// System.out.println("VoView: " + voView);
 				// System.out.println(voView);
 				String[] ruleArray = voView.getACL().getRuleArray();
 				for (String element : ruleArray) {
-					System.out.println("Element: " + element);
+					// System.out.println("Element: " + element);
 					if (element.equals(fqan)) {
 						// now that we found the voview, get the things we need
 						// from it like freejobslots
@@ -327,7 +327,7 @@ public class MatchMakerImpl implements MatchMaker {
 			try {
 				tempFreeJobSlots = voViewTmp.getFreeJobSlots().intValue();
 			} catch (Exception e) {
-				System.out.println(voViewTmp);
+				// System.out.println(voViewTmp);
 				myLogger.warn("Could not retrieve freejob slots for voview: "
 						+ voViewTmp.getDefaultSE());
 				tempFreeJobSlots = 0;
