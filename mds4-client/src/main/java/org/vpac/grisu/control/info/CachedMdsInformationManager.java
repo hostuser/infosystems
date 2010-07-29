@@ -41,20 +41,10 @@ import au.org.arcs.jcommons.utils.SubmissionLocationHelpers;
  */
 public class CachedMdsInformationManager implements InformationManager {
 
-	private static CachedMdsInformationManager singleton = null;
-
 	public static final Long MAX_CACHE_LIFETIME_IN_MS = new Long(1000 * 60 * 10);
 
 	static final Logger myLogger = Logger
 			.getLogger(CachedMdsInformationManager.class.getName());
-
-	public static InformationManager getDefaultCachedMdsInformationManager(
-			String mdsCacheDirectory) {
-		if (singleton == null) {
-			singleton = new CachedMdsInformationManager(mdsCacheDirectory);
-		}
-		return singleton;
-	}
 
 	private static String getHost(String host_or_url) {
 		// dodgy, I know
@@ -185,6 +175,11 @@ public class CachedMdsInformationManager implements InformationManager {
 	private Map<String, GridResource> submissionLocationMap;
 
 	private Date lastUpdated = null;
+
+	public CachedMdsInformationManager(Map<String, String> params) {
+		this(params.get("mdsFileDir"));
+
+	}
 
 	public CachedMdsInformationManager(String mdsCacheFileDirectory) {
 		// client = new QueryClient(Environment.getGrisuDirectory().toString());
@@ -319,8 +314,8 @@ public class CachedMdsInformationManager implements InformationManager {
 		String queueName = subLoc.substring(0, queSepIndex);
 		String contactString = "";
 		if (subLoc.indexOf("#") > 0) {
-			contactString = subLoc.substring(subLoc.indexOf(":") + 1, subLoc
-					.indexOf("#"));
+			contactString = subLoc.substring(subLoc.indexOf(":") + 1,
+					subLoc.indexOf("#"));
 		} else {
 			contactString = subLoc.substring(subLoc.indexOf(":") + 1);
 		}
@@ -455,8 +450,7 @@ public class CachedMdsInformationManager implements InformationManager {
 
 				// need versions of software
 				String ceUID = ceType.getUniqueID();
-				gr
-						.addAvailableApplicationVersion(Constants.NO_VERSION_INDICATOR_STRING);
+				gr.addAvailableApplicationVersion(Constants.NO_VERSION_INDICATOR_STRING);
 
 				// need contact string, jobmanager from CE
 				// assume that on ARCS grid, there will be only one contact
@@ -556,8 +550,8 @@ public class CachedMdsInformationManager implements InformationManager {
 		if (allSubmissionQueuesPerApplicationAndVersion.get(application
 				+ version) == null) {
 			allSubmissionQueuesPerApplicationAndVersion.put(application
-					+ version, calculateAllSubmissionQueues(application,
-					version));
+					+ version,
+					calculateAllSubmissionQueues(application, version));
 		}
 		return allSubmissionQueuesPerApplicationAndVersion.get(application
 				+ version);
@@ -633,8 +627,8 @@ public class CachedMdsInformationManager implements InformationManager {
 		String key = application + "_" + vo;
 
 		if (allVersionsOfApplicationForVO.get(key) == null) {
-			allVersionsOfApplicationForVO.put(key, client
-					.getVersionsOfCodeOnGridForVO(application, vo));
+			allVersionsOfApplicationForVO.put(key,
+					client.getVersionsOfCodeOnGridForVO(application, vo));
 		}
 		return allVersionsOfApplicationForVO.get(key);
 	}
@@ -698,9 +692,9 @@ public class CachedMdsInformationManager implements InformationManager {
 			for (int k = 0; (contactStrings != null)
 					&& (k < contactStrings.length); k++) {
 				// remove protocol and port number from the string
-				String hostname = contactStrings[k].substring(contactStrings[k]
-						.indexOf("https://") != 0 ? 0 : 8, contactStrings[k]
-						.indexOf(":8443"));
+				String hostname = contactStrings[k].substring(
+						contactStrings[k].indexOf("https://") != 0 ? 0 : 8,
+						contactStrings[k].indexOf(":8443"));
 				set.add(hostname);
 			}
 		}
@@ -847,8 +841,9 @@ public class CachedMdsInformationManager implements InformationManager {
 		for (int j = 0; (dataHosts != null) && (j < dataHosts.length); j++) {
 
 			// remove protocol and port number from the string
-			String hostname = dataHosts[j].substring(dataHosts[j]
-					.indexOf("://") + 3, dataHosts[j].lastIndexOf(":"));
+			String hostname = dataHosts[j].substring(
+					dataHosts[j].indexOf("://") + 3,
+					dataHosts[j].lastIndexOf(":"));
 			set.add(hostname);
 		}
 		return set;
