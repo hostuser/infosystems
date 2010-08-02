@@ -3,12 +3,10 @@
 	<parent>
 		<artifactId>infosystems</artifactId>
 		<groupId>au.org.arcs.infosystems</groupId>
-		<version>0.4-SNAPSHOT</version>
+		<version>0.5-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>au.org.arcs.infosystems</groupId>
 	<artifactId>mds4-client</artifactId>
-	<version>0.4-SNAPSHOT</version>
 	<description>MDS4 Client</description>
 	
 	<repositories>
@@ -168,8 +166,8 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>au.org.arcs.commons</groupId>
-			<artifactId>arcs-jcommons</artifactId>
+			<groupId>org.bestgrid</groupId>
+			<artifactId>grid-jcommons</artifactId>
 			<version>1.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
