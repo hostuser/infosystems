@@ -1,4 +1,4 @@
-package au.org.arcs.grid.grisu.matchmaker;
+package org.vpac.grisu.control.info;
 
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.CEVOViewType;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.ComputingElementType;
@@ -16,17 +16,15 @@ import java.util.TreeSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.globus.common.CoGProperties;
-import org.vpac.grisu.control.info.GridResourceBackendImpl;
-import org.vpac.grisu.control.info.RankingAlgorithm;
-import org.vpac.grisu.control.info.SimpleResourceRankingAlgorithm;
 import org.w3c.dom.Document;
 
 import au.edu.sapac.grid.mds.QueryClient;
-import au.org.arcs.grid.sched.MatchMaker;
 import au.org.arcs.grid.sched.util.PluginLoader;
 import au.org.arcs.jcommons.constants.Constants;
 import au.org.arcs.jcommons.constants.JobSubmissionProperty;
 import au.org.arcs.jcommons.interfaces.GridResource;
+import au.org.arcs.jcommons.interfaces.MatchMaker;
+import au.org.arcs.jcommons.interfaces.RankingAlgorithm;
 import au.org.arcs.jcommons.utils.JsdlHelpers;
 
 public class MatchMakerImpl implements MatchMaker {
@@ -153,6 +151,10 @@ public class MatchMakerImpl implements MatchMaker {
 	// TODO: get PluginLoader working with MatchMaker and RankingAlgorithm
 	public MatchMakerImpl(String mdsCacheDirectory) {
 		this(new SimpleResourceRankingAlgorithm(), mdsCacheDirectory);
+	}
+
+	public MatchMakerImpl(Map<String, String> params) {
+		this(params.get("mdsFileDir"));
 	}
 
 	public List<GridResource> findAllResources(Document jsdl, String fqan) {
