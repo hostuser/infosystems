@@ -148,13 +148,13 @@
 		<dependency>
 			<groupId>au.org.arcs.infosystems</groupId>
 			<artifactId>glue-xmlbeans</artifactId>
-			<version>0.7-SNAPSHOT</version>
+			<version>0.6</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>au.org.arcs.infosystems</groupId>
 			<artifactId>apacglue-transformer-ext</artifactId>
-			<version>0.7-SNAPSHOT</version>
+			<version>0.6</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
