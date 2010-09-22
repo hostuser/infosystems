@@ -2,12 +2,11 @@
 	<parent>
 		<artifactId>infosystems</artifactId>
 		<groupId>au.org.arcs.infosystems</groupId>
-		<version>0.5</version>
+		<version>0.5-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>glue-transformer</artifactId>
 
-	<version>0.5</version>
 	<description>GLUE Schema Query Transformer</description>
 
 	<dependencies>

@@ -2,12 +2,11 @@
 	<parent>
 		<artifactId>infosystems</artifactId>
 		<groupId>au.org.arcs.infosystems</groupId>
-		<version>0.5</version>
+		<version>0.5-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>au.org.arcs.infosystems</groupId>
 	<artifactId>glue-xmlbeans</artifactId>
-	<version>0.5</version>
 	<description>GLUE entity in XMLBeans</description>
 
 	<dependencies>
