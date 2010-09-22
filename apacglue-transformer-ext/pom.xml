@@ -7,6 +7,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>apacglue-transformer-ext</artifactId>
+	<version>0.5</version>
 	<description>APAC GLUE Query Tranformer Extension</description>
 
 	<!--
@@ -32,7 +33,7 @@
 		<dependency>
 			<groupId>au.org.arcs.infosystems</groupId>
 			<artifactId>glue-transformer</artifactId>
-			<version>0.4-SNAPSHOT</version>
+			<version>0.5</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
