@@ -16,9 +16,9 @@
 
 
         <scm>
-                <connection>scm:git:git://code.arcs.org.au/infosystems/infosystems.git
+                <connection>scm:git:git://code.arcs.org.au/~markus/infosystems/infosystems-bestgrid.git
                 </connection>
-                <url>scm:git:git://code.arcs.org.au/infosystems/infosystems.git
+                <url>scm:git:git://code.arcs.org.au/~markus/infosystems/infosystems-bestgrid.git
                 </url>
         </scm>
 
