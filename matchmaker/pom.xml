@@ -22,13 +22,8 @@
       <artifactId>junit</artifactId>
       <version>4.1</version>
     </dependency>
-    	<dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.14</version>
-    </dependency>
 		
-    	<dependency>
+ 	<dependency>
     		<groupId>au.org.arcs.infosystems</groupId>
     		<artifactId>mds4-client</artifactId>
     		<version>0.8-SNAPSHOT</version>
