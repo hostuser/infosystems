@@ -149,7 +149,7 @@
 		<dependency>
 			<groupId>au.org.arcs.infosystems</groupId>
 			<artifactId>apacglue-transformer-ext</artifactId>
-			<version>0.8.1-SNAPSHOT</version>
+			<version>0.8</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

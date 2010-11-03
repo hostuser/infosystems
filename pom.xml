@@ -46,8 +46,8 @@
   
   <modules>
 <!--  	<module>glue-xmlbeans</module>-->
-  	<module>glue-transformer</module>
-  	<module>apacglue-transformer-ext</module>
+<!--  	<module>glue-transformer</module>-->
+<!--  	<module>apacglue-transformer-ext</module>-->
   	<module>mds4-client</module>
   	<module>matchmaker</module>
   	<module>mysql-mds</module>
