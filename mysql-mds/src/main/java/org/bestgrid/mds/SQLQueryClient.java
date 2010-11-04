@@ -890,14 +890,14 @@ public class SQLQueryClient implements GridInfoInterface {
 	}
 
 	public String[] getVersionsOfCodeForQueueAndContactString(String queueName,
-			String contactString, String code) {
+			String hostName, String code) {
 		String query = "select distinct sp.version from Clusters c,ComputeElements "
 				+ " ce,SubClusters sc,SoftwarePackages sp WHERE c.id = ce.cluster_id AND "
 				+ " c.id = sc.cluster_id AND sc.id = sp.subcluster_id AND  sp.name=? "
-				+ "AND ce.contactString=? AND ce.name=?";
+				+ "AND ce.hostName=? AND ce.name=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, code);
-		setString(s, 2, contactString);
+		setString(s, 2, hostName);
 		setString(s, 3, queueName);
 		return runQuery(s, "version");
 	}
