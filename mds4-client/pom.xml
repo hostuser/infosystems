@@ -1,14 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>infosystems</artifactId>
 		<groupId>au.org.arcs.infosystems</groupId>
-		<version>0.4-SNAPSHOT</version>
+		<version>0.8.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>au.org.arcs.infosystems</groupId>
 	<artifactId>mds4-client</artifactId>
-	<version>0.4-SNAPSHOT</version>
 	<description>MDS4 Client</description>
 	
 	<repositories>
@@ -34,11 +31,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.1</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.14</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.activation</groupId>
@@ -138,7 +130,7 @@
 		<dependency>
 			<groupId>bouncycastle</groupId>
 			<artifactId>bcprov-jdk15</artifactId>
-			<version>143</version>
+			<version>145</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
@@ -151,13 +143,13 @@
 		<dependency>
 			<groupId>au.org.arcs.infosystems</groupId>
 			<artifactId>glue-xmlbeans</artifactId>
-			<version>0.4-SNAPSHOT</version>
+			<version>0.6</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>au.org.arcs.infosystems</groupId>
 			<artifactId>apacglue-transformer-ext</artifactId>
-			<version>0.4-SNAPSHOT</version>
+			<version>0.8</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -168,9 +160,9 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>au.org.arcs.commons</groupId>
-			<artifactId>arcs-jcommons</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<groupId>org.bestgrid</groupId>
+			<artifactId>grid-jcommons</artifactId>
+			<version>1.2</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

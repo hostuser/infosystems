@@ -2,12 +2,10 @@
   <parent>
     <artifactId>infosystems</artifactId>
     <groupId>au.org.arcs.infosystems</groupId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.8.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>au.org.arcs.infosystems</groupId>
   <artifactId>matchmaker</artifactId>
-  <version>0.4-SNAPSHOT</version>
   <description>ARCS Matchmaker (aka very simple metascheduler)</description>
   
   
@@ -24,16 +22,11 @@
       <artifactId>junit</artifactId>
       <version>4.1</version>
     </dependency>
-    	<dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.14</version>
-    </dependency>
 		
-    	<dependency>
+ 	<dependency>
     		<groupId>au.org.arcs.infosystems</groupId>
     		<artifactId>mds4-client</artifactId>
-    		<version>0.4-SNAPSHOT</version>
+    		<version>0.8.1-SNAPSHOT</version>
     		<scope>compile</scope>
     	</dependency>
   </dependencies>

@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>au.org.arcs.infosystems</groupId>
   <artifactId>infosystems</artifactId>
   <packaging>pom</packaging>
-  <version>0.4-SNAPSHOT</version>
+  <version>0.8.1-SNAPSHOT</version>
   <name>infosystems Multi Project</name>
   <url>http://maven.apache.org</url>
   
@@ -14,19 +13,51 @@
 			<url>http://code.arcs.org.au/nexus/content/groups/public</url>
 		</repository>
 	</repositories>
+
+
+        <scm>
+                <connection>scm:git:git://code.arcs.org.au/~markus/infosystems/infosystems-bestgrid.git
+                </connection>
+                <url>scm:git:git://code.arcs.org.au/~markus/infosystems/infosystems-bestgrid.git
+                </url>
+        </scm>
+
+
+        <distributionManagement>
+                <repository>
+                        <id>arcs.release</id>
+                        <name>ARCS Release Repository</name>
+                        <url>http://code.arcs.org.au/nexus/content/repositories/releases
+                        </url>
+                        <uniqueVersion>false</uniqueVersion>
+                </repository>
+                <snapshotRepository>
+                        <id>arcs.snapshot</id>
+                        <name>ARCS SNAPSHOT Repository</name>
+                        <url>http://code.arcs.org.au/nexus/content/repositories/snapshots
+                        </url>
+                        <uniqueVersion>false</uniqueVersion>
+                </snapshotRepository>
+        </distributionManagement>
+
+
+
+
   
   <modules>
-  	<module>glue-xmlbeans</module>
-  	<module>glue-transformer</module>
-  	<module>apacglue-transformer-ext</module>
+<!--  	<module>glue-xmlbeans</module>-->
+<!--  	<module>glue-transformer</module>-->
+<!--  	<module>apacglue-transformer-ext</module>-->
   	<module>mds4-client</module>
   	<module>matchmaker</module>
+  	<module>mysql-mds</module>
   </modules>
   <build>
   <plugins>
   			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.7</version>
 				<configuration>
 					<aggregate>true</aggregate>
 					<linksource>true</linksource>

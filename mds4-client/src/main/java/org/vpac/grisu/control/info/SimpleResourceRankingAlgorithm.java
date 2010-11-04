@@ -2,6 +2,7 @@ package org.vpac.grisu.control.info;
 
 
 import au.org.arcs.jcommons.interfaces.GridResource;
+import au.org.arcs.jcommons.interfaces.RankingAlgorithm;
 
 
 /**
