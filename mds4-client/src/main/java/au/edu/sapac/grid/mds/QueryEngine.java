@@ -150,7 +150,7 @@ public final static String VERSION = (("$LastChangedRevision: 131 $".split(":"))
         }
         else {
             logger.info("No MDS cache file... Creating one...");
-            System.err.println("No MDS cache file... Creating one...");
+//            System.err.println("No MDS cache file... Creating one...");
             makeCacheFile(mdsCacheFile);
             return true;
         }
