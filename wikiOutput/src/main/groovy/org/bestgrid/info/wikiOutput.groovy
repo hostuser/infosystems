@@ -2,29 +2,34 @@ package org.bestgrid.info
 
 import au.edu.sapac.grid.mds.QueryClient 
 
-//public static void main(String[] args) {
-
 qc = new QueryClient("/tmp")
 //qc = new SQLQueryClient("jdbc:mysql://mysql-bg.ceres.auckland.ac.nz/mds_test", "grisu_read", "password")
 
+vo = "/ARCS/BeSTGRID"
 
-apps = qc.getCodesOnGridForVO("/ARCS/BeSTGRID")
+apps = qc.getCodesOnGridForVO(vo)
+
+allSites = qc.getSitesForVO(vo) 
 
 for (app in apps) {
 	
 	println app
 	println "|Version|Site|"
-	versions = qc.getVersionsOfCodeOnGridForVO(app, "/ARCS/BeSTGRID")
+	versions = qc.getVersionsOfCodeOnGridForVO(app, vo)
 	for ( version in versions ) {
 		sites = qc.getSitesWithAVersionOfACode(app, version)
-		if ( sites.size() > 1 ) {
+		
+		if ( sites.size() > 1 ) { 
 			println("|"+version+"||")
 			for ( site in sites ) {
-				println("||"+site+"|")
+				if ( allSites.contains(site) ) {
+					println("||"+site+"|")
+				}
 			}
 		} else {
-			println("|"+version+"|"+sites[0]+"|")
+			if ( allSites.contains(sites[0]) ) {
+				println("|"+version+"|"+sites[0]+"|")
+			}
 		}
 	}
 }
-//}
