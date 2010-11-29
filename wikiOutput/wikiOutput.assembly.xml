@@ -1,6 +1,9 @@
 <assembly>
-    <id>binary</id>
+	<id>binary</id>
 	<formats>
+<!--				<format>dir</format>-->
+		<!--		<format>zip</format>-->
+		<!--		<format>tar.gz</format>-->
 		<format>jar</format>
 	</formats>
 	<includeBaseDirectory>false</includeBaseDirectory>
@@ -11,6 +14,9 @@
 			<useTransitiveFiltering>true</useTransitiveFiltering>
 			<useProjectArtifact>true</useProjectArtifact>
 			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>org.bestgrid.info:wikiOutput</include>
+			</includes>
 			<excludes>
 				<exclude>junit:junit</exclude>
 				<exclude>bouncycastle:bcprov-jdk15</exclude>
@@ -21,18 +27,30 @@
 					<exclude>**/MANIFEST.MF</exclude>
 					<exclude>**/LICENSE.txt</exclude>
 					<exclude>**/NOTICE.txt</exclude>
+					<exclude>**/DEPENDENCIES</exclude>
 					<exclude>**/LICENSE</exclude>
 					<exclude>**/NOTICE</exclude>
-					<exclude>log4j.properties</exclude>
-					<exclude>certificates.zip</exclude>
-					<exclude>vomses.zip</exclude>
+					<exclude>**/log4j.properties</exclude>
 					<exclude>arcs/__init__.py</exclude>
-					<exclude>gluev12r2-ext-class-map.properties</exclude>
-					<exclude>rebel.xml</exclude>
+					<exclude>META-INF/services/javax.script.ScriptEngineFactory</exclude>
+					<exclude>META-INF/maven/jline/jline/pom.properties</exclude>
+					<exclude>META-INF/maven/jline/jline/pom.xml</exclude>
+<!--					<exclude>client-config.wsdd</exclude>-->
 				</excludes>
 			</unpackOptions>
 		</dependencySet>
 	</dependencySets>
 
-</assembly>
+	<files>
+		<file>
+			<source>src/main/resources/log4j.properties</source>
+			<outputDirectory>/</outputDirectory>
+		</file>
+		<file>
+			<source>src/main/resources/gluev12r2-ext-class-map.properties</source>
+			<outputDirectory>/</outputDirectory>
+		</file>
+	</files>
 
+
+</assembly>

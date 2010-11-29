@@ -162,7 +162,7 @@
 		<dependency>
 			<groupId>org.bestgrid</groupId>
 			<artifactId>grid-jcommons</artifactId>
-			<version>1.2</version>
+			<version>1.2.2</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
@@ -179,21 +179,29 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
 
-					<descriptors>
-						<descriptor>mds4-client.assembly.xml</descriptor>
+							<descriptors>
+								<descriptor>mds4-client.assembly.xml</descriptor>
+							</descriptors>
+							<finalName>mds4-client</finalName>
+							<archive>
+								<index>true</index>
+								<manifestEntries>
+									<Class-Path>bcprov.jar bcprov-jdk15-143.jar local-backend.jar grisu-client-library.jar
+									</Class-Path>
+								</manifestEntries>
+							</archive>
 
-					</descriptors>
-
-					<archive>
-						<index>true</index>
-						<manifest>
-							<addClasspath>true</addClasspath>
-						</manifest>
-					</archive>
-
-				</configuration>
+						</configuration>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 		</plugins>
