@@ -40,10 +40,11 @@ public class SQLQueryClient implements GridInfoInterface {
 			InstantiationException, IllegalAccessException {
 		Connection con = null;
 		try {
+
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			con = DriverManager.getConnection(
 					"jdbc:mysql://mysql-bg.ceres.auckland.ac.nz/mds_test",
-					"grisu", "RGHWI6u/m83GA");
+					"grisu_read", "password");
 
 			QueryClient qClient = new QueryClient("/tmp");
 			SQLQueryClient sClient = new SQLQueryClient(con);

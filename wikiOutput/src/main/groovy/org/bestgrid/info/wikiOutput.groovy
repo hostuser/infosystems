@@ -2,10 +2,10 @@ package org.bestgrid.info
 
 import au.edu.sapac.grid.mds.QueryClient 
 
+vo = "/ARCS/BeSTGRID"
+
 qc = new QueryClient("/tmp")
 //qc = new SQLQueryClient("jdbc:mysql://mysql-bg.ceres.auckland.ac.nz/mds_test", "grisu_read", "password")
-
-vo = "/ARCS/BeSTGRID"
 
 apps = qc.getCodesOnGridForVO(vo)
 
@@ -33,3 +33,5 @@ for (app in apps) {
 		}
 	}
 }
+
+
