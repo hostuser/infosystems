@@ -15,7 +15,7 @@
 			<useProjectArtifact>true</useProjectArtifact>
 			<outputDirectory>/</outputDirectory>
 			<includes>
-				<include>org.bestgrid.info:wikiOutput</include>
+				<include>org.bestgrid.info:wikiOutputJava</include>
 			</includes>
 			<excludes>
 				<exclude>junit:junit</exclude>
