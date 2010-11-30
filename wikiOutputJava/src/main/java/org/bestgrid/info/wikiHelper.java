@@ -2,6 +2,7 @@ package org.bestgrid.info;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -63,9 +64,11 @@ public class wikiHelper {
 					}
 				}
 				if (temp.size() > 1) {
-					System.out.println("|-\n|" + version + "\n|\n");
-					for (String site : temp) {
-						System.out.println("|-\n|\n|" + site + "\n");
+					Iterator<String> i = temp.iterator();
+					System.out.println("|-\n|" + version + "\n|" + i.next()
+							+ "\n");
+					while (i.hasNext()) {
+						System.out.println("|-\n|\n|" + i.next() + "\n");
 					}
 				} else {
 					System.out.println("|-\n|" + version + "\n|"
