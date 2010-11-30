@@ -53,6 +53,7 @@
   	<module>matchmaker</module>
   	<module>mysql-mds</module>
   	<module>wikiOutput</module>
+  	<module>wikiOutputJava</module>
   </modules>
   <build>
   <plugins>

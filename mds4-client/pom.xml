@@ -162,7 +162,7 @@
 		<dependency>
 			<groupId>org.bestgrid</groupId>
 			<artifactId>grid-jcommons</artifactId>
-			<version>1.2.2</version>
+			<version>1.2.3-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
