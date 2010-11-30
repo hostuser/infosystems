@@ -51,8 +51,8 @@ public class wikiHelper {
 					.println("{| class=\"wikitable\"\n"
 							+ ""
 							+ "|-\n"
-							+ "! scope=\"col\" width=\"200\" align=\"left\" | Version\n"
-							+ "! scope=\"col\" width=\"200\" align=\"left\" | Site");
+							+ "! scope=\"col\" width=\"260\" align=\"left\" | Version\n"
+							+ "! scope=\"col\" width=\"340\" align=\"left\" | Site");
 			String[] versions = qc.getVersionsOfCodeOnGridForVO(app, vo);
 			for (String version : versions) {
 				String[] sites = qc.getSitesWithAVersionOfACode(app, version);
