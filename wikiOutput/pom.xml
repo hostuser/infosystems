@@ -4,11 +4,10 @@
 	<parent>
 		<artifactId>infosystems</artifactId>
 		<groupId>au.org.arcs.infosystems</groupId>
-		<version>0.8.2-SNAPSHOT</version>
+		<version>0.8.3-SNAPSHOT</version>
 	</parent>
 	<groupId>org.bestgrid.info</groupId>
 	<artifactId>wikiOutput</artifactId>
-	<version>0.8.2-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
@@ -33,6 +32,7 @@
 
 
 
+	<version>0.8.3-SNAPSHOT</version>
 	<build>
 		<plugins>
 

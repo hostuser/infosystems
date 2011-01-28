@@ -4,7 +4,7 @@
   <groupId>au.org.arcs.infosystems</groupId>
   <artifactId>infosystems</artifactId>
   <packaging>pom</packaging>
-  <version>0.8.2-SNAPSHOT</version>
+  <version>0.8.3-SNAPSHOT</version>
   <name>infosystems Multi Project</name>
   <url>http://maven.apache.org</url>
   
@@ -52,7 +52,6 @@
   	<module>mds4-client</module>
   	<module>matchmaker</module>
   	<module>mysql-mds</module>
-  	<module>wikiOutput</module>
   	<module>wikiOutputJava</module>
   </modules>
   <build>

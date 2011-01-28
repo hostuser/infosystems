@@ -1,5 +1,7 @@
-package org.vpac.grisu.control.info;
+package grisu.control.info;
 
+import grisu.control.info.GridResourceBackendImpl;
+import grisu.control.info.SimpleResourceRankingAlgorithm;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.CEVOViewType;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.ComputingElementType;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.SiteType;

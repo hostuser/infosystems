@@ -1,4 +1,4 @@
-package org.vpac.grisu.control.info;
+package grisu.control.info;
 
 import java.util.ArrayList;
 import java.util.List;

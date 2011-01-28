@@ -1214,7 +1214,7 @@ public class QueryClient implements GridInfoInterface {
 
 	/**
 	 * Get the name of the module required by a particular version of a code at
-	 * a particular site. 
+	 * a particular site.
 	 * 
 	 * @param site
 	 *            The site to check
@@ -1237,11 +1237,11 @@ public class QueryClient implements GridInfoInterface {
 		if (version == null || version.length() == 0
 				|| Constants.NO_VERSION_INDICATOR_STRING.equals(version)) {
 
-//			xpathQueryString = "get SoftwarePackage where Site.Name='" + site
-//					+ "' and ComputingElement.Name='" + queue
-//					+ "' and SoftwarePackage.Name='" + code + "'";
+			// xpathQueryString = "get SoftwarePackage where Site.Name='" + site
+			// + "' and ComputingElement.Name='" + queue
+			// + "' and SoftwarePackage.Name='" + code + "'";
 
-			 throw new RuntimeException("Version is not specified.");
+			throw new RuntimeException("Version is not specified.");
 		} else {
 			xpathQueryString = "get SoftwarePackage where Site.Name='" + site
 					+ "' and ComputingElement.Name='" + queue
@@ -1631,12 +1631,12 @@ public class QueryClient implements GridInfoInterface {
 
 			// client.getExeNameOfCodeAtSite("Canterbury", "java",
 			// "jdk-1.6.0_04-fcs");
-			//			
+			//
 			// client.getExeNameOfCodeAtQueueAtSite("Canterbury", "small",
 			// "java", "jdk-1.6.0_04-fcs");
-			//			
+			//
 			// client.getApplicationNamesThatProvideExecutable("java");
-			//			
+			//
 			// for (String code : client.getCodesOnGridForVO("/ARCS/NGAdmin") )
 			// {
 			// System.out.println(code);
@@ -1746,7 +1746,7 @@ public class QueryClient implements GridInfoInterface {
 		try {
 			xpathQuery = transformer.transform(
 			// "get SoftwarePackage where SoftwareExecutable.Name like '%"+executable
-					// + "'");
+			// + "'");
 					"get SoftwarePackage where SoftwareExecutable.Name = '"
 							+ executable + "'");
 			logger.debug("xpath: " + xpathQuery);

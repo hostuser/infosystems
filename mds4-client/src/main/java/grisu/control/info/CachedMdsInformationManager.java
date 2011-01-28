@@ -1,4 +1,4 @@
-package org.vpac.grisu.control.info;
+package grisu.control.info;
 
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.ComputingElementType;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.SEAccessProtocolType;
@@ -344,7 +344,7 @@ public class CachedMdsInformationManager implements InformationManager {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.vpac.grisu.control.info.InformationManager#getAllApplicationsAtSite
+	 * grisu.control.info.InformationManager#getAllApplicationsAtSite
 	 * (java.lang.String)
 	 */
 	public String[] getAllApplicationsAtSite(String site) {
@@ -362,7 +362,7 @@ public class CachedMdsInformationManager implements InformationManager {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.vpac.grisu.control.info.InformationManager#getAllApplicationsOnGrid()
+	 * grisu.control.info.InformationManager#getAllApplicationsOnGrid()
 	 */
 	public String[] getAllApplicationsOnGrid() {
 
@@ -533,7 +533,7 @@ public class CachedMdsInformationManager implements InformationManager {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.vpac.grisu.control.info.InformationManager#getAllSubmissionQueues()
+	 * grisu.control.info.InformationManager#getAllSubmissionQueues()
 	 */
 	public String[] getAllSubmissionLocations() {
 
@@ -550,7 +550,7 @@ public class CachedMdsInformationManager implements InformationManager {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.vpac.grisu.control.info.InformationManager#getAllSubmissionQueues
+	 * grisu.control.info.InformationManager#getAllSubmissionQueues
 	 * (java.lang.String, java.lang.String)
 	 */
 	public String[] getAllSubmissionLocations(String application, String version) {
@@ -571,7 +571,7 @@ public class CachedMdsInformationManager implements InformationManager {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.vpac.grisu.control.info.InformationManager#getAllSubmissionQueues
+	 * grisu.control.info.InformationManager#getAllSubmissionQueues
 	 * (java.lang.String)
 	 */
 	public String[] getAllSubmissionLocationsForApplication(String application) {
@@ -647,7 +647,7 @@ public class CachedMdsInformationManager implements InformationManager {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.vpac.grisu.control.info.InformationManager#getApplicationDetails(
+	 * grisu.control.info.InformationManager#getApplicationDetails(
 	 * java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public Map<String, String> getApplicationDetails(String application,
@@ -863,7 +863,7 @@ public class CachedMdsInformationManager implements InformationManager {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.vpac.grisu.control.info.InformationManager#getDataLocationsForVO(
+	 * grisu.control.info.InformationManager#getDataLocationsForVO(
 	 * java.lang.String)
 	 */
 	public Map<String, String[]> getDataLocationsForVO(String fqan) {
@@ -902,7 +902,7 @@ public class CachedMdsInformationManager implements InformationManager {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.vpac.grisu.control.info.InformationManager#getSiteForHostOrUrl(java
+	 * grisu.control.info.InformationManager#getSiteForHostOrUrl(java
 	 * .lang.String)
 	 */
 	public String getSiteForHostOrUrl(String host_or_url) {
@@ -938,7 +938,7 @@ public class CachedMdsInformationManager implements InformationManager {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.vpac.grisu.control.info.InformationManager#getVersionsOfApplicationOnSite
+	 * grisu.control.info.InformationManager#getVersionsOfApplicationOnSite
 	 * (java.lang.String, java.lang.String)
 	 */
 	public String[] getVersionsOfApplicationOnSite(String application,

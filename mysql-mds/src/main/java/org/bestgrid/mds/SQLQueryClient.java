@@ -5,6 +5,8 @@
 
 package org.bestgrid.mds;
 
+import grisu.control.info.GridResourceBackendImpl;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -19,7 +21,6 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.vpac.grisu.control.info.GridResourceBackendImpl;
 
 import au.edu.sapac.grid.mds.QueryClient;
 import au.org.arcs.jcommons.constants.Constants;

@@ -1,5 +1,7 @@
 package org.vpac.grisu.control.info;
 
+import grisu.control.info.SimpleResourceRankingAlgorithm;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
