@@ -1,5 +1,9 @@
 package au.edu.sapac.grid.mds;
 
+import grisu.jcommons.constants.Constants;
+import grisu.jcommons.interfaces.GridInfoInterface;
+import grisu.jcommons.utils.SubmissionLocationHelpers;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +20,6 @@ import au.edu.sapac.grid.glueschema.transform.GLUEQueryTransformer;
 import au.edu.sapac.grid.glueschema.transform.GLUEQueryTransformerFactory;
 import au.edu.sapac.grid.glueschema.transform.ParseException;
 import au.edu.sapac.grid.glueschema.transform.UnknownGLUESchemaVersion;
-import au.org.arcs.jcommons.constants.Constants;
-import au.org.arcs.jcommons.interfaces.GridInfoInterface;
-import au.org.arcs.jcommons.utils.SubmissionLocationHelpers;
 
 public class QueryClient implements GridInfoInterface {
 

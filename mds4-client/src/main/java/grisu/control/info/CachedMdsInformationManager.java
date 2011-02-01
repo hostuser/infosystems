@@ -1,5 +1,9 @@
 package grisu.control.info;
 
+import grisu.jcommons.constants.Constants;
+import grisu.jcommons.interfaces.GridResource;
+import grisu.jcommons.interfaces.InformationManager;
+import grisu.jcommons.utils.SubmissionLocationHelpers;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.ComputingElementType;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.SEAccessProtocolType;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.SiteType;
@@ -22,10 +26,6 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 
 import au.edu.sapac.grid.mds.QueryClient;
-import au.org.arcs.jcommons.constants.Constants;
-import au.org.arcs.jcommons.interfaces.GridResource;
-import au.org.arcs.jcommons.interfaces.InformationManager;
-import au.org.arcs.jcommons.utils.SubmissionLocationHelpers;
 
 /**
  * Mds information manager that can uses Gersons mds infosystems library

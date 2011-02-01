@@ -1,12 +1,13 @@
 package grisu.control.info;
 
+import grisu.jcommons.interfaces.GridResource;
+import grisu.jcommons.interfaces.Rankable;
+import grisu.jcommons.interfaces.RankingAlgorithm;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import au.org.arcs.jcommons.interfaces.GridResource;
-import au.org.arcs.jcommons.interfaces.Rankable;
-import au.org.arcs.jcommons.interfaces.RankingAlgorithm;
 
 public class GridResourceBackendImpl implements Rankable, GridResource {
 

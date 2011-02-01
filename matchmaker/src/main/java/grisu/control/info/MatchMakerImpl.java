@@ -2,6 +2,12 @@ package grisu.control.info;
 
 import grisu.control.info.GridResourceBackendImpl;
 import grisu.control.info.SimpleResourceRankingAlgorithm;
+import grisu.jcommons.constants.Constants;
+import grisu.jcommons.constants.JobSubmissionProperty;
+import grisu.jcommons.interfaces.GridResource;
+import grisu.jcommons.interfaces.MatchMaker;
+import grisu.jcommons.interfaces.RankingAlgorithm;
+import grisu.jcommons.utils.JsdlHelpers;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.CEVOViewType;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.ComputingElementType;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.SiteType;
@@ -22,12 +28,6 @@ import org.w3c.dom.Document;
 
 import au.edu.sapac.grid.mds.QueryClient;
 import au.org.arcs.grid.sched.util.PluginLoader;
-import au.org.arcs.jcommons.constants.Constants;
-import au.org.arcs.jcommons.constants.JobSubmissionProperty;
-import au.org.arcs.jcommons.interfaces.GridResource;
-import au.org.arcs.jcommons.interfaces.MatchMaker;
-import au.org.arcs.jcommons.interfaces.RankingAlgorithm;
-import au.org.arcs.jcommons.utils.JsdlHelpers;
 
 public class MatchMakerImpl implements MatchMaker {
 

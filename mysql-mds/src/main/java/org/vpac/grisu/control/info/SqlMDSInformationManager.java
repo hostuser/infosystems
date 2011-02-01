@@ -1,9 +1,10 @@
 package org.vpac.grisu.control.info;
 
-import au.org.arcs.jcommons.constants.Constants;
-import au.org.arcs.jcommons.interfaces.GridResource;
-import au.org.arcs.jcommons.interfaces.InformationManager;
-import au.org.arcs.jcommons.utils.SubmissionLocationHelpers;
+import grisu.jcommons.constants.Constants;
+import grisu.jcommons.interfaces.GridResource;
+import grisu.jcommons.interfaces.InformationManager;
+import grisu.jcommons.utils.SubmissionLocationHelpers;
+
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;

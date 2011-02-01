@@ -6,6 +6,10 @@
 package org.bestgrid.mds;
 
 import grisu.control.info.GridResourceBackendImpl;
+import grisu.jcommons.constants.Constants;
+import grisu.jcommons.constants.JobSubmissionProperty;
+import grisu.jcommons.interfaces.GridInfoInterface;
+import grisu.jcommons.interfaces.GridResource;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,10 +27,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import au.edu.sapac.grid.mds.QueryClient;
-import au.org.arcs.jcommons.constants.Constants;
-import au.org.arcs.jcommons.constants.JobSubmissionProperty;
-import au.org.arcs.jcommons.interfaces.GridInfoInterface;
-import au.org.arcs.jcommons.interfaces.GridResource;
 
 /**
  * 

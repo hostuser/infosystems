@@ -1,15 +1,16 @@
 package grisu.control.info;
 
+import grisu.jcommons.constants.JobSubmissionProperty;
+import grisu.jcommons.interfaces.GridResource;
+import grisu.jcommons.interfaces.MatchMaker;
+import grisu.jcommons.interfaces.RankingAlgorithm;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.w3c.dom.Document;
 
-import au.org.arcs.jcommons.constants.JobSubmissionProperty;
-import au.org.arcs.jcommons.interfaces.GridResource;
-import au.org.arcs.jcommons.interfaces.MatchMaker;
-import au.org.arcs.jcommons.interfaces.RankingAlgorithm;
 
 public class CachedMatchMakerImpl implements MatchMaker {
 

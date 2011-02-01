@@ -1,6 +1,11 @@
 package org.vpac.grisu.control.info;
 
 import grisu.control.info.SimpleResourceRankingAlgorithm;
+import grisu.jcommons.constants.JobSubmissionProperty;
+import grisu.jcommons.interfaces.GridResource;
+import grisu.jcommons.interfaces.MatchMaker;
+import grisu.jcommons.interfaces.RankingAlgorithm;
+import grisu.jcommons.utils.JsdlHelpers;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,11 +16,6 @@ import org.bestgrid.mds.SQLQueryClient;
 import org.w3c.dom.Document;
 
 import au.org.arcs.grid.sched.util.PluginLoader;
-import au.org.arcs.jcommons.constants.JobSubmissionProperty;
-import au.org.arcs.jcommons.interfaces.GridResource;
-import au.org.arcs.jcommons.interfaces.MatchMaker;
-import au.org.arcs.jcommons.interfaces.RankingAlgorithm;
-import au.org.arcs.jcommons.utils.JsdlHelpers;
 
 public class SqlMDSMatchMaker implements MatchMaker {
 

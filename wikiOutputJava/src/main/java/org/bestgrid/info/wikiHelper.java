@@ -1,5 +1,7 @@
 package org.bestgrid.info;
 
+import grisu.jcommons.interfaces.GridInfoInterface;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -9,7 +11,6 @@ import java.util.TreeSet;
 import org.bestgrid.mds.SQLQueryClient;
 
 import au.edu.sapac.grid.mds.QueryClient;
-import au.org.arcs.jcommons.interfaces.GridInfoInterface;
 
 public class wikiHelper {
 

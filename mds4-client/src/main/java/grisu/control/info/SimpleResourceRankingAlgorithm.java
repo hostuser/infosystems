@@ -1,7 +1,7 @@
 package grisu.control.info;
 
-import au.org.arcs.jcommons.interfaces.GridResource;
-import au.org.arcs.jcommons.interfaces.RankingAlgorithm;
+import grisu.jcommons.interfaces.GridResource;
+import grisu.jcommons.interfaces.RankingAlgorithm;
 
 /**
  * This is the simplest ranking algorithm that I thought of...
