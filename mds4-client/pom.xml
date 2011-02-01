@@ -187,7 +187,8 @@
 							<descriptors>
 								<descriptor>mds4-client.assembly.xml</descriptor>
 							</descriptors>
-							<finalName>mds4-client</finalName>
+							<finalName>mds4-client-lib</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
 							<archive>
 								<index>true</index>
 								<manifestEntries>
