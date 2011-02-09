@@ -2,7 +2,7 @@
 	<parent>
 		<artifactId>infosystems</artifactId>
 		<groupId>au.org.arcs.infosystems</groupId>
-		<version>0.8.3-SNAPSHOT</version>
+		<version>0.8.3</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>mds4-client</artifactId>
@@ -217,7 +217,7 @@
 <!--					<name>BUILD_NUMBER</name>-->
 <!--				</property>-->
 <!--			</activation>-->
-<!---->
+
 <!--			<build>-->
 <!--				<plugins>-->
 <!--					<plugin>-->
@@ -240,7 +240,7 @@
 <!--					</plugin>-->
 <!--				</plugins>-->
 <!--			</build>-->
-<!---->
+
 <!--		</profile>-->
 <!--	</profiles>	-->
 </project>
