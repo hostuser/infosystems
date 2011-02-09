@@ -6,9 +6,7 @@
 		<groupId>au.org.arcs.infosystems</groupId>
 		<version>0.8.3-SNAPSHOT</version>
 	</parent>
-	<groupId>org.bestgrid.info</groupId>
 	<artifactId>wikiOutputJava</artifactId>
-	<version>0.8.2-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>au.org.arcs.infosystems</groupId>
