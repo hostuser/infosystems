@@ -34,32 +34,32 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<configuration>
-
-							<descriptors>
-								<descriptor>mysql-mds.client.assembly.xml</descriptor>
-							</descriptors>
-							<finalName>mysql-client</finalName>
-							<archive>
-								<index>true</index>
-								<manifestEntries>
-									<Class-Path>bcprov.jar bcprov-jdk15-143.jar local-backend.jar grisu-client-library.jar
-									</Class-Path>
-								</manifestEntries>
-							</archive>
-
-						</configuration>
-						<goals>
-							<goal>attached</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+<!--			<plugin>-->
+<!--				<artifactId>maven-assembly-plugin</artifactId>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<phase>package</phase>-->
+<!--						<configuration>-->
+<!---->
+<!--							<descriptors>-->
+<!--								<descriptor>mysql-mds.client.assembly.xml</descriptor>-->
+<!--							</descriptors>-->
+<!--							<finalName>mysql-client</finalName>-->
+<!--							<archive>-->
+<!--								<index>true</index>-->
+<!--								<manifestEntries>-->
+<!--									<Class-Path>bcprov.jar bcprov-jdk15-143.jar local-backend.jar grisu-client-library.jar-->
+<!--									</Class-Path>-->
+<!--								</manifestEntries>-->
+<!--							</archive>-->
+<!---->
+<!--						</configuration>-->
+<!--						<goals>-->
+<!--							<goal>attached</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
 
 		</plugins>
 	</build>
