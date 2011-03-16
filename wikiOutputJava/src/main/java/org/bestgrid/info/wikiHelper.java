@@ -4,10 +4,15 @@ import grisu.jcommons.interfaces.GridInfoInterface;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.StringUtils;
 import org.bestgrid.mds.SQLQueryClient;
 
 import au.edu.sapac.grid.mds.QueryClient;
@@ -43,41 +48,89 @@ public class wikiHelper {
 
 		};
 
+
+
 		Arrays.sort(apps, icc);
 
-		String[] allSites = qc.getSitesForVO(vo);
+		Map<String, Map<String, Set<String>>> siteMap = new TreeMap<String, Map<String, Set<String>>>();
+
+		for ( String site : qc.getSitesForVO(vo)) {
+			Map<String, Set<String>> versionMap = new HashMap<String, Set<String>>();
+			siteMap.put(site, versionMap);
+
+		}
+
+		String[] allSites = siteMap.keySet().toArray(new String[] {});
 
 		for (String app : apps) {
-			System.out.println("== " + app + " ==");
-			System.out
-					.println("{| class=\"wikitable\"\n"
-							+ ""
-							+ "|-\n"
-							+ "! scope=\"col\" width=\"260\" align=\"left\" | Version\n"
-							+ "! scope=\"col\" width=\"340\" align=\"left\" | Site");
+
 			String[] versions = qc.getVersionsOfCodeOnGridForVO(app, vo);
 			for (String version : versions) {
 				String[] sites = qc.getSitesWithAVersionOfACode(app, version);
-				Set<String> temp = new TreeSet<String>();
+
 				for (String site : sites) {
-					if (Arrays.binarySearch(allSites, site) >= 0) {
-						temp.add(site);
+
+					if (!siteMap.keySet().contains(site)) {
+						continue;
 					}
-				}
-				if (temp.size() > 1) {
-					Iterator<String> i = temp.iterator();
-					System.out.println("|-\n|" + version + "\n|" + i.next()
-							+ "\n");
-					while (i.hasNext()) {
-						System.out.println("|-\n|\n|" + i.next() + "\n");
+
+					Map<String, Set<String>> appMap = siteMap.get(site);
+					if ( appMap == null ) {
+						appMap = new TreeMap<String, Set<String>>();
+						siteMap.put(site, appMap);
 					}
-				} else {
-					System.out.println("|-\n|" + version + "\n|"
-							+ temp.iterator().next() + "\n");
+
+					Set<String> versionSet = appMap.get(app);
+					if (versionSet == null) {
+						versionSet = new TreeSet<String>();
+						appMap.put(app, versionSet);
+					}
+
+					versionSet.add(version);
+
 				}
+
+
+
 			}
-			System.out.println("|}");
 		}
+
+		// for (String site : siteMap.keySet()) {
+		// System.out.println("Site: " + site);
+		//
+		// Map<String, Set<String>> appMap = siteMap.get(site);
+		// for (String app : appMap.keySet()) {
+		// System.out.println("\tApp: " + app);
+		// for ( String version : appMap.get(app)) {
+		// System.out.println("\t\tVersion: " + version);
+		// }
+		//
+		// }
+		// }
+
+		StringBuffer table = new StringBuffer();
+		table.append("{| border=\"1\" cellpadding=\"5\" cellspacing=\"0\"\n");
+		table.append("! Software Package !!" + StringUtils.join(allSites, "!!")
+				+ "\n");
+		for (String app : apps) {
+			table.append("|-\n");
+			table.append("| '''" + app + "''' ||");
+			List<String> allVersions = new LinkedList<String>();
+			for (String allSite : allSites) {
+				Set<String> versions = siteMap.get(allSite).get(app);
+				String versionsString = StringUtils.join(versions, "<br>");
+				if (StringUtils.isBlank(versionsString)) {
+					versionsString = "   ";
+				}
+				allVersions.add(versionsString);
+			}
+			table.append(StringUtils.join(allVersions, " || ") + "\n");
+		}
+
+		table.append("|-\n");
+		table.append("|}");
+
+		System.out.println(table);
 
 	}
 }
