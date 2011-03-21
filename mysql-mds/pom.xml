@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>infosystems</artifactId>
 		<groupId>au.org.arcs.infosystems</groupId>
-		<version>0.8.4-SNAPSHOT</version>
+		<version>0.8.4</version>
 	</parent>
 	<artifactId>mysql-mds</artifactId>
 
@@ -11,7 +11,7 @@
 		<dependency>
 			<groupId>au.org.arcs.infosystems</groupId>
 			<artifactId>matchmaker</artifactId>
-			<version>0.8.4-SNAPSHOT</version>
+			<version>0.8.4</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -40,7 +40,7 @@
 <!--					<execution>-->
 <!--						<phase>package</phase>-->
 <!--						<configuration>-->
-<!---->
+
 <!--							<descriptors>-->
 <!--								<descriptor>mysql-mds.client.assembly.xml</descriptor>-->
 <!--							</descriptors>-->
@@ -52,7 +52,7 @@
 <!--									</Class-Path>-->
 <!--								</manifestEntries>-->
 <!--							</archive>-->
-<!---->
+
 <!--						</configuration>-->
 <!--						<goals>-->
 <!--							<goal>attached</goal>-->
