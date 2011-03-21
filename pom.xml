@@ -42,8 +42,7 @@
 
 
 	<scm>
-		<connection>scm:git:git@code.arcs.org.au:infosystems/infosystems.git
-                </connection>
+		<connection>scm:git:git://code.arcs.org.au/infosystems/infosystems.git</connection>
 		<developerConnection>scm:git:git@code.arcs.org.au:infosystems/infosystems.git</developerConnection>
 
 	</scm>
