@@ -44,7 +44,7 @@
 	<scm>
 		<connection>scm:git:git://code.arcs.org.au/infosystems/infosystems.git</connection>
 		<developerConnection>scm:git:git@code.arcs.org.au:infosystems/infosystems.git</developerConnection>
-
+		<url>http://code.arcs.org.au/gitorious/infosystems</url>
 	</scm>
 
 	<distributionManagement>
