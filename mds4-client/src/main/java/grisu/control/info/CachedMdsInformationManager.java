@@ -15,6 +15,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -193,6 +194,7 @@ public class CachedMdsInformationManager implements InformationManager {
 	private Map<String, String[]> cachedApplicationsPerExecutables = new HashMap<String, String[]>();
 	// private Map<String, String> defaultStorageElementForSubmissionLocation =
 	// new HashMap<String, String>();
+	private Set<String> cachedAllStagingFileSystems = null;
 
 	private Map<String, GridResource> submissionLocationMap;
 
@@ -539,6 +541,20 @@ public class CachedMdsInformationManager implements InformationManager {
 			allGridSites = client.getSitesOnGrid();
 		}
 		return allGridSites;
+	}
+
+	private Set<String> getAllStagingFileSystems() {
+
+		if (cachedAllStagingFileSystems == null) {
+			cachedAllStagingFileSystems = new TreeSet<String>();
+
+			for ( String subLoc : getAllSubmissionLocations() ) {
+				String [] fs = getStagingFileSystemForSubmissionLocation(subLoc);
+				Collections.addAll(cachedAllStagingFileSystems, fs);
+			}
+		}
+		return cachedAllStagingFileSystems;
+
 	}
 
 	/*
