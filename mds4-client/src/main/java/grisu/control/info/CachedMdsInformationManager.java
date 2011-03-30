@@ -77,16 +77,22 @@ public class CachedMdsInformationManager implements InformationManager {
 		CachedMdsInformationManager info = new CachedMdsInformationManager(
 				System.getProperty("user.home"));
 
-		for (String dl : info.getDataLocationsForVO("/ARCS/BeSTGRID")
-				.keySet()) {
-			System.out.println(dl);
-		}
+		// for (String dl : info.getDataLocationsForVO("/ARCS/BeSTGRID")
+		// .keySet()) {
+		// System.out.println(dl);
+		// }
+		//
+		// for (String[] dl : info.getDataLocationsForVO("/ARCS/BeSTGRID")
+		// .values()) {
+		// for (String d : dl) {
+		// System.out.println(d);
+		// }
+		// }
 
-		for (String[] dl : info.getDataLocationsForVO("/ARCS/BeSTGRID")
-				.values()) {
-			for (String d : dl) {
-				System.out.println(d);
-			}
+		System.out.println("Start");
+
+		for (String fs : info.getAllStagingFileSystems()) {
+			System.out.println(fs);
 		}
 
 		String[] allAppsOnGrid = info.getAllApplicationsOnGrid();
@@ -209,6 +215,12 @@ public class CachedMdsInformationManager implements InformationManager {
 		// client = new QueryClient(Environment.getGrisuDirectory().toString());
 		client = new QueryClient(mdsCacheFileDirectory);
 		lastUpdated = new Date();
+		new Thread() {
+			@Override
+			public void run() {
+				getAllStagingFileSystems();
+			}
+		}.start();
 	}
 
 	private String[] calculateAllApplicationsAtSite(String site) {
@@ -543,15 +555,33 @@ public class CachedMdsInformationManager implements InformationManager {
 		return allGridSites;
 	}
 
-	private Set<String> getAllStagingFileSystems() {
+	private synchronized Set<String> getAllStagingFileSystems() {
 
 		if (cachedAllStagingFileSystems == null) {
 			cachedAllStagingFileSystems = new TreeSet<String>();
 
-			for ( String subLoc : getAllSubmissionLocations() ) {
+			// final ExecutorService executor = Executors
+			// .newFixedThreadPool(getAllSubmissionLocations().length);
+
+			for (final String subLoc : getAllSubmissionLocations()) {
+				// Thread t = new Thread() {
+				// @Override
+				// public void run() {
+				// System.out.println("start: " + subLoc);
 				String [] fs = getStagingFileSystemForSubmissionLocation(subLoc);
 				Collections.addAll(cachedAllStagingFileSystems, fs);
+				// System.out.println("finish: " + subLoc);
+				// }
+				// };
+				// executor.execute(t);
 			}
+
+			// executor.shutdown();
+			// try {
+			// executor.awaitTermination(30, TimeUnit.SECONDS);
+			// } catch (InterruptedException e) {
+			// e.printStackTrace();
+			// }
 		}
 		return cachedAllStagingFileSystems;
 
@@ -995,11 +1025,19 @@ public class CachedMdsInformationManager implements InformationManager {
 	}
 
 	public boolean isVolatileDataLocation(String host, String path, String fqan) {
-		// TODO implement fake method
 
-		// getStagingFileSystemForSubmissionLocation(subLoc)
+		// beware, this is not really a reliable way to do this, but since this
+		// informationManger is not really used in production anymore it should
+		// be ok.
 
-		return false;
+		host = host.replace(":2811", "");
+
+		if (getAllStagingFileSystems().contains(host)) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 	private synchronized void possiblyResetCache() {
@@ -1034,7 +1072,16 @@ public class CachedMdsInformationManager implements InformationManager {
 
 			submissionLocationMap = null;
 
+			cachedAllStagingFileSystems = null;
+
 			lastUpdated = new Date();
+			new Thread() {
+				@Override
+				public void run() {
+					getAllStagingFileSystems();
+				}
+			}.start();
+
 		}
 	}
 
