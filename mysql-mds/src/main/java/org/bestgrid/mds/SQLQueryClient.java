@@ -33,6 +33,8 @@ import au.edu.sapac.grid.mds.QueryClient;
  * @author yhal003
  */
 public class SQLQueryClient implements GridInfoInterface {
+	
+	public final String VOLATILE="volatile";
 
 	static final Logger myLogger = Logger.getLogger(SQLQueryClient.class
 			.getName());
@@ -970,6 +972,39 @@ public class SQLQueryClient implements GridInfoInterface {
 		setString(s, 4, queue);
 		String[] result = runQuery(s, "1");
 		return !((result == null) || (result.length == 0));
+	}
+	
+	public boolean isVolatile(String hostname, String path, String fqan){
+		
+		String endpoint = "gsiftp://" + hostname + ":2811";
+		
+		PreparedStatement s;
+		String query;
+		
+		if ("/~/".equals(path)) {
+			query = "select sa.type from AccessProtocols ap,StorageElements s,StorageAreas sa,storageAreaACLs acls WHERE "+
+				"sa.id = acls.storageArea_id AND s.id = sa.storageElement_id " +
+				"AND ap.storageElement_id = s.id AND acls.vo = ? AND ap.endpoint=?";
+			s = getStatement(query);
+		}
+		else {
+			query = "select sa.type from AccessProtocols ap,StorageElements s,StorageAreas sa,storageAreaACLs acls WHERE "+
+			"sa.id = acls.storageArea_id AND s.id = sa.storageElement_id AND " +
+			"ap.storageElement_id = s.id AND acls.vo = ? AND ap.endpoint=? AND sa.path+?";
+			s = getStatement(query);
+			setString(s, 3, path);
+		}
+
+		setString(s,1,fqan);
+		setString(s,2,endpoint);
+		String[] result = runQuery(s,"type");
+		if (result.length == 1){
+			return result[0].equals(VOLATILE);
+		}
+		else {
+			// undefined is volatile by default
+			return true;
+		}
 	}
 
 	private String[] runQuery(PreparedStatement s, String output) {
