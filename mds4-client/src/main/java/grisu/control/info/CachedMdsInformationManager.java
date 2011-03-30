@@ -76,6 +76,18 @@ public class CachedMdsInformationManager implements InformationManager {
 		CachedMdsInformationManager info = new CachedMdsInformationManager(
 				System.getProperty("user.home"));
 
+		for (String dl : info.getDataLocationsForVO("/ARCS/BeSTGRID")
+				.keySet()) {
+			System.out.println(dl);
+		}
+
+		for (String[] dl : info.getDataLocationsForVO("/ARCS/BeSTGRID")
+				.values()) {
+			for (String d : dl) {
+				System.out.println(d);
+			}
+		}
+
 		String[] allAppsOnGrid = info.getAllApplicationsOnGrid();
 		Arrays.sort(allAppsOnGrid);
 
@@ -966,8 +978,11 @@ public class CachedMdsInformationManager implements InformationManager {
 		return temp;
 	}
 
-	public boolean isVolatileDataLocation(String dataLocation, String fqan) {
+	public boolean isVolatileDataLocation(String host, String path, String fqan) {
 		// TODO implement fake method
+
+		// getStagingFileSystemForSubmissionLocation(subLoc)
+
 		return false;
 	}
 
