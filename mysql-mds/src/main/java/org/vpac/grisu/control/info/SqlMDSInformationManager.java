@@ -50,7 +50,7 @@ public class SqlMDSInformationManager implements InformationManager {
 		for (GridResource resource : resources) {
 
 			String subLoc = SubmissionLocationHelpers
-					.createSubmissionLocationString(resource);
+			.createSubmissionLocationString(resource);
 			resourceMap.put(subLoc, resource);
 		}
 		return resourceMap;
@@ -231,7 +231,7 @@ public class SqlMDSInformationManager implements InformationManager {
 	private String getHostname(String contactString) {
 		String hostname = contactString.substring(
 				contactString.indexOf("https://") != 0 ? 0 : 8,
-				contactString.indexOf(":8443"));
+						contactString.indexOf(":8443"));
 		return hostname;
 	}
 
@@ -257,7 +257,7 @@ public class SqlMDSInformationManager implements InformationManager {
 		if (queSepIndex < 1) {
 			throw new RuntimeException(
 					"Wrong submission location format. Queue missing in subLoc: "
-							+ subLoc);
+					+ subLoc);
 		}
 		String queueName = subLoc.substring(0, queSepIndex);
 		String contactString = "";
@@ -286,12 +286,17 @@ public class SqlMDSInformationManager implements InformationManager {
 			String application, String submissionLocation) {
 
 		String queue = SubmissionLocationHelpers
-				.extractQueue(submissionLocation);
+		.extractQueue(submissionLocation);
 		String host = SubmissionLocationHelpers.extractHost(submissionLocation);
 
 		String[] temp = client.getVersionsOfCodeForQueueAndContactString(queue,
 				host, application);
 		return temp;
+	}
+
+	public boolean isVolatileDataLocation(String dataLocation, String fqan) {
+		// TODO Yuriy to implement
+		return false;
 	}
 
 }
