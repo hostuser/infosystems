@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import java.util.regex.*;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -302,7 +304,17 @@ public class SQLQueryClient implements GridInfoInterface {
 			"gt5test"), "qclient getGridFTPServersForQueueAtSite");
 			printResults(sClient.getGridFTPServersForQueueAtSite("Canterbury",
 			"gt5test"), "sclient getGridFTPServersForQueueAtSite");
-
+			
+			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/grid-bestgrid", "/ARCS/BeSTGRID"), 
+					"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-bestgrid /ARCS/BeSTGRID");
+			
+			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/yhal003", "/ARCS/BeSTGRID/Local"), 
+			"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/yhal003 /ARCS/BeSTGRID/Local");
+			
+			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/grid-sbs", "/ARCS/BeSTGRID/Drug_discovery/SBS-Structural_Biology"), 
+			"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-sbs /ARCS/BeSTGRID/Drug_discovery/SBS-Structural_Biology");
+			
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -313,6 +325,10 @@ public class SQLQueryClient implements GridInfoInterface {
 		for (String result : results) {
 			System.out.println(result);
 		}
+	}
+	
+	private static void printResults(boolean result, String label){
+		printResults( new String[] {new Boolean(result).toString()},label);
 	}
 
 	private Connection con;
@@ -974,37 +990,54 @@ public class SQLQueryClient implements GridInfoInterface {
 		return !((result == null) || (result.length == 0));
 	}
 	
-	public boolean isVolatile(String hostname, String path, String fqan){
-		
-		String endpoint = "gsiftp://" + hostname + ":2811";
-		
+	public boolean isVolatile(String endpoint, String path, String fqan){
+
 		PreparedStatement s;
-		String query;
-		
-		if ("/~/".equals(path)) {
-			query = "select sa.type from AccessProtocols ap,StorageElements s,StorageAreas sa,storageAreaACLs acls WHERE "+
-				"sa.id = acls.storageArea_id AND s.id = sa.storageElement_id " +
-				"AND ap.storageElement_id = s.id AND acls.vo = ? AND ap.endpoint=?";
-			s = getStatement(query);
+
+		Pattern complete = Pattern.compile("gsiftp://.+:[0-9]+");
+		Pattern portOnly = Pattern.compile(".+:[0-9]+");
+		Pattern protocolOnly = Pattern.compile("gsiftp://.+");
+
+		if (complete.matcher(endpoint).matches()) {
+			// do nothing, endpoint has valid value
+		} 
+		else if (portOnly.matcher(endpoint).matches()){
+			endpoint = "gsiftp://" + endpoint;
+		}
+		else if (protocolOnly.matcher(endpoint).matches()){
+			endpoint += ":2811";
 		}
 		else {
-			query = "select sa.type from AccessProtocols ap,StorageElements s,StorageAreas sa,storageAreaACLs acls WHERE "+
-			"sa.id = acls.storageArea_id AND s.id = sa.storageElement_id AND " +
-			"ap.storageElement_id = s.id AND acls.vo = ? AND ap.endpoint=? AND sa.path+?";
-			s = getStatement(query);
-			setString(s, 3, path);
+			endpoint = "gsiftp://" + endpoint + ":2811";
 		}
 
+		String query = "select sa.type from AccessProtocols ap, StorageElements s, StorageAreas sa" +
+		",storageAreaACLs acls WHERE sa.id = acls.storageArea_id AND s.id = sa.storageElement_id AND " +
+		"ap.storageElement_id = s.id AND acls.vo = ? AND ap.endPoint=? AND (sa.path = ? OR sa.path LIKE ?)";
+		s = getStatement(query);
 		setString(s,1,fqan);
 		setString(s,2,endpoint);
+		setString(s,3,path);
+		setString(s,4,path + "[%]");
 		String[] result = runQuery(s,"type");
-		if (result.length == 1){
+		if (result.length > 0 ){
 			return result[0].equals(VOLATILE);
 		}
-		else {
-			// undefined is volatile by default
-			return true;
+		query = "select sa.type from AccessProtocols ap, StorageElements s, StorageAreas sa" +
+		",storageAreaACLs acls WHERE sa.id = acls.storageArea_id AND s.id = sa.storageElement_id AND " +
+		"ap.storageElement_id = s.id AND acls.vo = ? AND ap.endPoint=? AND (sa.path = '${GLOBUS_USER_HOME}' or " +
+		" sa.path = '/~/' or sa.path LIKE '.%' )";
+		
+		s = getStatement(query);
+		setString(s,1,fqan);
+		setString(s,2,endpoint);
+		result = runQuery(s,"type");
+		if (result.length > 0 ){
+			return result[0].equals(VOLATILE);
 		}
+		
+		return true;
+
 	}
 
 	private String[] runQuery(PreparedStatement s, String output) {
