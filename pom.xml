@@ -70,6 +70,7 @@
 		<module>matchmaker</module>
 		<module>mysql-mds</module>
 		<module>wikiOutputJava</module>
+		<module>mysql-mds-updater</module>
 	</modules>
 	<build>
 		<plugins>
