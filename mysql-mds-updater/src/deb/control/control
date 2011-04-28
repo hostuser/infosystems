@@ -1,0 +1,9 @@
+Package: mysql-mds-updater
+Version: 0.1-SNAPSHOT
+Section: misc
+Priority: optional
+Architecture: all
+Depends: sun-java6-jdk
+Recommends: 
+Maintainer: Markus Binsteiner <m.binsteiner@auckland.ac.nz>
+Description: Package to create a cron-job which updates mysql-mds database that is used by Grisu
