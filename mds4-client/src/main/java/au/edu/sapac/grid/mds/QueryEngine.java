@@ -66,7 +66,7 @@ public class QueryEngine extends BaseClient {
 	private final String backupMdsCacheFileName = "backup" + mdsCacheFileName;
 
 	private String backupMdsCacheFile = backupMdsCacheFileName;
-	private static final String DEFAULT_ARCS_MDS_SERVER = "https://mds.grid.apac.edu.au:8443/wsrf/services/DefaultIndexService";
+	private static final String DEFAULT_ARCS_MDS_SERVER = "https://mds.arcs.org.au:8443/wsrf/services/DefaultIndexService";
 
 	private String mds_url = DEFAULT_ARCS_MDS_SERVER;
 
