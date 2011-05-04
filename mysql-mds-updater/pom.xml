@@ -1,19 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>infosystems</artifactId>
 		<groupId>au.org.arcs.infosystems</groupId>
-		<version>0.8.5-SNAPSHOT</version>
+		<version>0.8.5</version>
 	</parent>
 	<groupId>org.bestgrid</groupId>
 	<artifactId>mysql-mds-updater</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.8.5</version>
 	<dependencies>
 		<dependency>
 			<groupId>au.org.arcs.infosystems</groupId>
 			<artifactId>mds4-client</artifactId>
-			<version>0.8.5-SNAPSHOT</version>
+			<version>0.8.5</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
@@ -74,7 +73,7 @@
 <!--						<configuration>-->
 <!--							<changesIn>changes.txt</changesIn>-->
 <!--							<deb>[[buildDir]]/mysql-updater.deb</deb>-->
-<!---->
+
 <!--							<dataSet>-->
 <!--								<data>-->
 <!--									<src>${project.build.directory}/mysql-mds-updater.jar</src>-->
@@ -86,7 +85,7 @@
 <!--										<group>root</group>-->
 <!--									</mapper>-->
 <!--								</data>-->
-<!---->
+
 <!--								<data>-->
 <!--									<src>${project.basedir}/src/deb/data/dom.py</src>-->
 <!--									<type>file</type>-->
@@ -109,7 +108,7 @@
 <!--									</mapper>-->
 <!--								</data>-->
 <!--							</dataSet>-->
-<!---->
+
 <!--						</configuration>-->
 <!--					</execution>-->
 <!--				</executions>-->
