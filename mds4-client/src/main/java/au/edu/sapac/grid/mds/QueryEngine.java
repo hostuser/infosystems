@@ -66,7 +66,9 @@ public class QueryEngine extends BaseClient {
 	private final String backupMdsCacheFileName = "backup" + mdsCacheFileName;
 
 	private String backupMdsCacheFile = backupMdsCacheFileName;
-	private static final String ARCS_MDS_SERVER = "https://mds.grid.apac.edu.au:8443/wsrf/services/DefaultIndexService";
+	private static final String DEFAULT_ARCS_MDS_SERVER = "https://mds.grid.apac.edu.au:8443/wsrf/services/DefaultIndexService";
+
+	private String mds_url = DEFAULT_ARCS_MDS_SERVER;
 
 	private static final WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
 
@@ -88,6 +90,14 @@ public class QueryEngine extends BaseClient {
 	 */
 	public QueryEngine() {
 		// TODO: Test that the MDS server is alive.
+	}
+
+	public QueryEngine(String mds_url) {
+
+		if (StringUtils.isNotBlank(mds_url)) {
+			this.mds_url = mds_url;
+		}
+
 	}
 
 	/* LOCAL HELPER METHODS */
@@ -209,7 +219,7 @@ public class QueryEngine extends BaseClient {
 
 			// Get site based info only! no mds service info collected.
 			String xPathqueryString = "//*[local-name()='Site']";
-			String mdsStr = masterQueryMDS(ARCS_MDS_SERVER, xPathqueryString);
+			String mdsStr = masterQueryMDS(mds_url, xPathqueryString);
 			// how to check if host is up?
 			// no idea!
 
