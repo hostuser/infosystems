@@ -314,7 +314,18 @@ public class SQLQueryClient implements GridInfoInterface {
 			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/grid-sbs", "/ARCS/BeSTGRID/Drug_discovery/SBS-Structural_Biology"), 
 			"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-sbs /ARCS/BeSTGRID/Drug_discovery/SBS-Structural_Biology");
 			
+			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/grid-acsrc", "/ARCS/BeSTGRID/Drug_discovery/ACSRC"), 
+			"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-acsrc /ARCS/BeSTGRID/Drug_discovery/ACSRC");
 			
+			
+			Map<JobSubmissionProperty,String> jobProperties = new HashMap<JobSubmissionProperty,String>();
+			jobProperties.put(JobSubmissionProperty.APPLICATIONNAME,"mech-uoa");
+			//jobProperties.put(JobSubmissionProperty.APPLICATIONVERSION, "1.5");
+			//jobProperties.put(JobSubmissionProperty.NO_CPUS, "1");
+			resources = sClient.findAllResourcesM(jobProperties, "/nz/NeSI",false);
+			for (GridResource r: resources){
+				System.out.println(r.getQueueName());
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -468,12 +479,13 @@ public class SQLQueryClient implements GridInfoInterface {
 			}
 
 			String[] exes = runQuery(s2, "exeName");
-			if (exes.length == 0) {
-				continue;
-			}
+
 			Set<String> executables = new HashSet<String>();
 			for (String exe : exes) {
 				executables.add(exe);
+			}			
+			if (executables.size() == 0){
+				executables.add(Constants.GENERIC_APPLICATION_NAME);
 			}
 			gr.setAllExecutables(executables);
 			results.add(gr);
