@@ -18,6 +18,7 @@ import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.globus.axis.util.Util;
@@ -44,12 +45,19 @@ public class QueryEngine extends BaseClient {
 
 	public static void main(String[] args) {
 		QueryEngine engine = new QueryEngine();
-		NodeList list = engine
-				.turboMDSquery("/descendant::node()[local-name()='Site']/descendant::node()[local-name()='Cluster']/descendant::node()[local-name()='SubCluster']/descendant::node()[local-name()='SoftwarePackage']/child::node()[local-name()='Name'][contains(translate(text(),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),'BEAST')]/parent::node()/parent::node()/parent::node()/parent::node()/self::node()");
-		for (int i = 0; i < list.getLength(); i++) {
-			org.w3c.dom.Element e = (org.w3c.dom.Element) list.item(i);
-			System.out.println(e);
+		//		NodeList list = engine
+		//				.turboMDSquery("/descendant::node()[local-name()='Site']/descendant::node()[local-name()='Cluster']/descendant::node()[local-name()='SubCluster']/descendant::node()[local-name()='SoftwarePackage']/child::node()[local-name()='Name'][contains(translate(text(),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),'BEAST')]/parent::node()/parent::node()/parent::node()/parent::node()/self::node()");
+		//		for (int i = 0; i < list.getLength(); i++) {
+		//			org.w3c.dom.Element e = (org.w3c.dom.Element) list.item(i);
+		//			System.out.println(e);
+		//		}
+
+		String name = args[0];
+		if (StringUtils.isBlank(name)) {
+			name = "MDSCache.xml";
 		}
+
+		engine.makeCacheFile(args[0]);
 	}
 
 	/** This file contains a cached version of the MDS information. */
@@ -58,7 +66,9 @@ public class QueryEngine extends BaseClient {
 	private final String backupMdsCacheFileName = "backup" + mdsCacheFileName;
 
 	private String backupMdsCacheFile = backupMdsCacheFileName;
-	private static final String ARCS_MDS_SERVER = "https://mds.grid.apac.edu.au:8443/wsrf/services/DefaultIndexService";
+	private static final String DEFAULT_ARCS_MDS_SERVER = "https://mds.arcs.org.au:8443/wsrf/services/DefaultIndexService";
+
+	private String mds_url = DEFAULT_ARCS_MDS_SERVER;
 
 	private static final WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
 
@@ -80,6 +90,14 @@ public class QueryEngine extends BaseClient {
 	 */
 	public QueryEngine() {
 		// TODO: Test that the MDS server is alive.
+	}
+
+	public QueryEngine(String mds_url) {
+
+		if (StringUtils.isNotBlank(mds_url)) {
+			this.mds_url = mds_url;
+		}
+
 	}
 
 	/* LOCAL HELPER METHODS */
@@ -105,13 +123,13 @@ public class QueryEngine extends BaseClient {
 			Vector<GridInformationListener> infoListenersTargets;
 			synchronized (this) {
 				infoListenersTargets = (Vector<GridInformationListener>) mdsInfoListener
-						.clone();
+				.clone();
 			}
 
 			// walk through the listener list and
 			// call the gridproxychanged method in each
 			Enumeration<GridInformationListener> e = infoListenersTargets
-					.elements();
+			.elements();
 			while (e.hasMoreElements()) {
 				GridInformationListener fqan_l = e.nextElement();
 
@@ -192,7 +210,7 @@ public class QueryEngine extends BaseClient {
 	 *            The name to give the cache file
 	 * @return <code>true</code> if the cache file was successfully created
 	 */
-	private boolean makeCacheFile(String cacheFileName) {
+	public boolean makeCacheFile(String cacheFileName) {
 		boolean success = false;
 		try {
 			File cacheFile = new File(cacheFileName);
@@ -201,7 +219,7 @@ public class QueryEngine extends BaseClient {
 
 			// Get site based info only! no mds service info collected.
 			String xPathqueryString = "//*[local-name()='Site']";
-			String mdsStr = masterQueryMDS(ARCS_MDS_SERVER, xPathqueryString);
+			String mdsStr = masterQueryMDS(mds_url, xPathqueryString);
 			// how to check if host is up?
 			// no idea!
 
@@ -251,7 +269,7 @@ public class QueryEngine extends BaseClient {
 					success = true;
 				} catch (Throwable e) {
 					System.out
-							.println("Could not write job string to file" + e);
+					.println("Could not write job string to file" + e);
 				}
 			}
 
@@ -283,7 +301,7 @@ public class QueryEngine extends BaseClient {
 			client.anonymous = Boolean.TRUE;
 
 			QueryResourceProperties_PortType queryPort = locator
-					.getQueryResourcePropertiesPort(client.getEPR());
+			.getQueryResourcePropertiesPort(client.getEPR());
 
 			// This is the XPath query that we will use.
 			// It requests all entries that contain the string
@@ -320,7 +338,7 @@ public class QueryEngine extends BaseClient {
 			client.setOptions((Stub) queryPort);
 
 			QueryResourcePropertiesResponse response = queryPort
-					.queryResourceProperties(qrp);
+			.queryResourceProperties(qrp);
 
 			// so now, response contains 0 or more Entries.
 			// we need to loop over each entry and display the
@@ -361,7 +379,7 @@ public class QueryEngine extends BaseClient {
 
 		try {
 			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
-					.newInstance();
+			.newInstance();
 			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 			Document doc = null;
 
@@ -406,7 +424,7 @@ public class QueryEngine extends BaseClient {
 	public void setCacheFileLocation(String cacheFile) {
 		mdsCacheFile = cacheFile + File.separator + mdsCacheFileName;
 		backupMdsCacheFile = cacheFile + File.separator
-				+ backupMdsCacheFileName;
+		+ backupMdsCacheFileName;
 	}
 
 	/**

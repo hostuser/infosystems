@@ -1,0 +1,119 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>infosystems</artifactId>
+		<groupId>au.org.arcs.infosystems</groupId>
+		<version>0.8.6-SNAPSHOT</version>
+	</parent>
+	<groupId>org.bestgrid</groupId>
+	<artifactId>mysql-mds-updater</artifactId>
+	<version>0.8.6-SNAPSHOT</version>
+	<dependencies>
+		<dependency>
+			<groupId>au.org.arcs.infosystems</groupId>
+			<artifactId>mds4-client</artifactId>
+			<version>0.8.6-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+
+							<descriptors>
+								<descriptor>mysql-mds-updater.assembly.xml</descriptor>
+							</descriptors>
+							<finalName>mysql-mds-updater</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+							<archive>
+								<index>true</index>
+								<manifest>
+									<mainClass>org.bestgrid.info.MysqlUpdater</mainClass>
+								</manifest>
+								<manifestEntries>
+									<Class-Path>bcprov.jar bcprov-jdk15-143.jar local-backend.jar
+										grisu-client-library.jar
+									</Class-Path>
+								</manifestEntries>
+							</archive>
+
+						</configuration>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+
+<!--			<plugin>-->
+<!--				<artifactId>jdeb</artifactId>-->
+<!--				<groupId>org.vafer</groupId>-->
+<!--				<version>0.9-beta1</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<phase>package</phase>-->
+<!--						<goals>-->
+<!--							<goal>jdeb</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							<changesIn>changes.txt</changesIn>-->
+<!--							<deb>[[buildDir]]/mysql-updater.deb</deb>-->
+
+<!--							<dataSet>-->
+<!--								<data>-->
+<!--									<src>${project.build.directory}/mysql-mds-updater.jar</src>-->
+<!--									<type>file</type>-->
+<!--									<mapper>-->
+<!--										<type>perm</type>-->
+<!--										<prefix>/usr/local/mysql-updater</prefix>-->
+<!--										<user>root</user>-->
+<!--										<group>root</group>-->
+<!--									</mapper>-->
+<!--								</data>-->
+
+<!--								<data>-->
+<!--									<src>${project.basedir}/src/deb/data/dom.py</src>-->
+<!--									<type>file</type>-->
+<!--									<mapper>-->
+<!--										<type>perm</type>-->
+<!--										<prefix>/usr/local/mysql-updater</prefix>-->
+<!--										<user>root</user>-->
+<!--										<group>root</group>-->
+<!--									</mapper>-->
+<!--								</data>-->
+<!--								-->
+<!--								<data>-->
+<!--									<src>${project.basedir}/src/deb/data/mysql-mds-updater.conf</src>-->
+<!--									<type>file</type>-->
+<!--									<mapper>-->
+<!--										<type>perm</type>-->
+<!--										<prefix>/etc</prefix>-->
+<!--										<user>root</user>-->
+<!--										<group>root</group>-->
+<!--									</mapper>-->
+<!--								</data>-->
+<!--							</dataSet>-->
+
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
+		</plugins>
+	</build>
+
+</project>
