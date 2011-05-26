@@ -8,17 +8,6 @@
 	<artifactId>mds4-client</artifactId>
 	<description>MDS4 Client</description>
 	
-	<repositories>
-		<repository>
-			<id>ARCS</id>
-			<url>http://code.arcs.org.au/nexus/content/groups/public</url>
-		</repository>
-		<repository>
-			<id>ARCS Snapshots</id>
-			<url>http://code.arcs.org.au/nexus/content/groups/public-snapshots</url>
-		</repository>
-  	</repositories>
-
 	<dependencies>
 		<!--
 			<dependency> <groupId>au.edu.sapac.grid</groupId>
@@ -162,7 +151,7 @@
 		<dependency>
 			<groupId>grisu</groupId>
 			<artifactId>grid-jcommons</artifactId>
-			<version>1.2.5</version>
+			<version>1.2.6-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
