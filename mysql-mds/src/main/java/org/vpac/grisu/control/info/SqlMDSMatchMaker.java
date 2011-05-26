@@ -132,14 +132,14 @@ public class SqlMDSMatchMaker implements MatchMaker {
 
 	public List<GridResource> findAllResources(Document jsdl, String fqan) {
 
-		return findMatchingResources(generatePropertiesMap(jsdl), fqan, false);
+		return findMatchingResources(generatePropertiesMap(jsdl), fqan, true);
 
 	}
 
 	public List<GridResource> findAllResources(
 			Map<JobSubmissionProperty, String> jobProperties, String fqan) {
 
-		return findMatchingResources(jobProperties, fqan, false);
+		return findMatchingResources(jobProperties, fqan, true);
 
 	}
 

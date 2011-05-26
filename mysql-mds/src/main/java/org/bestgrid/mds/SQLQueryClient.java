@@ -55,13 +55,14 @@ public class SQLQueryClient implements GridInfoInterface {
 			SQLQueryClient sClient = new SQLQueryClient(con);
 
 			HashMap<JobSubmissionProperty, String> props = new HashMap<JobSubmissionProperty, String>();
-			props.put(JobSubmissionProperty.APPLICATIONNAME, "mpiBLAST");
-			props.put(JobSubmissionProperty.APPLICATIONVERSION, "1.6.0");
-			System.out.println("Check MPIBlast...");
+			props.put(JobSubmissionProperty.APPLICATIONNAME, Constants.GENERIC_APPLICATION_NAME);
+			props.put(JobSubmissionProperty.APPLICATIONVERSION, Constants.NO_VERSION_INDICATOR_STRING);
+			props.put(JobSubmissionProperty.WALLTIME_IN_MINUTES, "4000");
+			System.out.println("Check R...");
 			List<GridResource> resources = sClient.findAllResourcesM(props,
-					"/ARCS/BeSTGRID", false);
+					"/ARCS/Monash", true);
 			for (GridResource r : resources) {
-				System.out.println("mpiblast site: " + r.getSiteName());
+				System.out.println("R site: " + r.getSiteName());
 			}
 
 			printResults(
@@ -383,14 +384,18 @@ public class SQLQueryClient implements GridInfoInterface {
 			boolean exclude) {
 
 		List<GridResource> results = new LinkedList<GridResource>();
-
-		String query = "select acls.vo fqan,"
-			+ "contactString,gramVersion,jobManager,ce.name queue,"
-			+ "maxWalltime, v.freeJobSlots,v.runningJobs,v.waitingJobs,v.totalJobs,"
-			+ "s.name site,lattitude,longitude,gramVersion,jobManager  "
-			+ "from Sites s,Clusters c ,ComputeElements ce, voViews v,voViewACLs acls "
-			+ "where acls.voView_id = v.id  and ce.cluster_id = c.id "
-			+ "and c.site_id = s.id and v.ce_id = ce.id AND acls.vo = ? ";
+		
+		String query = "SELECT acls.vo fqan, contactString, gramVersion," +
+				" jobManager, ce.name queue, maxWalltime, v.freeJobSlots, " +
+				"v.runningJobs, v.waitingJobs, v.totalJobs, s.name site, " +
+				"lattitude, longitude, sp.name sname ,sp.version  sversion" +
+				" FROM" +
+				" Sites s, SubClusters sc, Clusters c, ComputeElements ce, voViews v, " +
+				"voViewACLs acls, SoftwarePackages sp " +
+				"WHERE " +
+				"acls.voView_id = v.id and ce.cluster_id =c.id and " +
+				"c.site_id = s.id and c.id =  sc.cluster_id  and " +
+				"v.ce_id = ce.id and sp.subcluster_id = sc.id and acls.vo=?";
 
 		int wallTimeRequirement = -1;
 		try {
@@ -412,9 +417,28 @@ public class SQLQueryClient implements GridInfoInterface {
 		String[][] resources = runQuery(s, new String[] { "queue",
 				"contactString", "gramVersion", "jobManager", "freeJobSlots",
 				"runningJobs", "waitingJobs", "totalJobs", "site", "lattitude",
-				"longitude", "maxWalltime" });
+				"longitude", "maxWalltime","sname","sversion" });
 
 		for (String[] resource : resources) {
+					
+			// check if application name matches
+			String applicationName = jobProperties.get(JobSubmissionProperty.APPLICATIONNAME);
+			if (StringUtils.isNotBlank(applicationName)
+					&& !Constants.GENERIC_APPLICATION_NAME
+					.equals(applicationName)
+					&& !resource[12].equals(applicationName)) {
+				continue;
+			}
+			
+			// check if application version matches
+			String applicationVersion = jobProperties.get(JobSubmissionProperty.APPLICATIONVERSION);
+			if (StringUtils.isNotBlank(applicationVersion) 
+					&& !Constants.NO_VERSION_INDICATOR_STRING.equals(applicationVersion) 
+					&& !resource[13].equals(applicationVersion)){
+				continue;
+			}
+			
+			
 			GridResourceBackendImpl gr = new GridResourceBackendImpl();
 
 			gr.setQueueName(resource[0]);
@@ -439,46 +463,11 @@ public class SQLQueryClient implements GridInfoInterface {
 			gr.setSiteLatitude(Double.parseDouble(resource[9]));
 			gr.setSiteLongitude(Double.parseDouble(resource[10]));
 
-			String query2 = "select exe.name exeName from Sites s, Clusters c,SubClusters sc"
-				+ ",ComputeElements ce, SoftwarePackages sp, SoftwareExecutables exe "
-				+ "where s.id = c.site_id and c.id= sc.cluster_id and sp.subcluster_id = sc.id "
-				+ "and exe.package_id = sp.id AND ce.cluster_id =  c.id AND "
-				+ "s.name =? and ce.name =?";
-			boolean hasAppName = false;
-			String applicationName = jobProperties
-			.get(JobSubmissionProperty.APPLICATIONNAME);
 			gr.setApplicationName(applicationName);
-			if (StringUtils.isNotBlank(applicationName)
-					&& !Constants.GENERIC_APPLICATION_NAME
-					.equals(applicationName)) {
-				query2 += " AND sp.name=? ";
-				hasAppName = true;
-			}
-
-			boolean hasAppVersion = false;
-			String applicationVersion = jobProperties
-			.get(JobSubmissionProperty.APPLICATIONVERSION);
 			gr.addAvailableApplicationVersion(applicationVersion);
-			if (StringUtils.isNotBlank(applicationVersion)
-					&& !Constants.NO_VERSION_INDICATOR_STRING
-					.equals(applicationVersion)) {
-				query2 += " AND sp.version=? ";
-				hasAppVersion = true;
-			}
+	
 
-			PreparedStatement s2 = getStatement(query2);
-			setString(s2, 1, gr.getSiteName());
-			setString(s2, 2, gr.getQueueName());
-			int paramIndex = 3;
-			if (hasAppName) {
-				setString(s2, paramIndex, applicationName);
-				paramIndex++;
-			}
-			if (hasAppVersion) {
-				setString(s2, paramIndex, applicationVersion);
-			}
-
-			String[] exes = runQuery(s2, "exeName");
+			String[] exes = getExecutables(gr.getSiteName(),gr.getQueueName(),applicationName,applicationVersion);
 
 			Set<String> executables = new HashSet<String>();
 			for (String exe : exes) {
@@ -492,6 +481,30 @@ public class SQLQueryClient implements GridInfoInterface {
 		}
 
 		return results;
+	}
+	
+	private String[] getExecutables(String siteName, String queue, String appName, String appVersion){
+		
+		if (appName == null && appVersion == null){
+			return new String[] {};
+		}
+		
+		String query = "select exe.name exeName from Sites s, Clusters c,SubClusters sc"
+			+ ",ComputeElements ce, SoftwarePackages sp, SoftwareExecutables exe "
+			+ "where s.id = c.site_id and c.id= sc.cluster_id and sp.subcluster_id = sc.id "
+			+ "and exe.package_id = sp.id AND ce.cluster_id =  c.id AND "
+			+ "s.name =? and ce.name =? AND (sp.name=? OR ? = ?) AND (sp.version=? OR ? = ?)";
+		PreparedStatement s = getStatement(query);
+		setString(s, 1, siteName);
+		setString(s, 2,queue);
+		setString(s, 3, appName);
+		setString(s, 4, appName);
+		setString(s, 5, Constants.GENERIC_APPLICATION_NAME);
+		setString(s, 6, appVersion);
+		setString(s, 7, appVersion);
+		setString(s, 8, Constants.NO_VERSION_INDICATOR_STRING);
+
+		return runQuery(s, "exeName");
 	}
 
 	public Map<String, String> getAllComputeHosts() {
