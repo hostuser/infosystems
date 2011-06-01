@@ -22,8 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import java.util.regex.*;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -35,7 +34,7 @@ import au.edu.sapac.grid.mds.QueryClient;
  * @author yhal003
  */
 public class SQLQueryClient implements GridInfoInterface {
-	
+
 	public final String VOLATILE="volatile";
 
 	static final Logger myLogger = Logger.getLogger(SQLQueryClient.class
@@ -305,20 +304,20 @@ public class SQLQueryClient implements GridInfoInterface {
 			"gt5test"), "qclient getGridFTPServersForQueueAtSite");
 			printResults(sClient.getGridFTPServersForQueueAtSite("Canterbury",
 			"gt5test"), "sclient getGridFTPServersForQueueAtSite");
-			
-			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/grid-bestgrid", "/ARCS/BeSTGRID"), 
-					"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-bestgrid /ARCS/BeSTGRID");
-			
-			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/yhal003", "/ARCS/BeSTGRID/Local"), 
+
+			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/grid-bestgrid", "/ARCS/BeSTGRID"),
+			"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-bestgrid /ARCS/BeSTGRID");
+
+			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/yhal003", "/ARCS/BeSTGRID/Local"),
 			"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/yhal003 /ARCS/BeSTGRID/Local");
-			
-			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/grid-sbs", "/ARCS/BeSTGRID/Drug_discovery/SBS-Structural_Biology"), 
+
+			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/grid-sbs", "/ARCS/BeSTGRID/Drug_discovery/SBS-Structural_Biology"),
 			"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-sbs /ARCS/BeSTGRID/Drug_discovery/SBS-Structural_Biology");
-			
-			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/grid-acsrc", "/ARCS/BeSTGRID/Drug_discovery/ACSRC"), 
+
+			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/grid-acsrc", "/ARCS/BeSTGRID/Drug_discovery/ACSRC"),
 			"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-acsrc /ARCS/BeSTGRID/Drug_discovery/ACSRC");
-			
-			
+
+
 			Map<JobSubmissionProperty,String> jobProperties = new HashMap<JobSubmissionProperty,String>();
 			jobProperties.put(JobSubmissionProperty.APPLICATIONNAME,"mech-uoa");
 			//jobProperties.put(JobSubmissionProperty.APPLICATIONVERSION, "1.5");
@@ -332,15 +331,15 @@ public class SQLQueryClient implements GridInfoInterface {
 		}
 	}
 
+	private static void printResults(boolean result, String label){
+		printResults( new String[] {new Boolean(result).toString()},label);
+	}
+
 	private static void printResults(String[] results, String label) {
 		System.out.println(label);
 		for (String result : results) {
 			System.out.println(result);
 		}
-	}
-	
-	private static void printResults(boolean result, String label){
-		printResults( new String[] {new Boolean(result).toString()},label);
 	}
 
 	private Connection con;
@@ -384,18 +383,18 @@ public class SQLQueryClient implements GridInfoInterface {
 			boolean exclude) {
 
 		List<GridResource> results = new LinkedList<GridResource>();
-		
+
 		String query = "SELECT acls.vo fqan, contactString, gramVersion," +
-				" jobManager, ce.name queue, maxWalltime, v.freeJobSlots, " +
-				"v.runningJobs, v.waitingJobs, v.totalJobs, s.name site, " +
-				"lattitude, longitude, sp.name sname ,sp.version  sversion" +
-				" FROM" +
-				" Sites s, SubClusters sc, Clusters c, ComputeElements ce, voViews v, " +
-				"voViewACLs acls, SoftwarePackages sp " +
-				"WHERE " +
-				"acls.voView_id = v.id and ce.cluster_id =c.id and " +
-				"c.site_id = s.id and c.id =  sc.cluster_id  and " +
-				"v.ce_id = ce.id and sp.subcluster_id = sc.id and acls.vo=?";
+		" jobManager, ce.name queue, maxWalltime, v.freeJobSlots, " +
+		"v.runningJobs, v.waitingJobs, v.totalJobs, s.name site, " +
+		"lattitude, longitude, sp.name sname ,sp.version  sversion" +
+		" FROM" +
+		" Sites s, SubClusters sc, Clusters c, ComputeElements ce, voViews v, " +
+		"voViewACLs acls, SoftwarePackages sp " +
+		"WHERE " +
+		"acls.voView_id = v.id and ce.cluster_id =c.id and " +
+		"c.site_id = s.id and c.id =  sc.cluster_id  and " +
+		"v.ce_id = ce.id and sp.subcluster_id = sc.id and acls.vo=?";
 
 		int wallTimeRequirement = -1;
 		try {
@@ -420,7 +419,7 @@ public class SQLQueryClient implements GridInfoInterface {
 				"longitude", "maxWalltime","sname","sversion" });
 
 		for (String[] resource : resources) {
-					
+
 			// check if application name matches
 			String applicationName = jobProperties.get(JobSubmissionProperty.APPLICATIONNAME);
 			if (StringUtils.isNotBlank(applicationName)
@@ -429,16 +428,16 @@ public class SQLQueryClient implements GridInfoInterface {
 					&& !resource[12].equals(applicationName)) {
 				continue;
 			}
-			
+
 			// check if application version matches
 			String applicationVersion = jobProperties.get(JobSubmissionProperty.APPLICATIONVERSION);
-			if (StringUtils.isNotBlank(applicationVersion) 
-					&& !Constants.NO_VERSION_INDICATOR_STRING.equals(applicationVersion) 
+			if (StringUtils.isNotBlank(applicationVersion)
+					&& !Constants.NO_VERSION_INDICATOR_STRING.equals(applicationVersion)
 					&& !resource[13].equals(applicationVersion)){
 				continue;
 			}
-			
-			
+
+
 			GridResourceBackendImpl gr = new GridResourceBackendImpl();
 
 			gr.setQueueName(resource[0]);
@@ -450,8 +449,11 @@ public class SQLQueryClient implements GridInfoInterface {
 
 			int maxWalltime = Integer.parseInt(resource[11]);
 
-			if (exclude
-					&& ((gr.getFreeJobSlots() < totalCPURequirement) || (maxWalltime < wallTimeRequirement))) {
+			if (maxWalltime < wallTimeRequirement) {
+				continue;
+			}
+
+			if (exclude && (gr.getFreeJobSlots() < totalCPURequirement)) {
 				continue;
 			}
 
@@ -465,14 +467,14 @@ public class SQLQueryClient implements GridInfoInterface {
 
 			gr.setApplicationName(applicationName);
 			gr.addAvailableApplicationVersion(applicationVersion);
-	
+
 
 			String[] exes = getExecutables(gr.getSiteName(),gr.getQueueName(),applicationName,applicationVersion);
 
 			Set<String> executables = new HashSet<String>();
 			for (String exe : exes) {
 				executables.add(exe);
-			}			
+			}
 			if (executables.size() == 0){
 				executables.add(Constants.GENERIC_APPLICATION_NAME);
 			}
@@ -481,30 +483,6 @@ public class SQLQueryClient implements GridInfoInterface {
 		}
 
 		return results;
-	}
-	
-	private String[] getExecutables(String siteName, String queue, String appName, String appVersion){
-		
-		if (appName == null && appVersion == null){
-			return new String[] {};
-		}
-		
-		String query = "select exe.name exeName from Sites s, Clusters c,SubClusters sc"
-			+ ",ComputeElements ce, SoftwarePackages sp, SoftwareExecutables exe "
-			+ "where s.id = c.site_id and c.id= sc.cluster_id and sp.subcluster_id = sc.id "
-			+ "and exe.package_id = sp.id AND ce.cluster_id =  c.id AND "
-			+ "s.name =? and ce.name =? AND (sp.name=? OR ? = ?) AND (sp.version=? OR ? = ?)";
-		PreparedStatement s = getStatement(query);
-		setString(s, 1, siteName);
-		setString(s, 2,queue);
-		setString(s, 3, appName);
-		setString(s, 4, appName);
-		setString(s, 5, Constants.GENERIC_APPLICATION_NAME);
-		setString(s, 6, appVersion);
-		setString(s, 7, appVersion);
-		setString(s, 8, Constants.NO_VERSION_INDICATOR_STRING);
-
-		return runQuery(s, "exeName");
 	}
 
 	public Map<String, String> getAllComputeHosts() {
@@ -652,6 +630,30 @@ public class SQLQueryClient implements GridInfoInterface {
 		} else {
 			return elements[0];
 		}
+	}
+
+	private String[] getExecutables(String siteName, String queue, String appName, String appVersion){
+
+		if ((appName == null) && (appVersion == null)){
+			return new String[] {};
+		}
+
+		String query = "select exe.name exeName from Sites s, Clusters c,SubClusters sc"
+			+ ",ComputeElements ce, SoftwarePackages sp, SoftwareExecutables exe "
+			+ "where s.id = c.site_id and c.id= sc.cluster_id and sp.subcluster_id = sc.id "
+			+ "and exe.package_id = sp.id AND ce.cluster_id =  c.id AND "
+			+ "s.name =? and ce.name =? AND (sp.name=? OR ? = ?) AND (sp.version=? OR ? = ?)";
+		PreparedStatement s = getStatement(query);
+		setString(s, 1, siteName);
+		setString(s, 2,queue);
+		setString(s, 3, appName);
+		setString(s, 4, appName);
+		setString(s, 5, Constants.GENERIC_APPLICATION_NAME);
+		setString(s, 6, appVersion);
+		setString(s, 7, appVersion);
+		setString(s, 8, Constants.NO_VERSION_INDICATOR_STRING);
+
+		return runQuery(s, "exeName");
 	}
 
 	public String[] getExeNameOfCodeAtSite(String site, String code,
@@ -1014,7 +1016,7 @@ public class SQLQueryClient implements GridInfoInterface {
 		String[] result = runQuery(s, "1");
 		return !((result == null) || (result.length == 0));
 	}
-	
+
 	public boolean isVolatile(String endpoint, String path, String fqan){
 
 		PreparedStatement s;
@@ -1025,7 +1027,7 @@ public class SQLQueryClient implements GridInfoInterface {
 
 		if (complete.matcher(endpoint).matches()) {
 			// do nothing, endpoint has valid value
-		} 
+		}
 		else if (portOnly.matcher(endpoint).matches()){
 			endpoint = "gsiftp://" + endpoint;
 		}
@@ -1052,7 +1054,7 @@ public class SQLQueryClient implements GridInfoInterface {
 		",storageAreaACLs acls WHERE sa.id = acls.storageArea_id AND s.id = sa.storageElement_id AND " +
 		"ap.storageElement_id = s.id AND acls.vo = ? AND ap.endPoint=? AND (sa.path = '${GLOBUS_USER_HOME}' or " +
 		" sa.path = '/~/' or sa.path LIKE '.%' )";
-		
+
 		s = getStatement(query);
 		setString(s,1,fqan);
 		setString(s,2,endpoint);
@@ -1060,7 +1062,7 @@ public class SQLQueryClient implements GridInfoInterface {
 		if (result.length > 0 ){
 			return result[0].equals(VOLATILE);
 		}
-		
+
 		return true;
 
 	}
