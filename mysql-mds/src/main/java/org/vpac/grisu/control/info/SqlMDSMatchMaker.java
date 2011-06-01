@@ -111,6 +111,15 @@ public class SqlMDSMatchMaker implements MatchMaker {
 
 	private RankingAlgorithm rankingAlgorithm = null;
 
+	public SqlMDSMatchMaker(Map<String, String> params) {
+		this(new SimpleResourceRankingAlgorithm(), params);
+	}
+
+	// TODO: get PluginLoader working with MatchMaker and RankingAlgorithm
+	// public SqlMDSMatchMaker(String mdsCacheDirectory) {
+	// this(new SimpleResourceRankingAlgorithm(), mdsCacheDirectory);
+	// }
+
 	public SqlMDSMatchMaker(RankingAlgorithm rankingAlgorithm,
 			Map<String, String> configuration) {
 		this.rankingAlgorithm = rankingAlgorithm;
@@ -121,25 +130,16 @@ public class SqlMDSMatchMaker implements MatchMaker {
 				databasePassword);
 	}
 
-	// TODO: get PluginLoader working with MatchMaker and RankingAlgorithm
-	// public SqlMDSMatchMaker(String mdsCacheDirectory) {
-	// this(new SimpleResourceRankingAlgorithm(), mdsCacheDirectory);
-	// }
-
-	public SqlMDSMatchMaker(Map<String, String> params) {
-		this(new SimpleResourceRankingAlgorithm(), params);
-	}
-
 	public List<GridResource> findAllResources(Document jsdl, String fqan) {
 
-		return findMatchingResources(generatePropertiesMap(jsdl), fqan, true);
+		return findMatchingResources(generatePropertiesMap(jsdl), fqan, false);
 
 	}
 
 	public List<GridResource> findAllResources(
 			Map<JobSubmissionProperty, String> jobProperties, String fqan) {
 
-		return findMatchingResources(jobProperties, fqan, true);
+		return findMatchingResources(jobProperties, fqan, false);
 
 	}
 
