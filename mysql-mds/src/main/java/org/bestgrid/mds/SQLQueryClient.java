@@ -584,7 +584,7 @@ public class SQLQueryClient implements GridInfoInterface {
 	}
 
 	public String[] getCodesOnGridForVO(String fqan) {
-		String query = "select distinct binary sp.name from SubClusters sc, ComputeElements ce, voViews v, voViewACLs acls, SoftwarePackages sp"
+		String query = "select distinct binary sp.name as name from SubClusters sc, ComputeElements ce, voViews v, voViewACLs acls, SoftwarePackages sp"
 			+ " WHERE sc.cluster_id = ce.cluster_id AND v.ce_id = ce.id "
 			+ "AND acls.voView_id = v.id AND sp.subcluster_id = sc.id AND acls.vo=?";
 		PreparedStatement s = getStatement(query);
