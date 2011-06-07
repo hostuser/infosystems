@@ -2,7 +2,7 @@
 	<parent>
 		<artifactId>infosystems</artifactId>
 		<groupId>au.org.arcs.infosystems</groupId>
-		<version>0.8.6-SNAPSHOT</version>
+		<version>0.8.6</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>mds4-client</artifactId>
@@ -151,7 +151,7 @@
 		<dependency>
 			<groupId>grisu</groupId>
 			<artifactId>grid-jcommons</artifactId>
-			<version>1.2.6-SNAPSHOT</version>
+			<version>1.2.6</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

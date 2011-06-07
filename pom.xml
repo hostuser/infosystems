@@ -4,7 +4,7 @@
 	<groupId>au.org.arcs.infosystems</groupId>
 	<artifactId>infosystems</artifactId>
 	<packaging>pom</packaging>
-	<version>0.8.6-SNAPSHOT</version>
+	<version>0.8.6</version>
 	<name>infosystems Multi Project</name>
 	<url>http://maven.apache.org</url>
 
