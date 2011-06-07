@@ -295,7 +295,7 @@ public class SqlMDSInformationManager implements InformationManager {
 	}
 
 	public boolean isVolatileDataLocation(String hostname, String endpoint , String fqan) {
-		return client.isVolatile(hostname, endpoint , fqan);		
+		return client.isVolatile(hostname, endpoint , fqan);
 	}
 
 }
