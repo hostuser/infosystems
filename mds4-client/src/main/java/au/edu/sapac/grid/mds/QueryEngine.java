@@ -422,9 +422,15 @@ public class QueryEngine extends BaseClient {
 	}
 
 	public void setCacheFileLocation(String cacheFile) {
-		mdsCacheFile = cacheFile + File.separator + mdsCacheFileName;
-		backupMdsCacheFile = cacheFile + File.separator
-		+ backupMdsCacheFileName;
+		if (StringUtils.isBlank(cacheFile)) {
+			mdsCacheFile = mdsCacheFileName;
+			backupMdsCacheFile = backupMdsCacheFileName;
+		} else {
+			mdsCacheFile = cacheFile + File.separator + mdsCacheFileName;
+			backupMdsCacheFile = cacheFile + File.separator
+			+ backupMdsCacheFileName;
+		}
+
 	}
 
 	/**
