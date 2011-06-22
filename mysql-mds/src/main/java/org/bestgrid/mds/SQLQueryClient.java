@@ -27,8 +27,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import au.edu.sapac.grid.mds.QueryClient;
-
 /**
  * 
  * @author yhal003
@@ -40,296 +38,311 @@ public class SQLQueryClient implements GridInfoInterface {
 	static final Logger myLogger = Logger.getLogger(SQLQueryClient.class
 			.getName());
 
-	public static void main(String[] args) throws ClassNotFoundException,
-	InstantiationException, IllegalAccessException {
-		Connection con = null;
-		try {
-
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			con = DriverManager.getConnection(
-					"jdbc:mysql://mysql-bg.ceres.auckland.ac.nz/mds_test",
-					"grisu_read", "password");
-
-			QueryClient qClient = new QueryClient("/tmp");
-			SQLQueryClient sClient = new SQLQueryClient(con);
-
-			HashMap<JobSubmissionProperty, String> props = new HashMap<JobSubmissionProperty, String>();
-			props.put(JobSubmissionProperty.APPLICATIONNAME, Constants.GENERIC_APPLICATION_NAME);
-			props.put(JobSubmissionProperty.APPLICATIONVERSION, Constants.NO_VERSION_INDICATOR_STRING);
-			props.put(JobSubmissionProperty.WALLTIME_IN_MINUTES, "4000");
-			System.out.println("Check R...");
-			List<GridResource> resources = sClient.findAllResourcesM(props,
-					"/ARCS/Monash", true);
-			for (GridResource r : resources) {
-				System.out.println("R site: " + r.getSiteName());
-			}
-
-			printResults(
-					qClient.getApplicationNamesThatProvideExecutable("javac"),
-			"Query Client method 1");
-			printResults(
-					sClient.getApplicationNamesThatProvideExecutable("javac"),
-			"SQL Client method 1");
-
-			// appears broken
-			// printResults(qClient.getClusterNamesAtSite("canterbury.ac.nz"),"Query Client method 2");
-			printResults(sClient.getClusterNamesAtSite("Canterbury"),
-			"SQL Client method 2");
-
-			// broken too, maybe...
-			// printResults(qClient.getClustersForCodeAtSite("canterbury.ac.nz","Java","1.4.2"),"Query Client method 3");
-			printResults(sClient.getClustersForCodeAtSite("Canterbury", "Java",
-			"1.4.2"), "SQL Client method 3");
-
-			printResults(qClient.getCodesAtSite("Canterbury"),
-			"Query Client method  4");
-			printResults(sClient.getCodesAtSite("Canterbury"),
-			"SQL Client method 4");
-
-			printResults(qClient.getCodesOnGrid(), "Query Client method  5");
-			printResults(sClient.getCodesOnGrid(), "SQL Client method 5");
-
-			printResults(qClient.getContactStringOfQueueAtSite("eRSA",
-			"hydra@hydra"), "Query Client method  6");
-			printResults(sClient.getContactStringOfQueueAtSite("eRSA",
-			"hydra@hydra"), "SQL Client method 6");
-
-			printResults(qClient.getDataDir("Auckland", "ng2.auckland.ac.nz",
-			"/ARCS/BeSTGRID"), "Query Client method  7");
-			printResults(sClient.getDataDir("Auckland", "ng2.auckland.ac.nz",
-			"/ARCS/BeSTGRID"), "SQL Client method 7");
-
-			printResults(
-					new String[] { qClient.getDefaultStorageElementForQueueAtSite(
-							"Canterbury", "grid_aix") },
-			"Query Client method  8");
-			printResults(
-					new String[] { sClient.getDefaultStorageElementForQueueAtSite(
-							"Canterbury", "grid_aix") }, "SQL Client method  8");
-
-			printResults(
-					qClient.getExeNameOfCodeAtSite("Auckland", "Java", "1.6"),
-			"Query Client method  9");
-			printResults(
-					sClient.getExeNameOfCodeAtSite("Auckland", "Java", "1.6"),
-			"SQL Client method  9");
-
-			printResults(qClient.getExeNameOfCodeForSubmissionLocation(
-					"route@er171.ceres.auckland.ac.nz:ng2.auckland.ac.nz",
-					"Java", "1.6"), "Query Client method  10");
-			printResults(sClient.getExeNameOfCodeForSubmissionLocation(
-					"route@er171.ceres.auckland.ac.nz:ng2.auckland.ac.nz",
-					"Java", "1.6"), "SQL Client method  10");
-
-			printResults(qClient.getGridFTPServersAtSite("Auckland"),
-			"Query Client method  11");
-			printResults(sClient.getGridFTPServersAtSite("Auckland"),
-			"SQL Client method  11");
-
-			printResults(qClient.getGridFTPServersForQueueAtSite("Auckland",
-			"route@er171.ceres.auckland.ac.nz"),
-			"Query Client method  12");
-			printResults(sClient.getGridFTPServersForQueueAtSite("Auckland",
-			"route@er171.ceres.auckland.ac.nz"),
-			"SQL Client method  12");
-
-			printResults(qClient.getGridFTPServersForStorageElementAtSite(
-					"Auckland", "ngdata.ceres.auckland.ac.nz"),
-			"Query Client method  13");
-			printResults(sClient.getGridFTPServersForStorageElementAtSite(
-					"Auckland", "ngdata.ceres.auckland.ac.nz"),
-			"SQL Client method  13");
-
-			// also broken
-			// printResults(qClient.getGridFTPServersOnGrid(),"Query Client method  14");
-			printResults(sClient.getGridFTPServersOnGrid(),
-			"SQL Client method  14");
-
-			printResults(new String[] { qClient.getJobManagerOfQueueAtSite(
-					"Auckland", "route@er171.ceres.auckland.ac.nz") },
-			"Query Client method  15");
-			printResults(new String[] { sClient.getJobManagerOfQueueAtSite(
-					"Auckland", "route@er171.ceres.auckland.ac.nz") },
-			"SQL Client method  15");
-
-			// not sure what we are supposed to do here
-			// System.out.println(qClient.getJobTypeOfCodeAtSite("Auckland",
-			// "Java", "1.6"));
-
-			printResults(new String[] { qClient.getLRMSTypeOfQueueAtSite(
-					"Auckland", "route@er171.ceres.auckland.ac.nz") },
-			"Query Client method  17");
-			printResults(new String[] { sClient.getLRMSTypeOfQueueAtSite(
-					"Auckland", "route@er171.ceres.auckland.ac.nz") },
-			"SQL Client method  17");
-
-			printResults(
-					new String[] { qClient
-							.getModuleNameOfCodeForSubmissionLocation(
-									"route@er171.ceres.auckland.ac.nz:ng2.auckland.ac.nz",
-									"Java", "1.6") }, "Query Client method  18");
-			printResults(
-					new String[] { sClient
-							.getModuleNameOfCodeForSubmissionLocation(
-									"route@er171.ceres.auckland.ac.nz:ng2.auckland.ac.nz",
-									"Java", "1.6") }, "SQL Client method  18");
-
-			printResults(qClient.getQueueNamesAtSite("Canterbury"),
-			"Query Client method  19");
-			printResults(sClient.getQueueNamesAtSite("Canterbury"),
-			"SQL Client method  19");
-
-			printResults(
-					qClient.getQueueNamesAtSite("Canterbury", "/ARCS/NGAdmin"),
-			"Query Client method  20");
-			printResults(
-					sClient.getQueueNamesAtSite("Canterbury", "/ARCS/NGAdmin"),
-			"SQL Client method  20");
-
-			// broken too!
-			// printResults(qClient.getQueueNamesForClusterAtSite("Canterbury","ng1.canterbury.ac.nz"),"Query Client method  21");
-			printResults(sClient.getQueueNamesForClusterAtSite("Canterbury",
-			"ng1.canterbury.ac.nz"), "SQL Client method  21");
-
-			printResults(
-					qClient.getQueueNamesForCodeAtSite("Canterbury", "Java"),
-			"Query Client method  22");
-			printResults(
-					sClient.getQueueNamesForCodeAtSite("Canterbury", "Java"),
-			"SQL Client method  22");
-
-			printResults(qClient.getQueueNamesForCodeAtSite("Canterbury",
-					"Java", "1.4.2"), "Query Client method  23");
-			printResults(sClient.getQueueNamesForCodeAtSite("Canterbury",
-					"Java", "1.4.2"), "SQL Client method  23");
-
-			printResults(
-					new String[] { qClient.getSiteForHost("cognac.ivec.org") },
-			"Query Client method  24");
-			printResults(
-					new String[] { sClient.getSiteForHost("cognac.ivec.org") },
-			"SQL Client method  24");
-
-			printResults(qClient.getSitesOnGrid(), "Query Client method  25");
-			printResults(sClient.getSitesOnGrid(), "SQL Client method  25");
-
-			printResults(qClient.getSitesWithAVersionOfACode("Java", "1.6"),
-			"Query Client method  26");
-			printResults(sClient.getSitesWithAVersionOfACode("Java", "1.6"),
-			"SQL Client method  26");
-
-			printResults(qClient.getSitesWithCode("Java"),
-			"Query Client method  27");
-			printResults(sClient.getSitesWithCode("Java"),
-			"SQL Client method  27");
-
-			printResults(
-					new String[] { qClient
-							.getStorageElementForGridFTPServer("gsiftp://ng2.esscc.uq.edu.au:2811") },
-			"Query Client method  28");
-			printResults(
-					new String[] { sClient
-							.getStorageElementForGridFTPServer("gsiftp://ng2.esscc.uq.edu.au:2811") },
-			"SQL Client method  28");
-
-			printResults(qClient.getStorageElementsForSite("HPSC"),
-			"Query Client method  29");
-			printResults(sClient.getStorageElementsForSite("HPSC"),
-			"SQL Client method  29");
-
-			printResults(qClient.getVersionsOfCodeAtSite("Auckland", "Java"),
-			"Query Client method  30");
-			printResults(sClient.getVersionsOfCodeAtSite("Auckland", "Java"),
-			"SQL Client method  30");
-
-			printResults(
-					qClient.getVersionsOfCodeForQueueAndContactString(
-							"grid_aix",
-							"https://ng2hpc.canterbury.ac.nz:8443/wsrf/services/ManagedJobFactoryService",
-					"Java"), "Query Client method  31");
-			printResults(
-					sClient.getVersionsOfCodeForQueueAndContactString(
-							"grid_aix",
-							"https://ng2hpc.canterbury.ac.nz:8443/wsrf/services/ManagedJobFactoryService",
-					"Java"), "SQL Client method  31");
-
-			printResults(qClient.getVersionsOfCodeOnGrid("beast"),
-			"Query Client method  32");
-			printResults(sClient.getVersionsOfCodeOnGrid("beast"),
-			"SQL Client method  32");
-
-			printResults(
-					new String[] { ""
-							+ qClient.isParallelAvailForCodeForSubmissionLocation(
-									"grid_aix:ng2hpc.canterbury.ac.nz",
-									"MrBayes", "3.1.2") },
-			"Query Client method  33");
-			printResults(
-					new String[] { ""
-							+ sClient.isParallelAvailForCodeForSubmissionLocation(
-									"grid_aix:ng2hpc.canterbury.ac.nz",
-									"MrBayes", "3.1.2") },
-			"SQL Client method  33");
-
-			// and this one is broken as well so it seems...
-			printResults(
-					new String[] { ""
-							+ qClient.isSerialAvailForCodeForSubmissionLocation(
-									"grid_aix:ng2hpc.canterbury.ac.nz",
-									"MrBayes", "3.1.2") },
-			"Query Client method  34");
-			printResults(
-					new String[] { ""
-							+ sClient.isSerialAvailForCodeForSubmissionLocation(
-									"grid_aix:ng2hpc.canterbury.ac.nz",
-									"MrBayes", "3.1.2") },
-			"SQL Client method  34");
-
-			printResults(qClient.getSitesForVO("/ARCS/BeSTGRID"),
-			"Query Client method 35");
-			printResults(sClient.getSitesForVO("/ARCS/BeSTGRID"),
-			"SQL Client method 35");
-
-			Map<String, String[]> data = sClient
-			.calculateDataLocationsForVO("/ARCS/BeSTGRID");
-			for (String key : data.keySet()) {
-				System.out.println("key is : " + key);
-				String[] values = data.get(key);
-				for (String value : values) {
-					System.out.println(value);
-				}
-			}
-
-			printResults(qClient.getGridFTPServersForQueueAtSite("Canterbury",
-			"gt5test"), "qclient getGridFTPServersForQueueAtSite");
-			printResults(sClient.getGridFTPServersForQueueAtSite("Canterbury",
-			"gt5test"), "sclient getGridFTPServersForQueueAtSite");
-
-			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/grid-bestgrid", "/ARCS/BeSTGRID"),
-			"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-bestgrid /ARCS/BeSTGRID");
-
-			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/yhal003", "/ARCS/BeSTGRID/Local"),
-			"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/yhal003 /ARCS/BeSTGRID/Local");
-
-			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/grid-sbs", "/ARCS/BeSTGRID/Drug_discovery/SBS-Structural_Biology"),
-			"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-sbs /ARCS/BeSTGRID/Drug_discovery/SBS-Structural_Biology");
-
-			printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811", "/home/grid-acsrc", "/ARCS/BeSTGRID/Drug_discovery/ACSRC"),
-			"qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-acsrc /ARCS/BeSTGRID/Drug_discovery/ACSRC");
-
-
-			Map<JobSubmissionProperty,String> jobProperties = new HashMap<JobSubmissionProperty,String>();
-			jobProperties.put(JobSubmissionProperty.APPLICATIONNAME,"mech-uoa");
-			//jobProperties.put(JobSubmissionProperty.APPLICATIONVERSION, "1.5");
-			//jobProperties.put(JobSubmissionProperty.NO_CPUS, "1");
-			resources = sClient.findAllResourcesM(jobProperties, "/nz/NeSI",false);
-			for (GridResource r: resources){
-				System.out.println(r.getQueueName());
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+	// public static void main(String[] args) throws ClassNotFoundException,
+	// InstantiationException, IllegalAccessException {
+	// Connection con = null;
+	// try {
+	//
+	// Class.forName("com.mysql.jdbc.Driver").newInstance();
+	// con = DriverManager.getConnection(
+	// "jdbc:mysql://mysql-bg.ceres.auckland.ac.nz/mds_test",
+	// "grisu_read", "password");
+	//
+	// QueryClient qClient = new QueryClient("/tmp");
+	// SQLQueryClient sClient = new SQLQueryClient(con);
+	//
+	// HashMap<JobSubmissionProperty, String> props = new
+	// HashMap<JobSubmissionProperty, String>();
+	// props.put(JobSubmissionProperty.APPLICATIONNAME,
+	// Constants.GENERIC_APPLICATION_NAME);
+	// props.put(JobSubmissionProperty.APPLICATIONVERSION,
+	// Constants.NO_VERSION_INDICATOR_STRING);
+	// props.put(JobSubmissionProperty.WALLTIME_IN_MINUTES, "4000");
+	// System.out.println("Check R...");
+	// List<GridResource> resources = sClient.findAllResourcesM(props,
+	// "/ARCS/Monash", true);
+	// for (GridResource r : resources) {
+	// System.out.println("R site: " + r.getSiteName());
+	// }
+	//
+	// printResults(
+	// qClient.getApplicationNamesThatProvideExecutable("javac"),
+	// "Query Client method 1");
+	// printResults(
+	// sClient.getApplicationNamesThatProvideExecutable("javac"),
+	// "SQL Client method 1");
+	//
+	// // appears broken
+	// //
+	// printResults(qClient.getClusterNamesAtSite("canterbury.ac.nz"),"Query Client method 2");
+	// printResults(sClient.getClusterNamesAtSite("Canterbury"),
+	// "SQL Client method 2");
+	//
+	// // broken too, maybe...
+	// //
+	// printResults(qClient.getClustersForCodeAtSite("canterbury.ac.nz","Java","1.4.2"),"Query Client method 3");
+	// printResults(sClient.getClustersForCodeAtSite("Canterbury", "Java",
+	// "1.4.2"), "SQL Client method 3");
+	//
+	// printResults(qClient.getCodesAtSite("Canterbury"),
+	// "Query Client method  4");
+	// printResults(sClient.getCodesAtSite("Canterbury"),
+	// "SQL Client method 4");
+	//
+	// printResults(qClient.getCodesOnGrid(), "Query Client method  5");
+	// printResults(sClient.getCodesOnGrid(), "SQL Client method 5");
+	//
+	// printResults(qClient.getContactStringOfQueueAtSite("eRSA",
+	// "hydra@hydra"), "Query Client method  6");
+	// printResults(sClient.getContactStringOfQueueAtSite("eRSA",
+	// "hydra@hydra"), "SQL Client method 6");
+	//
+	// printResults(qClient.getDataDir("Auckland", "ng2.auckland.ac.nz",
+	// "/ARCS/BeSTGRID"), "Query Client method  7");
+	// printResults(sClient.getDataDir("Auckland", "ng2.auckland.ac.nz",
+	// "/ARCS/BeSTGRID"), "SQL Client method 7");
+	//
+	// printResults(
+	// new String[] { qClient.getDefaultStorageElementForQueueAtSite(
+	// "Canterbury", "grid_aix") },
+	// "Query Client method  8");
+	// printResults(
+	// new String[] { sClient.getDefaultStorageElementForQueueAtSite(
+	// "Canterbury", "grid_aix") }, "SQL Client method  8");
+	//
+	// printResults(
+	// qClient.getExeNameOfCodeAtSite("Auckland", "Java", "1.6"),
+	// "Query Client method  9");
+	// printResults(
+	// sClient.getExeNameOfCodeAtSite("Auckland", "Java", "1.6"),
+	// "SQL Client method  9");
+	//
+	// printResults(qClient.getExeNameOfCodeForSubmissionLocation(
+	// "route@er171.ceres.auckland.ac.nz:ng2.auckland.ac.nz",
+	// "Java", "1.6"), "Query Client method  10");
+	// printResults(sClient.getExeNameOfCodeForSubmissionLocation(
+	// "route@er171.ceres.auckland.ac.nz:ng2.auckland.ac.nz",
+	// "Java", "1.6"), "SQL Client method  10");
+	//
+	// printResults(qClient.getGridFTPServersAtSite("Auckland"),
+	// "Query Client method  11");
+	// printResults(sClient.getGridFTPServersAtSite("Auckland"),
+	// "SQL Client method  11");
+	//
+	// printResults(qClient.getGridFTPServersForQueueAtSite("Auckland",
+	// "route@er171.ceres.auckland.ac.nz"),
+	// "Query Client method  12");
+	// printResults(sClient.getGridFTPServersForQueueAtSite("Auckland",
+	// "route@er171.ceres.auckland.ac.nz"),
+	// "SQL Client method  12");
+	//
+	// printResults(qClient.getGridFTPServersForStorageElementAtSite(
+	// "Auckland", "ngdata.ceres.auckland.ac.nz"),
+	// "Query Client method  13");
+	// printResults(sClient.getGridFTPServersForStorageElementAtSite(
+	// "Auckland", "ngdata.ceres.auckland.ac.nz"),
+	// "SQL Client method  13");
+	//
+	// // also broken
+	// //
+	// printResults(qClient.getGridFTPServersOnGrid(),"Query Client method  14");
+	// printResults(sClient.getGridFTPServersOnGrid(),
+	// "SQL Client method  14");
+	//
+	// printResults(new String[] { qClient.getJobManagerOfQueueAtSite(
+	// "Auckland", "route@er171.ceres.auckland.ac.nz") },
+	// "Query Client method  15");
+	// printResults(new String[] { sClient.getJobManagerOfQueueAtSite(
+	// "Auckland", "route@er171.ceres.auckland.ac.nz") },
+	// "SQL Client method  15");
+	//
+	// // not sure what we are supposed to do here
+	// // System.out.println(qClient.getJobTypeOfCodeAtSite("Auckland",
+	// // "Java", "1.6"));
+	//
+	// printResults(new String[] { qClient.getLRMSTypeOfQueueAtSite(
+	// "Auckland", "route@er171.ceres.auckland.ac.nz") },
+	// "Query Client method  17");
+	// printResults(new String[] { sClient.getLRMSTypeOfQueueAtSite(
+	// "Auckland", "route@er171.ceres.auckland.ac.nz") },
+	// "SQL Client method  17");
+	//
+	// printResults(
+	// new String[] { qClient
+	// .getModuleNameOfCodeForSubmissionLocation(
+	// "route@er171.ceres.auckland.ac.nz:ng2.auckland.ac.nz",
+	// "Java", "1.6") }, "Query Client method  18");
+	// printResults(
+	// new String[] { sClient
+	// .getModuleNameOfCodeForSubmissionLocation(
+	// "route@er171.ceres.auckland.ac.nz:ng2.auckland.ac.nz",
+	// "Java", "1.6") }, "SQL Client method  18");
+	//
+	// printResults(qClient.getQueueNamesAtSite("Canterbury"),
+	// "Query Client method  19");
+	// printResults(sClient.getQueueNamesAtSite("Canterbury"),
+	// "SQL Client method  19");
+	//
+	// printResults(
+	// qClient.getQueueNamesAtSite("Canterbury", "/ARCS/NGAdmin"),
+	// "Query Client method  20");
+	// printResults(
+	// sClient.getQueueNamesAtSite("Canterbury", "/ARCS/NGAdmin"),
+	// "SQL Client method  20");
+	//
+	// // broken too!
+	// //
+	// printResults(qClient.getQueueNamesForClusterAtSite("Canterbury","ng1.canterbury.ac.nz"),"Query Client method  21");
+	// printResults(sClient.getQueueNamesForClusterAtSite("Canterbury",
+	// "ng1.canterbury.ac.nz"), "SQL Client method  21");
+	//
+	// printResults(
+	// qClient.getQueueNamesForCodeAtSite("Canterbury", "Java"),
+	// "Query Client method  22");
+	// printResults(
+	// sClient.getQueueNamesForCodeAtSite("Canterbury", "Java"),
+	// "SQL Client method  22");
+	//
+	// printResults(qClient.getQueueNamesForCodeAtSite("Canterbury",
+	// "Java", "1.4.2"), "Query Client method  23");
+	// printResults(sClient.getQueueNamesForCodeAtSite("Canterbury",
+	// "Java", "1.4.2"), "SQL Client method  23");
+	//
+	// printResults(
+	// new String[] { qClient.getSiteForHost("cognac.ivec.org") },
+	// "Query Client method  24");
+	// printResults(
+	// new String[] { sClient.getSiteForHost("cognac.ivec.org") },
+	// "SQL Client method  24");
+	//
+	// printResults(qClient.getSitesOnGrid(), "Query Client method  25");
+	// printResults(sClient.getSitesOnGrid(), "SQL Client method  25");
+	//
+	// printResults(qClient.getSitesWithAVersionOfACode("Java", "1.6"),
+	// "Query Client method  26");
+	// printResults(sClient.getSitesWithAVersionOfACode("Java", "1.6"),
+	// "SQL Client method  26");
+	//
+	// printResults(qClient.getSitesWithCode("Java"),
+	// "Query Client method  27");
+	// printResults(sClient.getSitesWithCode("Java"),
+	// "SQL Client method  27");
+	//
+	// printResults(
+	// new String[] { qClient
+	// .getStorageElementForGridFTPServer("gsiftp://ng2.esscc.uq.edu.au:2811")
+	// },
+	// "Query Client method  28");
+	// printResults(
+	// new String[] { sClient
+	// .getStorageElementForGridFTPServer("gsiftp://ng2.esscc.uq.edu.au:2811")
+	// },
+	// "SQL Client method  28");
+	//
+	// printResults(qClient.getStorageElementsForSite("HPSC"),
+	// "Query Client method  29");
+	// printResults(sClient.getStorageElementsForSite("HPSC"),
+	// "SQL Client method  29");
+	//
+	// printResults(qClient.getVersionsOfCodeAtSite("Auckland", "Java"),
+	// "Query Client method  30");
+	// printResults(sClient.getVersionsOfCodeAtSite("Auckland", "Java"),
+	// "SQL Client method  30");
+	//
+	// printResults(
+	// qClient.getVersionsOfCodeForQueueAndContactString(
+	// "grid_aix",
+	// "https://ng2hpc.canterbury.ac.nz:8443/wsrf/services/ManagedJobFactoryService",
+	// "Java"), "Query Client method  31");
+	// printResults(
+	// sClient.getVersionsOfCodeForQueueAndContactString(
+	// "grid_aix",
+	// "https://ng2hpc.canterbury.ac.nz:8443/wsrf/services/ManagedJobFactoryService",
+	// "Java"), "SQL Client method  31");
+	//
+	// printResults(qClient.getVersionsOfCodeOnGrid("beast"),
+	// "Query Client method  32");
+	// printResults(sClient.getVersionsOfCodeOnGrid("beast"),
+	// "SQL Client method  32");
+	//
+	// printResults(
+	// new String[] { ""
+	// + qClient.isParallelAvailForCodeForSubmissionLocation(
+	// "grid_aix:ng2hpc.canterbury.ac.nz",
+	// "MrBayes", "3.1.2") },
+	// "Query Client method  33");
+	// printResults(
+	// new String[] { ""
+	// + sClient.isParallelAvailForCodeForSubmissionLocation(
+	// "grid_aix:ng2hpc.canterbury.ac.nz",
+	// "MrBayes", "3.1.2") },
+	// "SQL Client method  33");
+	//
+	// // and this one is broken as well so it seems...
+	// printResults(
+	// new String[] { ""
+	// + qClient.isSerialAvailForCodeForSubmissionLocation(
+	// "grid_aix:ng2hpc.canterbury.ac.nz",
+	// "MrBayes", "3.1.2") },
+	// "Query Client method  34");
+	// printResults(
+	// new String[] { ""
+	// + sClient.isSerialAvailForCodeForSubmissionLocation(
+	// "grid_aix:ng2hpc.canterbury.ac.nz",
+	// "MrBayes", "3.1.2") },
+	// "SQL Client method  34");
+	//
+	// printResults(qClient.getSitesForVO("/ARCS/BeSTGRID"),
+	// "Query Client method 35");
+	// printResults(sClient.getSitesForVO("/ARCS/BeSTGRID"),
+	// "SQL Client method 35");
+	//
+	// Map<String, String[]> data = sClient
+	// .calculateDataLocationsForVO("/ARCS/BeSTGRID");
+	// for (String key : data.keySet()) {
+	// System.out.println("key is : " + key);
+	// String[] values = data.get(key);
+	// for (String value : values) {
+	// System.out.println(value);
+	// }
+	// }
+	//
+	// printResults(qClient.getGridFTPServersForQueueAtSite("Canterbury",
+	// "gt5test"), "qclient getGridFTPServersForQueueAtSite");
+	// printResults(sClient.getGridFTPServersForQueueAtSite("Canterbury",
+	// "gt5test"), "sclient getGridFTPServersForQueueAtSite");
+	//
+	// printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811",
+	// "/home/grid-bestgrid", "/ARCS/BeSTGRID"),
+	// "qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-bestgrid /ARCS/BeSTGRID");
+	//
+	// printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811",
+	// "/home/yhal003", "/ARCS/BeSTGRID/Local"),
+	// "qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/yhal003 /ARCS/BeSTGRID/Local");
+	//
+	// printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811",
+	// "/home/grid-sbs",
+	// "/ARCS/BeSTGRID/Drug_discovery/SBS-Structural_Biology"),
+	// "qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-sbs /ARCS/BeSTGRID/Drug_discovery/SBS-Structural_Biology");
+	//
+	// printResults(sClient.isVolatile("gsiftp://ng2.auckland.ac.nz:2811",
+	// "/home/grid-acsrc", "/ARCS/BeSTGRID/Drug_discovery/ACSRC"),
+	// "qClient isVolatile gsiftp://ng2.auckland.ac.nz:2811 /home/grid-acsrc /ARCS/BeSTGRID/Drug_discovery/ACSRC");
+	//
+	//
+	// Map<JobSubmissionProperty,String> jobProperties = new
+	// HashMap<JobSubmissionProperty,String>();
+	// jobProperties.put(JobSubmissionProperty.APPLICATIONNAME,"mech-uoa");
+	// //jobProperties.put(JobSubmissionProperty.APPLICATIONVERSION, "1.5");
+	// //jobProperties.put(JobSubmissionProperty.NO_CPUS, "1");
+	// resources = sClient.findAllResourcesM(jobProperties, "/nz/NeSI",false);
+	// for (GridResource r: resources){
+	// System.out.println(r.getQueueName());
+	// }
+	// } catch (SQLException e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 	private static void printResults(boolean result, String label){
 		printResults( new String[] {new Boolean(result).toString()},label);

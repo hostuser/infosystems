@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import org.bestgrid.mds.SQLQueryClient;
 import org.w3c.dom.Document;
 
-import au.org.arcs.grid.sched.util.PluginLoader;
+//import au.org.arcs.grid.sched.util.PluginLoader;
 
 public class SqlMDSMatchMaker implements MatchMaker {
 
@@ -84,10 +84,10 @@ public class SqlMDSMatchMaker implements MatchMaker {
 	// }
 	// }
 
-	private static void test3() {
-		System.out.println(PluginLoader
-				.getImplementationClass("RankingAlgorithm"));
-	}
+	// private static void test3() {
+	// System.out.println(PluginLoader
+	// .getImplementationClass("RankingAlgorithm"));
+	// }
 
 	// private static void test4() {
 	//
