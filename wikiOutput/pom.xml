@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>infosystems</artifactId>
 		<groupId>au.org.arcs.infosystems</groupId>
-		<version>0.8.3-SNAPSHOT</version>
+		<version>0.8.7-SNAPSHOT</version>
 	</parent>
 	<groupId>org.bestgrid.info</groupId>
 	<artifactId>wikiOutput</artifactId>
