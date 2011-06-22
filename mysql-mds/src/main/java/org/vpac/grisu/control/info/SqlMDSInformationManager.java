@@ -7,9 +7,11 @@ import grisu.jcommons.utils.SubmissionLocationHelpers;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bestgrid.mds.SQLQueryClient;
 
@@ -107,7 +109,13 @@ public class SqlMDSInformationManager implements InformationManager {
 		}
 
 		String[] sites = client.getSitesForVO(fqan);
-		return getContactStringsForSitesWithApplication(sites, null, null);
+		Set<String> locations = new HashSet<String>();
+		for (String site: sites){
+			for (String location: client.getQueueNamesAtSite(site, fqan)){
+				locations.add(location);
+			}
+		}
+		return locations.toArray(new String[] {});
 	}
 
 	public String[] getAllVersionsOfApplicationOnGrid(String application) {
