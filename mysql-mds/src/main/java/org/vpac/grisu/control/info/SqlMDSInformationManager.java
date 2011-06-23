@@ -112,8 +112,9 @@ public class SqlMDSInformationManager implements InformationManager {
 		Set<String> locations = new HashSet<String>();
 		for (String site: sites){
 			for (String queue: client.getQueueNamesAtSite(site, fqan)){
-				for (String location: client.getContactStringOfQueueAtSite(site, queue)){
-					locations.add(location);
+				for (String cs: client.getContactStringOfQueueAtSite(site, queue)){
+					String jobManager = getJobmanagerOfQueueAtSite(site, queue);
+					locations.add(getContactString(queue, cs, jobManager));
 				}
 			}
 		}
