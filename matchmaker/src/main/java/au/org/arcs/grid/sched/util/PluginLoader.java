@@ -5,7 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 public class PluginLoader {
+
+	static Logger myLogger = Logger.getLogger(PluginLoader.class.getName());
 
 	private static Properties matchmakerProperties;
 
@@ -15,15 +19,15 @@ public class PluginLoader {
 		matchmakerProperties = new Properties();
 		try {
 			matchmakerProperties
-					.load(new FileInputStream(MATCHMAKER_PROPERTIES));
+			.load(new FileInputStream(MATCHMAKER_PROPERTIES));
 		} catch (IOException e) {
+			myLogger.error(e);
 			try {
 				InputStream is = PluginLoader.class.getClassLoader()
 						.getResourceAsStream(MATCHMAKER_PROPERTIES);
 				matchmakerProperties.load(is);
 			} catch (IOException ioe) {
-				e.printStackTrace();
-				ioe.printStackTrace();
+				myLogger.error(ioe);
 				System.exit(-1);
 			}
 		}

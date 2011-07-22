@@ -33,22 +33,22 @@ public class QueryClient implements GridInfoInterface {
 		QueryClient client = new QueryClient();
 		String fqan = "/APACGrid/NGAdmin";
 		it.infn.cnaf.forge.glueschema.spec.v12.r2.StorageElementType[] storageElements = (client)
-		.getStorageElementsForVO(fqan);
+				.getStorageElementsForVO(fqan);
 		if (storageElements != null) {
 			for (StorageElementType storageElement : storageElements) {
 				System.out.println("StorageElement: "
 						+ storageElement.getUniqueID());
 				it.infn.cnaf.forge.glueschema.spec.v12.r2.SEAccessProtocolType[] accessProtocols = storageElement
-				.getAccessProtocolArray();
+						.getAccessProtocolArray();
 
 				it.infn.cnaf.forge.glueschema.spec.v12.r2.StorageAreaType[] allStorageAreas = storageElement
-				.getStorageAreaArray();
+						.getStorageAreaArray();
 
 				java.util.List<String> voStorageAreaList = new java.util.ArrayList<String>();
 
 				for (StorageAreaType allStorageArea : allStorageAreas) {
 					String[] aclTypes = allStorageArea.getACL()
-					.getRuleArray();
+							.getRuleArray();
 
 					for (String aclType : aclTypes) {
 						if (aclType.equalsIgnoreCase(fqan)) {
@@ -94,7 +94,7 @@ public class QueryClient implements GridInfoInterface {
 			}
 			System.out.println("------------------------------");
 			for (String version : client.getVersionsOfCodeOnGridForVO("java",
-			"/ARCS/VPAC")) {
+					"/ARCS/VPAC")) {
 				System.out.println(version);
 			}
 		}
@@ -120,7 +120,7 @@ public class QueryClient implements GridInfoInterface {
 						sites[i], queues[j]);
 
 				for (int k = 0; (contactStrings != null)
-				&& (k < contactStrings.length); k++) {
+						&& (k < contactStrings.length); k++) {
 					String hostname = contactStrings[k].substring(
 							contactStrings[k].indexOf("https://") != 0 ? 0 : 8,
 									contactStrings[k].indexOf(":8443"));
@@ -159,7 +159,7 @@ public class QueryClient implements GridInfoInterface {
 						sites[i], queues[j]);
 
 				for (int k = 0; (contactStrings != null)
-				&& (k < contactStrings.length); k++) {
+						&& (k < contactStrings.length); k++) {
 					String hostname = contactStrings[k].substring(
 							contactStrings[k].indexOf("https://") != 0 ? 0 : 8,
 									contactStrings[k].indexOf(":8443"));
@@ -192,7 +192,7 @@ public class QueryClient implements GridInfoInterface {
 		factory = GLUEQueryTransformerFactory.newInstance();
 		try {
 			transformer = factory
-			.createGLUEQueryTransformer(GLUEQueryTransformerFactory.GLUE_SCHEMA_V12_R2);
+					.createGLUEQueryTransformer(GLUEQueryTransformerFactory.GLUE_SCHEMA_V12_R2);
 		} catch (UnknownGLUESchemaVersion e) {
 			// don't do anything yet
 		}
@@ -227,12 +227,12 @@ public class QueryClient implements GridInfoInterface {
 
 			Element softwareExecutableEl;
 			NodeList softwareExecutableNodeList = qEngine
-			.turboMDSquery(xpathQuery);
+					.turboMDSquery(xpathQuery);
 
 			TreeSet<String> myTreeSet = new TreeSet<String>();
 			for (int i = 0; i < softwareExecutableNodeList.getLength(); i++) {
 				softwareExecutableEl = (Element) softwareExecutableNodeList
-				.item(i);
+						.item(i);
 				myTreeSet.add(qEngine
 						.getTextValue(softwareExecutableEl, "Name"));
 			}
@@ -246,7 +246,8 @@ public class QueryClient implements GridInfoInterface {
 			// System.out.println("--------------------------------");
 
 		} catch (ParseException e) {
-			e.printStackTrace();
+			logger.error(e);
+			// e.printStackTrace();
 		}
 		return applications;
 	}
@@ -261,8 +262,8 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get Cluster where ComputingElement.UniqueID='"
-					+ ceUID + "'");
+					.transform("get Cluster where ComputingElement.UniqueID='"
+							+ ceUID + "'");
 			logger.debug("xpath: " + xpathQuery);
 
 			NodeList clusterNodeList = qEngine.turboMDSquery(xpathQuery);
@@ -291,8 +292,8 @@ public class QueryClient implements GridInfoInterface {
 				}
 			}
 			return myTreeSet
-			.toArray(new it.infn.cnaf.forge.glueschema.spec.v12.r2.ClusterType[myTreeSet
-			                                                                   .size()])[0];
+					.toArray(new it.infn.cnaf.forge.glueschema.spec.v12.r2.ClusterType[myTreeSet
+					                                                                   .size()])[0];
 
 		} catch (ParseException e) {
 
@@ -335,8 +336,8 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get SoftwarePackage where Site.Name='" + site
-					+ "'");
+					.transform("get SoftwarePackage where Site.Name='" + site
+							+ "'");
 			logger.debug("xpath: " + xpathQuery);
 
 			Element softwarePackageEl;
@@ -395,8 +396,8 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get SoftwarePackage where ACL.Rule='" + fqan
-					+ "'");
+					.transform("get SoftwarePackage where ACL.Rule='" + fqan
+							+ "'");
 			logger.debug("xpath: " + xpathQuery);
 
 			Element softwarePackageEl;
@@ -410,7 +411,7 @@ public class QueryClient implements GridInfoInterface {
 
 			codes = myTreeSet.toArray(new String[myTreeSet.size()]);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return codes;
 	}
@@ -437,19 +438,19 @@ public class QueryClient implements GridInfoInterface {
 			} else if (StringUtils.isBlank(code)
 					|| Constants.GENERIC_APPLICATION_NAME.equals(code)) {
 				xpathQuery = transformer
-				.transform("get Cluster where ACL.Rule='" + fqan + "'");
+						.transform("get Cluster where ACL.Rule='" + fqan + "'");
 			} else if (StringUtils.isBlank(version)
 					|| Constants.NO_VERSION_INDICATOR_STRING.equals(version)) {
 				xpathQuery = transformer
-				.transform("get Cluster where ACL.Rule='" + fqan
-						+ "' and " + "SoftwarePackage.Name='" + code
-						+ "'");
+						.transform("get Cluster where ACL.Rule='" + fqan
+								+ "' and " + "SoftwarePackage.Name='" + code
+								+ "'");
 			} else {
 				xpathQuery = transformer
-				.transform("get Cluster where ACL.Rule='" + fqan
-						+ "' and " + "SoftwarePackage.Name='" + code
-						+ "' and " + "SoftwarePackage.Version='"
-						+ version + "'");
+						.transform("get Cluster where ACL.Rule='" + fqan
+								+ "' and " + "SoftwarePackage.Name='" + code
+								+ "' and " + "SoftwarePackage.Version='"
+								+ version + "'");
 			}
 
 			logger.debug("xpath: " + xpathQuery);
@@ -474,13 +475,13 @@ public class QueryClient implements GridInfoInterface {
 				try {
 
 					it.infn.cnaf.forge.glueschema.spec.v12.r2.ComputingElementType[] ceArrayTmp = it.infn.cnaf.forge.glueschema.spec.v12.r2.ClusterDocument.Factory
-					.parse(clusterEl).getCluster()
-					.getComputingElementArray();
+							.parse(clusterEl).getCluster()
+							.getComputingElementArray();
 
 					// now only find the CEs that give permission to fqan
 					for (ComputingElementType element : ceArrayTmp) {
 						String[] ruleArray = element.getACL()
-						.getRuleArray();
+								.getRuleArray();
 						for (String element2 : ruleArray) {
 							// if (ruleArray[k].equals(fqan)) {
 							myTreeSet.add(element);
@@ -494,8 +495,8 @@ public class QueryClient implements GridInfoInterface {
 				}
 			}
 			computingElements = myTreeSet
-			.toArray(new it.infn.cnaf.forge.glueschema.spec.v12.r2.ComputingElementType[myTreeSet
-			                                                                            .size()]);
+					.toArray(new it.infn.cnaf.forge.glueschema.spec.v12.r2.ComputingElementType[myTreeSet
+					                                                                            .size()]);
 
 		} catch (ParseException e) {
 		}
@@ -587,13 +588,13 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get ComputingElement where Site.Name='" + site
-					+ "' and ComputingElement.Name='" + queue + "'");
+					.transform("get ComputingElement where Site.Name='" + site
+							+ "' and ComputingElement.Name='" + queue + "'");
 			logger.debug("xpath: " + xpathQuery);
 
 			Element computingEl;
 			NodeList computingElementNodeList = qEngine
-			.turboMDSquery(xpathQuery);
+					.turboMDSquery(xpathQuery);
 
 			// TODO: might probably need to come up with a better way of doing
 			// this
@@ -601,7 +602,7 @@ public class QueryClient implements GridInfoInterface {
 			for (int i = 0; i < computingElementNodeList.getLength(); i++) {
 				computingEl = (Element) computingElementNodeList.item(i);
 				defaultStorageElement = qEngine.getTextValue(computingEl,
-				"DefaultSE");
+						"DefaultSE");
 			}
 		} catch (ParseException e) {
 
@@ -628,20 +629,20 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get SoftwareExecutable where Site.Name='"
-					+ site + "' and ComputingElement.Name='" + queue
-					+ "' and SoftwarePackage.Version='" + version
-					+ "' and SoftwarePackage.Name='" + code + "'");
+					.transform("get SoftwareExecutable where Site.Name='"
+							+ site + "' and ComputingElement.Name='" + queue
+							+ "' and SoftwarePackage.Version='" + version
+							+ "' and SoftwarePackage.Name='" + code + "'");
 			logger.debug("xpath: " + xpathQuery);
 
 			Element softwareExecutableEl;
 			NodeList softwareExecutableNodeList = qEngine
-			.turboMDSquery(xpathQuery);
+					.turboMDSquery(xpathQuery);
 
 			TreeSet<String> myTreeSet = new TreeSet<String>();
 			for (int i = 0; i < softwareExecutableNodeList.getLength(); i++) {
 				softwareExecutableEl = (Element) softwareExecutableNodeList
-				.item(i);
+						.item(i);
 				myTreeSet.add(qEngine
 						.getTextValue(softwareExecutableEl, "Name"));
 			}
@@ -679,20 +680,20 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get SoftwareExecutable where Site.Name='"
-					+ site + "' and SoftwarePackage.Version='"
-					+ version + "' and SoftwarePackage.Name='" + code
-					+ "'");
+					.transform("get SoftwareExecutable where Site.Name='"
+							+ site + "' and SoftwarePackage.Version='"
+							+ version + "' and SoftwarePackage.Name='" + code
+							+ "'");
 			logger.debug("xpath: " + xpathQuery);
 
 			Element softwareExecutableEl;
 			NodeList softwareExecutableNodeList = qEngine
-			.turboMDSquery(xpathQuery);
+					.turboMDSquery(xpathQuery);
 
 			TreeSet<String> myTreeSet = new TreeSet<String>();
 			for (int i = 0; i < softwareExecutableNodeList.getLength(); i++) {
 				softwareExecutableEl = (Element) softwareExecutableNodeList
-				.item(i);
+						.item(i);
 				myTreeSet.add(qEngine
 						.getTextValue(softwareExecutableEl, "Name"));
 			}
@@ -943,9 +944,9 @@ public class QueryClient implements GridInfoInterface {
 			throw new RuntimeException("Version is not specified.");
 		} else {
 			xpathQueryString = "get SoftwarePackage where Site.Name='" + site
-			+ "' and ComputingElement.Name='" + queue
-			+ "' and SoftwarePackage.Version='" + version
-			+ "' and SoftwarePackage.Name='" + code + "'";
+					+ "' and ComputingElement.Name='" + queue
+					+ "' and SoftwarePackage.Version='" + version
+					+ "' and SoftwarePackage.Name='" + code + "'";
 		}
 		try {
 			xpathQuery = transformer.transform(xpathQueryString);
@@ -985,8 +986,8 @@ public class QueryClient implements GridInfoInterface {
 		try {
 			logger.debug("calling: getQueueNamesAtSite(" + site + ")");
 			xpathQuery = transformer
-			.transform("get ComputingElement where Site.Name='" + site
-					+ "'");
+					.transform("get ComputingElement where Site.Name='" + site
+							+ "'");
 
 			logger.debug("xpath: " + xpathQuery);
 
@@ -1025,8 +1026,8 @@ public class QueryClient implements GridInfoInterface {
 			logger.debug("calling: getQueueNamesAtSite(" + site + ", " + fqan
 					+ ")");
 			xpathQuery = transformer
-			.transform("get ComputingElement where Site.Name='" + site
-					+ "' and ACL.Rule='" + fqan + "'");
+					.transform("get ComputingElement where Site.Name='" + site
+							+ "' and ACL.Rule='" + fqan + "'");
 
 			logger.debug("xpath: " + xpathQuery);
 
@@ -1072,8 +1073,8 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get ComputingElement where Site.Name='" + site
-					+ "' and SoftwarePackage.Name='" + code + "'");
+					.transform("get ComputingElement where Site.Name='" + site
+							+ "' and SoftwarePackage.Name='" + code + "'");
 
 			logger.debug("xpath: " + xpathQuery);
 
@@ -1106,15 +1107,15 @@ public class QueryClient implements GridInfoInterface {
 			if (StringUtils.isBlank(version)
 					|| Constants.NO_VERSION_INDICATOR_STRING.equals(version)) {
 				xpathQuery = transformer
-				.transform("get ComputingElement where Site.Name='"
-						+ site + "' and SoftwarePackage.Name='" + code
-						+ "'");
+						.transform("get ComputingElement where Site.Name='"
+								+ site + "' and SoftwarePackage.Name='" + code
+								+ "'");
 			} else {
 				xpathQuery = transformer
-				.transform("get ComputingElement where Site.Name='"
-						+ site + "' and SoftwarePackage.Version='"
-						+ version + "' and SoftwarePackage.Name='"
-						+ code + "'");
+						.transform("get ComputingElement where Site.Name='"
+								+ site + "' and SoftwarePackage.Version='"
+								+ version + "' and SoftwarePackage.Name='"
+								+ code + "'");
 			}
 			logger.debug("xpath: " + xpathQuery);
 
@@ -1143,8 +1144,8 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get Site where ComputingElement.UniqueID='"
-					+ ceUID + "'");
+					.transform("get Site where ComputingElement.UniqueID='"
+							+ ceUID + "'");
 			logger.debug("xpath: " + xpathQuery);
 
 			NodeList siteNodeList = qEngine.turboMDSquery(xpathQuery);
@@ -1172,8 +1173,8 @@ public class QueryClient implements GridInfoInterface {
 				}
 			}
 			return myTreeSet
-			.toArray(new it.infn.cnaf.forge.glueschema.spec.v12.r2.SiteType[myTreeSet
-			                                                                .size()])[0];
+					.toArray(new it.infn.cnaf.forge.glueschema.spec.v12.r2.SiteType[myTreeSet
+					                                                                .size()])[0];
 
 		} catch (ParseException e) {
 
@@ -1195,8 +1196,8 @@ public class QueryClient implements GridInfoInterface {
 		try {
 			// try first if the host is a GridFTP Server
 			xpathQuery = transformer
-			.transform("get Site where AccessProtocol.Endpoint like '%"
-					+ host + "%'");
+					.transform("get Site where AccessProtocol.Endpoint like '%"
+							+ host + "%'");
 
 			logger.debug("xpath: " + xpathQuery);
 
@@ -1217,8 +1218,8 @@ public class QueryClient implements GridInfoInterface {
 
 			// now try if it's a GRAM Server
 			xpathQuery = transformer
-			.transform("get Site where ComputingElement.ContactString like '%"
-					+ host + "%'");
+					.transform("get Site where ComputingElement.ContactString like '%"
+							+ host + "%'");
 
 			logger.debug("xpath: " + xpathQuery);
 			hostLists = qEngine.turboMDSquery(xpathQuery);
@@ -1230,8 +1231,8 @@ public class QueryClient implements GridInfoInterface {
 
 			// now try if it's a Cluster host
 			xpathQuery = transformer
-			.transform("get Site where Cluster.Name like '%" + host
-					+ "%'");
+					.transform("get Site where Cluster.Name like '%" + host
+							+ "%'");
 
 			logger.debug("xpath: " + xpathQuery);
 			hostLists = qEngine.turboMDSquery(xpathQuery);
@@ -1243,8 +1244,8 @@ public class QueryClient implements GridInfoInterface {
 
 			// or lastly, try if it's a SubCluster host
 			xpathQuery = transformer
-			.transform("get Site where SubCluster.Name like '%" + host
-					+ "%'");
+					.transform("get Site where SubCluster.Name like '%" + host
+							+ "%'");
 
 			logger.debug("xpath: " + xpathQuery);
 			hostLists = qEngine.turboMDSquery(xpathQuery);
@@ -1342,8 +1343,8 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get Site where SoftwarePackage.Name='" + code
-					+ "' and SoftwarePackage.Version='" + version + "'");
+					.transform("get Site where SoftwarePackage.Name='" + code
+							+ "' and SoftwarePackage.Version='" + version + "'");
 
 			logger.debug("xpath: " + xpathQuery);
 
@@ -1373,8 +1374,8 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get Site where SoftwarePackage.Name='" + code
-					+ "'");
+					.transform("get Site where SoftwarePackage.Name='" + code
+							+ "'");
 
 			logger.debug("xpath: " + xpathQuery);
 
@@ -1405,8 +1406,8 @@ public class QueryClient implements GridInfoInterface {
 		try {
 			// try first if the host is a GridFTP Server
 			xpathQuery = transformer
-			.transform("get StorageElement where AccessProtocol.Endpoint like '%"
-					+ gridFtp + "%'");
+					.transform("get StorageElement where AccessProtocol.Endpoint like '%"
+							+ gridFtp + "%'");
 
 			logger.debug("xpath: " + xpathQuery);
 
@@ -1418,7 +1419,7 @@ public class QueryClient implements GridInfoInterface {
 			for (int i = 0; i < storageElementNodeList.getLength(); i++) {
 				storageEl = (Element) storageElementNodeList.item(i);
 				storageElement = qEngine.getAttributeValue(storageEl,
-				"UniqueID");
+						"UniqueID");
 			}
 
 		} catch (ParseException e) {
@@ -1433,8 +1434,8 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get StorageElement where Site.Name='" + site
-					+ "'");
+					.transform("get StorageElement where Site.Name='" + site
+							+ "'");
 
 			logger.debug("xpath: " + xpathQuery);
 
@@ -1472,8 +1473,8 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get StorageElement where ACL.Rule='" + fqan
-					+ "'");
+					.transform("get StorageElement where ACL.Rule='" + fqan
+							+ "'");
 
 			logger.debug("xpath: " + xpathQuery);
 
@@ -1499,8 +1500,8 @@ public class QueryClient implements GridInfoInterface {
 				}
 			}
 			storageElements = myTreeSet
-			.toArray(new it.infn.cnaf.forge.glueschema.spec.v12.r2.StorageElementType[myTreeSet
-			                                                                          .size()]);
+					.toArray(new it.infn.cnaf.forge.glueschema.spec.v12.r2.StorageElementType[myTreeSet
+					                                                                          .size()]);
 
 		} catch (ParseException e) {
 
@@ -1526,8 +1527,8 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get SoftwarePackage where Site.Name='" + site
-					+ "' and SoftwarePackage.Name='" + code + "'");
+					.transform("get SoftwarePackage where Site.Name='" + site
+							+ "' and SoftwarePackage.Name='" + code + "'");
 			logger.debug("xpath: " + xpathQuery);
 
 			Element softwarePackageEl;
@@ -1556,9 +1557,9 @@ public class QueryClient implements GridInfoInterface {
 			logger.debug("Getting versions of code for ce: "
 					+ computingElementUID + ", code: " + code);
 			xpathQuery = transformer
-			.transform("get SoftwarePackage where ComputingElement.UniqueID='"
-					+ computingElementUID
-					+ "' and SoftwarePackage.Name='" + code + "'");
+					.transform("get SoftwarePackage where ComputingElement.UniqueID='"
+							+ computingElementUID
+							+ "' and SoftwarePackage.Name='" + code + "'");
 			logger.debug("xpath: " + xpathQuery);
 
 			Element softwarePackageEl;
@@ -1587,12 +1588,12 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get SoftwarePackage where ComputingElement.Name='"
-					+ queueName
-					+ "' and ComputingElement.ContactString like '%"
-					+ contactString
-					+ "%' and SoftwarePackage.Name='"
-					+ code + "'");
+					.transform("get SoftwarePackage where ComputingElement.Name='"
+							+ queueName
+							+ "' and ComputingElement.ContactString like '%"
+							+ contactString
+							+ "%' and SoftwarePackage.Name='"
+							+ code + "'");
 			logger.debug("xpath: " + xpathQuery);
 
 			Element softwarePackageEl;
@@ -1627,8 +1628,8 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get SoftwarePackage where SoftwarePackage.Name='"
-					+ code + "'");
+					.transform("get SoftwarePackage where SoftwarePackage.Name='"
+							+ code + "'");
 			logger.debug("xpath: " + xpathQuery);
 
 			Element softwarePackageEl;
@@ -1639,11 +1640,11 @@ public class QueryClient implements GridInfoInterface {
 				softwarePackageEl = (Element) codeVersionNodeList.item(i);
 
 				String codeName = qEngine.getTextValue(softwarePackageEl,
-				"Name");
+						"Name");
 
 				if (code.toLowerCase().equals(codeName.toLowerCase())) {
 					myTreeSet.add(qEngine.getTextValue(softwarePackageEl,
-					"Version"));
+							"Version"));
 				}
 			}
 
@@ -1670,8 +1671,8 @@ public class QueryClient implements GridInfoInterface {
 		String xpathQuery;
 		try {
 			xpathQuery = transformer
-			.transform("get SoftwarePackage where ACL.Rule='" + fqan
-					+ "' and SoftwarePackage.Name='" + code + "'");
+					.transform("get SoftwarePackage where ACL.Rule='" + fqan
+							+ "' and SoftwarePackage.Name='" + code + "'");
 			logger.debug("xpath: " + xpathQuery);
 
 			Element softwarePackageEl;
@@ -1682,11 +1683,11 @@ public class QueryClient implements GridInfoInterface {
 				softwarePackageEl = (Element) codeVersionNodeList.item(i);
 
 				String codeName = qEngine.getTextValue(softwarePackageEl,
-				"Name");
+						"Name");
 
 				if (code.toLowerCase().equals(codeName.toLowerCase())) {
 					myTreeSet.add(qEngine.getTextValue(softwarePackageEl,
-					"Version"));
+							"Version"));
 				}
 			}
 
@@ -1713,10 +1714,10 @@ public class QueryClient implements GridInfoInterface {
 		}
 		try {
 			xpathQuery = transformer
-			.transform("get SoftwarePackage where Site.Name='" + site
-					+ "' and ComputingElement.Name='" + queue
-					+ "' and SoftwarePackage.Version='" + version
-					+ "' and SoftwarePackage.Name='" + code + "'");
+					.transform("get SoftwarePackage where Site.Name='" + site
+							+ "' and ComputingElement.Name='" + queue
+							+ "' and SoftwarePackage.Version='" + version
+							+ "' and SoftwarePackage.Name='" + code + "'");
 			logger.debug("xpath: " + xpathQuery);
 
 			Element softwarePackageEl;
@@ -1755,9 +1756,9 @@ public class QueryClient implements GridInfoInterface {
 			throw new RuntimeException("No version specified.");
 		} else {
 			xpathQueryString = "get SoftwarePackage where Site.Name='" + site
-			+ "' and ComputingElement.Name='" + queue
-			+ "' and SoftwarePackage.Version='" + version
-			+ "' and SoftwarePackage.Name='" + code + "'";
+					+ "' and ComputingElement.Name='" + queue
+					+ "' and SoftwarePackage.Version='" + version
+					+ "' and SoftwarePackage.Name='" + code + "'";
 		}
 		try {
 			xpathQuery = transformer.transform(xpathQueryString);
@@ -1772,7 +1773,7 @@ public class QueryClient implements GridInfoInterface {
 			for (int i = 0; i < softPackNodeList.getLength(); i++) {
 				softwarePackageEl = (Element) softPackNodeList.item(i);
 				String serialAvailStr = qEngine.getTextValue(softwarePackageEl,
-				"SerialAvail");
+						"SerialAvail");
 				if (serialAvailStr != null) {
 					serialAvail = Boolean.parseBoolean(serialAvailStr);
 				}
