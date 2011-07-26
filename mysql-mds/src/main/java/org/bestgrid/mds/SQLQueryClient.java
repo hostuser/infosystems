@@ -379,7 +379,7 @@ public class SQLQueryClient implements GridInfoInterface {
 		// getDataDir(String site, String storageElement, String FQAN)
 		HashMap<String, String[]> map = new HashMap<String, String[]>();
 		String query = "select sa.path,ap.endpoint from StorageElements se,StorageAreas sa,AccessProtocols ap, storageAreaACLs sacls "
-			+ " WHERE ap.storageElement_id = se.id AND sa.storageElement_id = se.id AND sacls.storageArea_id = sa.id and sacls.vo =?";
+				+ " WHERE ap.storageElement_id = se.id AND sa.storageElement_id = se.id AND sacls.storageArea_id = sa.id and sacls.vo =?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, fqan);
 		String[][] results = runQuery(s, "path", "endpoint");
@@ -398,16 +398,16 @@ public class SQLQueryClient implements GridInfoInterface {
 		List<GridResource> results = new LinkedList<GridResource>();
 
 		String query = "SELECT acls.vo fqan, contactString, gramVersion," +
-		" jobManager, ce.name queue, maxWalltime, v.freeJobSlots, " +
-		"v.runningJobs, v.waitingJobs, v.totalJobs, s.name site, " +
-		"lattitude, longitude, sp.name sname ,sp.version  sversion" +
-		" FROM" +
-		" Sites s, SubClusters sc, Clusters c, ComputeElements ce, voViews v, " +
-		"voViewACLs acls, SoftwarePackages sp " +
-		"WHERE " +
-		"acls.voView_id = v.id and ce.cluster_id =c.id and " +
-		"c.site_id = s.id and c.id =  sc.cluster_id  and " +
-		"v.ce_id = ce.id and sp.subcluster_id = sc.id and acls.vo=?";
+				" jobManager, ce.name queue, maxWalltime, v.freeJobSlots, " +
+				"v.runningJobs, v.waitingJobs, v.totalJobs, s.name site, " +
+				"lattitude, longitude, sp.name sname ,sp.version  sversion" +
+				" FROM" +
+				" Sites s, SubClusters sc, Clusters c, ComputeElements ce, voViews v, " +
+				"voViewACLs acls, SoftwarePackages sp " +
+				"WHERE " +
+				"acls.voView_id = v.id and ce.cluster_id =c.id and " +
+				"c.site_id = s.id and c.id =  sc.cluster_id  and " +
+				"v.ce_id = ce.id and sp.subcluster_id = sc.id and acls.vo=?";
 
 		int wallTimeRequirement = -1;
 		try {
@@ -437,16 +437,17 @@ public class SQLQueryClient implements GridInfoInterface {
 			String applicationName = jobProperties.get(JobSubmissionProperty.APPLICATIONNAME);
 			if (StringUtils.isNotBlank(applicationName)
 					&& !Constants.GENERIC_APPLICATION_NAME
-					.equals(applicationName)
-					&& !resource[12].equals(applicationName)) {
+					.equals(applicationName.toLowerCase())
+					&& !resource[12].equalsIgnoreCase(applicationName)) {
 				continue;
 			}
 
 			// check if application version matches
 			String applicationVersion = jobProperties.get(JobSubmissionProperty.APPLICATIONVERSION);
 			if (StringUtils.isNotBlank(applicationVersion)
-					&& !Constants.NO_VERSION_INDICATOR_STRING.equals(applicationVersion)
-					&& !resource[13].equals(applicationVersion)){
+					&& !Constants.NO_VERSION_INDICATOR_STRING
+							.equals(applicationVersion.toLowerCase())
+					&& !resource[13].equalsIgnoreCase(applicationVersion)) {
 				continue;
 			}
 
@@ -501,8 +502,8 @@ public class SQLQueryClient implements GridInfoInterface {
 	public Map<String, String> getAllComputeHosts() {
 		Map<String, String> results = new HashMap<String, String>();
 		String query = "select DISTINCT  s.name as site, "
-			+ " SUBSTRING_INDEX(TRIM(LEADING 'https://' FROM ce.contactString),':',1) hostname  "
-			+ "FROM Sites s ,Clusters c,ComputeElements ce WHERE s.id = c.site_id and c.id = ce.cluster_id;";
+				+ " SUBSTRING_INDEX(TRIM(LEADING 'https://' FROM ce.contactString),':',1) hostname  "
+				+ "FROM Sites s ,Clusters c,ComputeElements ce WHERE s.id = c.site_id and c.id = ce.cluster_id;";
 		PreparedStatement s = getStatement(query);
 		String[][] hostnames = runQuery(s, new String[] { "site", "hostname" });
 		for (String[] hostname : hostnames) {
@@ -515,9 +516,9 @@ public class SQLQueryClient implements GridInfoInterface {
 	public Map<String, String> getAllDataHosts() {
 		Map<String, String> results = new HashMap<String, String>();
 		String query = "SELECT DISTINCT s.name as site,"
-			+ "SUBSTRING_INDEX(TRIM(LEADING 'gsiftp://' FROM endpoint),':',1) as hostname "
-			+ "FROM Sites s,StorageElements se,StorageAreas sa, AccessProtocols p "
-			+ "WHERE s.id = se.site_id AND se.id = sa.storageElement_ID AND se.id=p.storageElement_ID";
+				+ "SUBSTRING_INDEX(TRIM(LEADING 'gsiftp://' FROM endpoint),':',1) as hostname "
+				+ "FROM Sites s,StorageElements se,StorageAreas sa, AccessProtocols p "
+				+ "WHERE s.id = se.site_id AND se.id = sa.storageElement_ID AND se.id=p.storageElement_ID";
 		PreparedStatement s = getStatement(query);
 		String[][] hostnames = runQuery(s, new String[] { "site", "hostname" });
 		for (String[] hostname : hostnames) {
@@ -529,10 +530,10 @@ public class SQLQueryClient implements GridInfoInterface {
 	// only partially implemented
 	public GridResource[] getAllGridResources() {
 		String query = "select contactString,gramVersion,jobManager,ce.name,"
-			+ "freeJobSlots,runningJobs,waitingJobs,totalJobs,s.name,"
-			+ "lattitude,longitude  "
-			+ "from Sites s,Clusters c ,ComputeElements ce where "
-			+ "ce.cluster_id = c.id and c.site_id = s.id";
+				+ "freeJobSlots,runningJobs,waitingJobs,totalJobs,s.name,"
+				+ "lattitude,longitude  "
+				+ "from Sites s,Clusters c ,ComputeElements ce where "
+				+ "ce.cluster_id = c.id and c.site_id = s.id";
 		PreparedStatement s = getStatement(query);
 		String[][] results = runQuery(s, new String[] { "contactString",
 				"gramVersion", "jobManager", "ce.name", "freeJobSlots",
@@ -554,8 +555,8 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getApplicationNamesThatProvideExecutable(String executable) {
 		String query = "SELECT DISTINCT BINARY  sp.name as name FROM SoftwareExecutables AS "
-			+ "   se,SoftwarePackages AS sp WHERE se.package_id = sp.id AND "
-			+ " se.name=?";
+				+ "   se,SoftwarePackages AS sp WHERE se.package_id = sp.id AND "
+				+ " se.name=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, executable);
 		return runQuery(s, "name");
@@ -571,9 +572,9 @@ public class SQLQueryClient implements GridInfoInterface {
 	public String[] getClustersForCodeAtSite(String site, String code,
 			String version) {
 		String query = " SELECT c.uniqueID FROM Sites AS s ,Clusters AS  c, SubClusters AS "
-			+ " sc,SoftwarePackages as p where s.id = c.site_id AND sc.cluster_id = c.id "
-			+ " AND p.subcluster_id = sc.id AND s.name=? AND "
-			+ " p.name=? AND p.version = ?";
+				+ " sc,SoftwarePackages as p where s.id = c.site_id AND sc.cluster_id = c.id "
+				+ " AND p.subcluster_id = sc.id AND s.name=? AND "
+				+ " p.name=? AND p.version = ?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 2, code);
@@ -583,8 +584,8 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getCodesAtSite(String site) {
 		String query = "SELECT DISTINCT p.name FROM Sites AS s ,Clusters AS  c, SubClusters AS "
-			+ " sc,SoftwarePackages AS p WHERE s.id = c.site_id AND sc.cluster_id = "
-			+ " c.id AND s.name=? AND p.subcluster_id = sc.id;";
+				+ " sc,SoftwarePackages AS p WHERE s.id = c.site_id AND sc.cluster_id = "
+				+ " c.id AND s.name=? AND p.subcluster_id = sc.id;";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		return runQuery(s, "name");
@@ -598,8 +599,8 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getCodesOnGridForVO(String fqan) {
 		String query = "select distinct binary sp.name as name from SubClusters sc, ComputeElements ce, voViews v, voViewACLs acls, SoftwarePackages sp"
-			+ " WHERE sc.cluster_id = ce.cluster_id AND v.ce_id = ce.id "
-			+ "AND acls.voView_id = v.id AND sp.subcluster_id = sc.id AND acls.vo=?";
+				+ " WHERE sc.cluster_id = ce.cluster_id AND v.ce_id = ce.id "
+				+ "AND acls.voView_id = v.id AND sp.subcluster_id = sc.id AND acls.vo=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, fqan);
 		return runQuery(s, "name");
@@ -607,7 +608,7 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getContactStringOfQueueAtSite(String site, String queue) {
 		String query = " SELECT contactString FROM ComputeElements ce,Clusters c,Sites  s WHERE "
-			+ "c.site_id = s.id AND ce.cluster_id = c.id  AND s.name = ? AND ce.name =? ";
+				+ "c.site_id = s.id AND ce.cluster_id = c.id  AND s.name = ? AND ce.name =? ";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 2, queue);
@@ -616,11 +617,11 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getDataDir(String site, String storageElement, String FQAN) {
 		String query = " SELECT StorageAreas.path  FROM "
-			+ " Sites,StorageElements,StorageAreas,storageAreaACLs WHERE "
-			+ " Sites.id=StorageElements.site_id AND StorageElements.id = "
-			+ " StorageAreas.storageElement_id AND StorageAreas.id = "
-			+ " storageAreaACLs.storageArea_id AND Sites.name=? "
-			+ "AND vo=? AND StorageElements.uniqueID =?";
+				+ " Sites,StorageElements,StorageAreas,storageAreaACLs WHERE "
+				+ " Sites.id=StorageElements.site_id AND StorageElements.id = "
+				+ " StorageAreas.storageElement_id AND StorageAreas.id = "
+				+ " storageAreaACLs.storageArea_id AND Sites.name=? "
+				+ "AND vo=? AND StorageElements.uniqueID =?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 3, storageElement);
@@ -632,8 +633,8 @@ public class SQLQueryClient implements GridInfoInterface {
 	public String getDefaultStorageElementForQueueAtSite(String site,
 			String queue) {
 		String query = "SELECT se.uniqueID FROM Sites AS s,StorageElements AS "
-			+ " se,ComputeElements AS ce WHERE s.id = se.site_id AND s.id = se.site_id "
-			+ " AND ce.defaultSE_id = se.id AND s.name=? AND  ce.name=?";
+				+ " se,ComputeElements AS ce WHERE s.id = se.site_id AND s.id = se.site_id "
+				+ " AND ce.defaultSE_id = se.id AND s.name=? AND  ce.name=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 2, queue);
@@ -652,10 +653,10 @@ public class SQLQueryClient implements GridInfoInterface {
 		}
 
 		String query = "select exe.name exeName from Sites s, Clusters c,SubClusters sc"
-			+ ",ComputeElements ce, SoftwarePackages sp, SoftwareExecutables exe "
-			+ "where s.id = c.site_id and c.id= sc.cluster_id and sp.subcluster_id = sc.id "
-			+ "and exe.package_id = sp.id AND ce.cluster_id =  c.id AND "
-			+ "s.name =? and ce.name =? AND (sp.name=? OR ? = ?) AND (sp.version=? OR ? = ?)";
+				+ ",ComputeElements ce, SoftwarePackages sp, SoftwareExecutables exe "
+				+ "where s.id = c.site_id and c.id= sc.cluster_id and sp.subcluster_id = sc.id "
+				+ "and exe.package_id = sp.id AND ce.cluster_id =  c.id AND "
+				+ "s.name =? and ce.name =? AND (sp.name=? OR ? = ?) AND (sp.version=? OR ? = ?)";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, siteName);
 		setString(s, 2,queue);
@@ -672,10 +673,10 @@ public class SQLQueryClient implements GridInfoInterface {
 	public String[] getExeNameOfCodeAtSite(String site, String code,
 			String version) {
 		String query = "SELECT exec.name FROM Sites AS s ,Clusters AS c,SubClusters AS "
-			+ " sc,SoftwarePackages AS sp,SoftwareExecutables AS exec WHERE s.id = "
-			+ " c.site_id AND c.id = sc.cluster_id AND sc.id = sp.subcluster_id AND "
-			+ " exec.package_id = sp.id AND s.name=? AND "
-			+ " sp.name=?  AND sp.version=? ";
+				+ " sc,SoftwarePackages AS sp,SoftwareExecutables AS exec WHERE s.id = "
+				+ " c.site_id AND c.id = sc.cluster_id AND sc.id = sp.subcluster_id AND "
+				+ " exec.package_id = sp.id AND s.name=? AND "
+				+ " sp.name=?  AND sp.version=? ";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 2, code);
@@ -686,11 +687,11 @@ public class SQLQueryClient implements GridInfoInterface {
 	public String[] getExeNameOfCodeForSubmissionLocation(String subLoc,
 			String code, String version) {
 		String query = "SELECT exec.name FROM Sites AS s ,ComputeElements AS ce,Clusters AS "
-			+ " c ,SubClusters AS  sc,SoftwarePackages AS sp,SoftwareExecutables AS "
-			+ " exec WHERE c.id = ce.cluster_id AND s.id =  c.site_id AND c.id = "
-			+ " sc.cluster_id AND sc.id = sp.subcluster_id AND  exec.package_id = "
-			+ " sp.id AND ce.name=? AND "
-			+ " ce.hostname=? AND  sp.name=?  AND sp.version=?";
+				+ " c ,SubClusters AS  sc,SoftwarePackages AS sp,SoftwareExecutables AS "
+				+ " exec WHERE c.id = ce.cluster_id AND s.id =  c.site_id AND c.id = "
+				+ " sc.cluster_id AND sc.id = sp.subcluster_id AND  exec.package_id = "
+				+ " sp.id AND ce.name=? AND "
+				+ " ce.hostname=? AND  sp.name=?  AND sp.version=?";
 
 		String hostname = getSubmissionHostName(subLoc);
 		String queue = getSubmissionQueue(subLoc);
@@ -704,8 +705,8 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getGridFTPServersAtSite(String site) {
 		String query = "SELECT DISTINCT endpoint FROM Sites AS s ,StorageElements AS "
-			+ " se,StorageAreas AS sa, AccessProtocols AS p  WHERE s.id = se.site_id "
-			+ " AND se.id = sa.storageElement_ID AND se.id=p.storageElement_ID AND s.name=?";
+				+ " se,StorageAreas AS sa, AccessProtocols AS p  WHERE s.id = se.site_id "
+				+ " AND se.id = sa.storageElement_ID AND se.id=p.storageElement_ID AND s.name=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		return runQuery(s, "endpoint");
@@ -713,10 +714,10 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getGridFTPServersForQueueAtSite(String site, String queue) {
 		String query = "SELECT DISTINCT endpoint FROM Sites s ,Clusters c,StorageElements "
-			+ " se,StorageAreas sa, AccessProtocols  p,ComputeElements ce "
-			+ " WHERE s.id = se.site_id AND s.id = c.site_id AND ce.cluster_id = c.id AND se.id = "
-			+ "sa.storageElement_ID AND ce.defaultSE_id = se.id AND se.id=p.storageElement_ID AND "
-			+ "  s.name=? AND ce.name = ? ";
+				+ " se,StorageAreas sa, AccessProtocols  p,ComputeElements ce "
+				+ " WHERE s.id = se.site_id AND s.id = c.site_id AND ce.cluster_id = c.id AND se.id = "
+				+ "sa.storageElement_ID AND ce.defaultSE_id = se.id AND se.id=p.storageElement_ID AND "
+				+ "  s.name=? AND ce.name = ? ";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 2, queue);
@@ -726,10 +727,10 @@ public class SQLQueryClient implements GridInfoInterface {
 	public String[] getGridFTPServersForStorageElementAtSite(String site,
 			String storageElement) {
 		String query = "select distinct endpoint from Sites  s, Clusters c ,StorageElements "
-			+ " se,StorageAreas  sa, AccessProtocols  p,ComputeElements  ce "
-			+ " WHERE s.id = se.site_id AND s.id = c.site_id AND c.id = ce.cluster_id AND se.id = "
-			+ " sa.storageElement_ID AND se.id=p.storageElement_ID AND "
-			+ " s.name=? AND se.uniqueID =?";
+				+ " se,StorageAreas  sa, AccessProtocols  p,ComputeElements  ce "
+				+ " WHERE s.id = se.site_id AND s.id = c.site_id AND c.id = ce.cluster_id AND se.id = "
+				+ " sa.storageElement_ID AND se.id=p.storageElement_ID AND "
+				+ " s.name=? AND se.uniqueID =?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 2, storageElement);
@@ -738,14 +739,14 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getGridFTPServersOnGrid() {
 		String query = "select AccessProtocols.endpoint from StorageElements,AccessProtocols "
-			+ " where StorageElements.id = AccessProtocols.storageElement_id";
+				+ " where StorageElements.id = AccessProtocols.storageElement_id";
 		PreparedStatement s = getStatement(query);
 		return runQuery(s, "endpoint");
 	}
 
 	public String getJobManagerOfQueueAtSite(String site, String queue) {
 		String query = "select ce.jobManager from Sites s,Clusters c,ComputeElements ce WHERE s.id "
-			+ " = c.site_id AND c.id = ce.cluster_id AND s.name=? AND ce.name=?";
+				+ " = c.site_id AND c.id = ce.cluster_id AND s.name=? AND ce.name=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 2, queue);
@@ -760,7 +761,7 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String getLRMSTypeOfQueueAtSite(String site, String queue) {
 		String query = "SELECT ce.lRMSType FROM Sites s,Clusters c,ComputeElements ce WHERE s.id = "
-			+ " c.site_id AND c.id = ce.cluster_id AND s.name=? AND ce.name=?";
+				+ " c.site_id AND c.id = ce.cluster_id AND s.name=? AND ce.name=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 2, queue);
@@ -770,10 +771,10 @@ public class SQLQueryClient implements GridInfoInterface {
 	public String getModuleNameOfCodeForSubmissionLocation(String subLoc,
 			String code, String version) {
 		String query = "SELECT sp.module FROM Sites AS s ,ComputeElements AS ce,Clusters AS "
-			+ " c ,SubClusters AS  sc,SoftwarePackages AS sp "
-			+ " WHERE s.id = c.site_id AND c.id =  ce.cluster_id AND c.id = "
-			+ " sc.cluster_id AND sc.id = sp.subcluster_id  AND ce.name=? AND "
-			+ " ce.hostname=? AND sp.name=?  AND sp.version=?";
+				+ " c ,SubClusters AS  sc,SoftwarePackages AS sp "
+				+ " WHERE s.id = c.site_id AND c.id =  ce.cluster_id AND c.id = "
+				+ " sc.cluster_id AND sc.id = sp.subcluster_id  AND ce.name=? AND "
+				+ " ce.hostname=? AND sp.name=?  AND sp.version=?";
 
 		String hostname = getSubmissionHostName(subLoc);
 		String queue = getSubmissionQueue(subLoc);
@@ -792,7 +793,7 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getQueueNamesAtSite(String site) {
 		String query = " SELECT ce.name FROM Sites s,Clusters c "
-			+ ",ComputeElements ce WHERE s.id = c.site_id AND c.id = ce.cluster_id AND s.name=?";
+				+ ",ComputeElements ce WHERE s.id = c.site_id AND c.id = ce.cluster_id AND s.name=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		return runQuery(s, "name");
@@ -800,8 +801,8 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getQueueNamesAtSite(String site, String fqan) {
 		String query = "select ce.name from voViews v,Sites s,Clusters c,ComputeElements ce,voViewACLs "
-			+ " acls where s.id = c.site_id and c.id = ce.cluster_id and v.ce_id=ce.id AND v.id = "
-			+ " acls.voView_id AND s.name=? and vo = ?";
+				+ " acls where s.id = c.site_id and c.id = ce.cluster_id and v.ce_id=ce.id AND v.id = "
+				+ " acls.voView_id AND s.name=? and vo = ?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 2, fqan);
@@ -810,7 +811,7 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getQueueNamesForClusterAtSite(String site, String cluster) {
 		String query = "select ce.name from Sites s,ComputeElements ce,Clusters as c where "
-			+ "s.id = c.site_id and c.id = ce.cluster_id AND s.name=? and c.name = ?";
+				+ "s.id = c.site_id and c.id = ce.cluster_id AND s.name=? and c.name = ?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 2, cluster);
@@ -819,9 +820,9 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getQueueNamesForCodeAtSite(String site, String code) {
 		String query = "select ce.name from Sites as s ,ComputeElements as ce,Clusters as "
-			+ " c,SubClusters as sc,SoftwarePackages as sp WHERE s.id = c.site_id AND "
-			+ " c.id = ce.cluster_id AND c.id = sc.cluster_id AND sc.id = "
-			+ " sp.subcluster_id AND s.name=? AND sp.name=?";
+				+ " c,SubClusters as sc,SoftwarePackages as sp WHERE s.id = c.site_id AND "
+				+ " c.id = ce.cluster_id AND c.id = sc.cluster_id AND sc.id = "
+				+ " sp.subcluster_id AND s.name=? AND sp.name=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 2, code);
@@ -832,9 +833,9 @@ public class SQLQueryClient implements GridInfoInterface {
 	public String[] getQueueNamesForCodeAtSite(String site, String code,
 			String version) {
 		String query = "select ce.name from Sites as s ,ComputeElements as ce,Clusters as "
-			+ " c,SubClusters as sc,SoftwarePackages as sp WHERE s.id = c.site_id AND "
-			+ " c.id = ce.cluster_id AND c.id = sc.cluster_id AND sc.id = "
-			+ " sp.subcluster_id AND s.name=? AND sp.name=? AND sp.version=?";
+				+ " c,SubClusters as sc,SoftwarePackages as sp WHERE s.id = c.site_id AND "
+				+ " c.id = ce.cluster_id AND c.id = sc.cluster_id AND sc.id = "
+				+ " sp.subcluster_id AND s.name=? AND sp.name=? AND sp.version=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 2, code);
@@ -845,7 +846,7 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String getSiteForHost(String host) {
 		String query = "SELECT DISTINCT  s.name from Sites s, Clusters c, ComputeElements ce where s.id "
-			+ " = c.site_id AND c.id = ce.cluster_id and ce.hostname=?";
+				+ " = c.site_id AND c.id = ce.cluster_id and ce.hostname=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, host);
 		String[] sites = runQuery(s, "name");
@@ -858,8 +859,8 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getSitesForVO(String fqan) {
 		String query = " select distinct s.name from Sites s,Clusters c, ComputeElements ce"
-			+ ",voViews v,voViewACLs acls WHERE s.id=c.site_id and c.id = ce.cluster_id "
-			+ "AND ce.id = v.ce_id and acls.voView_id=v.id AND acls.vo=?";
+				+ ",voViews v,voViewACLs acls WHERE s.id=c.site_id and c.id = ce.cluster_id "
+				+ "AND ce.id = v.ce_id and acls.voView_id=v.id AND acls.vo=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, fqan);
 		return runQuery(s, "name");
@@ -873,8 +874,8 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getSitesWithAVersionOfACode(String code, String version) {
 		String query = "select distinct s.name from Sites s,Clusters c,SubClusters sc, "
-			+ " SoftwarePackages sp where s.id = c.site_id and c.id = sc.cluster_id "
-			+ " AND sp.subcluster_id = sc.id  and sp.name=? and sp.version = ?";
+				+ " SoftwarePackages sp where s.id = c.site_id and c.id = sc.cluster_id "
+				+ " AND sp.subcluster_id = sc.id  and sp.name=? and sp.version = ?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, code);
 		setString(s, 2, version);
@@ -883,8 +884,8 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getSitesWithCode(String code) {
 		String query = "select distinct s.name from Sites s,Clusters c,SubClusters sc, "
-			+ " SoftwarePackages sp where s.id = c.site_id and c.id = sc.cluster_id "
-			+ " AND sp.subcluster_id = sc.id  and sp.name=?";
+				+ " SoftwarePackages sp where s.id = c.site_id and c.id = sc.cluster_id "
+				+ " AND sp.subcluster_id = sc.id  and sp.name=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, code);
 		return runQuery(s, "name");
@@ -912,7 +913,7 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String getStorageElementForGridFTPServer(String gridFtp) {
 		String query = "select se.uniqueID from StorageElements se, AccessProtocols p WHERE "
-			+ " p.storageElement_id=se.id AND endpoint=?";
+				+ " p.storageElement_id=se.id AND endpoint=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, gridFtp);
 		String[] ses = runQuery(s, "uniqueID");
@@ -932,8 +933,8 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getStorageElementsForVO(String fqan) {
 		String query = "select distinct se.uniqueID from Sites s, StorageElements se,"
-			+ "StorageAreas sa, storageAreaACLs sacls WHERE s.id = se.site_id and sa."
-			+ "storageElement_id = se.id AND sacls.storageArea_id = sa.id and sacls.vo=?";
+				+ "StorageAreas sa, storageAreaACLs sacls WHERE s.id = se.site_id and sa."
+				+ "storageElement_id = se.id AND sacls.storageArea_id = sa.id and sacls.vo=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, fqan);
 		return runQuery(s, "uniqueID");
@@ -954,8 +955,8 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getVersionsOfCodeAtSite(String site, String code) {
 		String query = "SELECT DISTINCT sp.version FROM Sites s,Clusters c,SubClusters "
-			+ " sc,SoftwarePackages sp WHERE s.id = c.site_id AND c.id = sc.cluster_id "
-			+ " AND sc.id = sp.subcluster_id AND s.name=? AND sp.name=?";
+				+ " sc,SoftwarePackages sp WHERE s.id = c.site_id AND c.id = sc.cluster_id "
+				+ " AND sc.id = sp.subcluster_id AND s.name=? AND sp.name=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, site);
 		setString(s, 2, code);
@@ -965,9 +966,9 @@ public class SQLQueryClient implements GridInfoInterface {
 	public String[] getVersionsOfCodeForQueueAndContactString(String queueName,
 			String hostName, String code) {
 		String query = "select distinct sp.version from Clusters c,ComputeElements "
-			+ " ce,SubClusters sc,SoftwarePackages sp WHERE c.id = ce.cluster_id AND "
-			+ " c.id = sc.cluster_id AND sc.id = sp.subcluster_id AND  sp.name=? "
-			+ "AND ce.hostName=? AND ce.name=?";
+				+ " ce,SubClusters sc,SoftwarePackages sp WHERE c.id = ce.cluster_id AND "
+				+ " c.id = sc.cluster_id AND sc.id = sp.subcluster_id AND  sp.name=? "
+				+ "AND ce.hostName=? AND ce.name=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, code);
 		setString(s, 2, hostName);
@@ -984,9 +985,9 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getVersionsOfCodeOnGridForVO(String code, String fqan) {
 		String query = "select distinct sp.version from Clusters c, SubClusters sc, SoftwarePackages sp,"
-			+ " ComputeElements ce, voViews v, voViewACLs acls WHERE c.id = sc.cluster_id AND c.id ="
-			+ " ce.cluster_id AND sp.subcluster_id = sc.id AND ce.id = v.ce_id  AND acls.voView_id ="
-			+ " v.id AND sp.name =? and acls.vo=?";
+				+ " ComputeElements ce, voViews v, voViewACLs acls WHERE c.id = sc.cluster_id AND c.id ="
+				+ " ce.cluster_id AND sp.subcluster_id = sc.id AND ce.id = v.ce_id  AND acls.voView_id ="
+				+ " v.id AND sp.name =? and acls.vo=?";
 		PreparedStatement s = getStatement(query);
 		setString(s, 1, code);
 		setString(s, 2, fqan);
@@ -996,10 +997,10 @@ public class SQLQueryClient implements GridInfoInterface {
 	public boolean isParallelAvailForCodeForSubmissionLocation(String subLoc,
 			String code, String version) {
 		String query = "select  1 from ComputeElements ce,SubClusters sc,SoftwarePackages "
-			+ " sp,SoftwareExecutables exec where ce.cluster_id = sc.cluster_id AND "
-			+ " sp.subcluster_id = sc.id AND exec.package_id = sp.id AND "
-			+ " sp.name=? AND sp.version=? AND "
-			+ " ce.hostname=? AND ce.name=? AND " + " isParallel=1";
+				+ " sp,SoftwareExecutables exec where ce.cluster_id = sc.cluster_id AND "
+				+ " sp.subcluster_id = sc.id AND exec.package_id = sp.id AND "
+				+ " sp.name=? AND sp.version=? AND "
+				+ " ce.hostname=? AND ce.name=? AND " + " isParallel=1";
 		String hostname = getSubmissionHostName(subLoc);
 		String queue = getSubmissionQueue(subLoc);
 		PreparedStatement s = getStatement(query);
@@ -1015,10 +1016,10 @@ public class SQLQueryClient implements GridInfoInterface {
 	public boolean isSerialAvailForCodeForSubmissionLocation(String subLoc,
 			String code, String version) {
 		String query = "select  1 from ComputeElements ce,SubClusters sc,SoftwarePackages "
-			+ " sp,SoftwareExecutables exec where ce.cluster_id = sc.cluster_id AND "
-			+ " sp.subcluster_id = sc.id AND exec.package_id = sp.id AND "
-			+ " sp.name=? AND sp.version=? AND "
-			+ " ce.hostname=? AND ce.name=? AND " + " isSerial=1";
+				+ " sp,SoftwareExecutables exec where ce.cluster_id = sc.cluster_id AND "
+				+ " sp.subcluster_id = sc.id AND exec.package_id = sp.id AND "
+				+ " sp.name=? AND sp.version=? AND "
+				+ " ce.hostname=? AND ce.name=? AND " + " isSerial=1";
 		String hostname = getSubmissionHostName(subLoc);
 		String queue = getSubmissionQueue(subLoc);
 		PreparedStatement s = getStatement(query);
@@ -1052,8 +1053,8 @@ public class SQLQueryClient implements GridInfoInterface {
 		}
 
 		String query = "select sa.type from AccessProtocols ap, StorageElements s, StorageAreas sa" +
-		",storageAreaACLs acls WHERE sa.id = acls.storageArea_id AND s.id = sa.storageElement_id AND " +
-		"ap.storageElement_id = s.id AND acls.vo = ? AND ap.endPoint=? AND (sa.path = ? OR sa.path LIKE ?)";
+				",storageAreaACLs acls WHERE sa.id = acls.storageArea_id AND s.id = sa.storageElement_id AND " +
+				"ap.storageElement_id = s.id AND acls.vo = ? AND ap.endPoint=? AND (sa.path = ? OR sa.path LIKE ?)";
 		s = getStatement(query);
 		setString(s,1,fqan);
 		setString(s,2,endpoint);
@@ -1064,9 +1065,9 @@ public class SQLQueryClient implements GridInfoInterface {
 			return result[0].equals(VOLATILE);
 		}
 		query = "select sa.type from AccessProtocols ap, StorageElements s, StorageAreas sa" +
-		",storageAreaACLs acls WHERE sa.id = acls.storageArea_id AND s.id = sa.storageElement_id AND " +
-		"ap.storageElement_id = s.id AND acls.vo = ? AND ap.endPoint=? AND (sa.path = '${GLOBUS_USER_HOME}' or " +
-		" sa.path = '/~/' or sa.path LIKE '.%' )";
+				",storageAreaACLs acls WHERE sa.id = acls.storageArea_id AND s.id = sa.storageElement_id AND " +
+				"ap.storageElement_id = s.id AND acls.vo = ? AND ap.endPoint=? AND (sa.path = '${GLOBUS_USER_HOME}' or " +
+				" sa.path = '/~/' or sa.path LIKE '.%' )";
 
 		s = getStatement(query);
 		setString(s,1,fqan);
