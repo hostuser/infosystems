@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.8.7.2
+--------
+
+* hotfix for bug in mysql-mds library that checks application names case sensitive
+
 0.8.7.1
 -------
 
