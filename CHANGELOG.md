@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.8.7.1
+-------
+
+* hotfix because of some git inconsitencies, probably forgot to do a pull before releasing
+
 0.8.7
 -----
 
