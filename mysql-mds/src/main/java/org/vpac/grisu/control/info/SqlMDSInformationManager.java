@@ -136,17 +136,16 @@ public class SqlMDSInformationManager implements InformationManager {
 
 		boolean allVersions = (Constants.NO_VERSION_INDICATOR_STRING
 				.equals(version));
-		if (!allVersions) {
-			codeDetails.put(Constants.MDS_MODULES_KEY, client
-					.getModuleNameOfCodeForSubmissionLocation(subLoc, application,
-							version));
-			codeDetails.put(Constants.MDS_SERIAL_AVAIL_KEY, Boolean.toString(client
-					.isSerialAvailForCodeForSubmissionLocation(subLoc, application,
-							version)));
-			codeDetails.put(Constants.MDS_PARALLEL_AVAIL_KEY, Boolean
-					.toString(client.isParallelAvailForCodeForSubmissionLocation(
-							subLoc, application, version)));
-		}
+		codeDetails.put(Constants.MDS_MODULES_KEY, client
+				.getModuleNameOfCodeForSubmissionLocation(subLoc, application,
+						version));
+		codeDetails.put(Constants.MDS_SERIAL_AVAIL_KEY, Boolean.toString(client
+				.isSerialAvailForCodeForSubmissionLocation(subLoc, application,
+						version)));
+		codeDetails.put(Constants.MDS_PARALLEL_AVAIL_KEY, Boolean
+				.toString(client.isParallelAvailForCodeForSubmissionLocation(
+						subLoc, application, version)));
+
 		String[] executables = client.getExeNameOfCodeForSubmissionLocation(
 				subLoc, application, version);
 		StringBuffer exeStrBuff = new StringBuffer();

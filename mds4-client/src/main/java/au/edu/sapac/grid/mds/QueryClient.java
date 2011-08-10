@@ -947,11 +947,10 @@ public class QueryClient implements GridInfoInterface {
 		if ((version == null) || (version.length() == 0)
 				|| Constants.NO_VERSION_INDICATOR_STRING.equals(version)) {
 
-			// xpathQueryString = "get SoftwarePackage where Site.Name='" + site
-			// + "' and ComputingElement.Name='" + queue
-			// + "' and SoftwarePackage.Name='" + code + "'";
+			xpathQueryString = "get SoftwarePackage where Site.Name='" + site
+					+ "' and ComputingElement.Name='" + queue
+					+ "' and SoftwarePackage.Name='" + code + "'";
 
-			throw new RuntimeException("Version is not specified.");
 		} else {
 			xpathQueryString = "get SoftwarePackage where Site.Name='" + site
 					+ "' and ComputingElement.Name='" + queue
@@ -1723,11 +1722,20 @@ public class QueryClient implements GridInfoInterface {
 			throw new RuntimeException("No version specified.");
 		}
 		try {
-			xpathQuery = transformer
-					.transform("get SoftwarePackage where Site.Name='" + site
-							+ "' and ComputingElement.Name='" + queue
-							+ "' and SoftwarePackage.Version='" + version
-							+ "' and SoftwarePackage.Name='" + code + "'");
+			if (!Constants.NO_VERSION_INDICATOR_STRING.equals(version)) {
+				xpathQuery = transformer
+						.transform("get SoftwarePackage where Site.Name='"
+								+ site + "' and ComputingElement.Name='"
+								+ queue + "' and SoftwarePackage.Version='"
+								+ version + "' and SoftwarePackage.Name='"
+								+ code + "'");
+			} else {
+				xpathQuery = transformer
+						.transform("get SoftwarePackage where Site.Name='"
+								+ site + "' and ComputingElement.Name='"
+								+ queue + "' and SoftwarePackage.Name='" + code
+								+ "'");
+			}
 			logger.debug("xpath: " + xpathQuery);
 
 			Element softwarePackageEl;
@@ -1742,6 +1750,9 @@ public class QueryClient implements GridInfoInterface {
 						softwarePackageEl, "ParallelAvail");
 				if (parallelAvailStr != null) {
 					parallelAvail = Boolean.parseBoolean(parallelAvailStr);
+					if (parallelAvail) {
+						return true;
+					}
 				}
 			}
 		} catch (ParseException e) {
@@ -1763,7 +1774,9 @@ public class QueryClient implements GridInfoInterface {
 
 		if ((version == null) || (version.length() == 0)
 				|| Constants.NO_VERSION_INDICATOR_STRING.equals(version)) {
-			throw new RuntimeException("No version specified.");
+			xpathQueryString = "get SoftwarePackage where Site.Name='" + site
+					+ "' and ComputingElement.Name='" + queue
+					+ "' and SoftwarePackage.Name='" + code + "'";
 		} else {
 			xpathQueryString = "get SoftwarePackage where Site.Name='" + site
 					+ "' and ComputingElement.Name='" + queue
@@ -1786,6 +1799,9 @@ public class QueryClient implements GridInfoInterface {
 						"SerialAvail");
 				if (serialAvailStr != null) {
 					serialAvail = Boolean.parseBoolean(serialAvailStr);
+					if (serialAvail) {
+						return true;
+					}
 				}
 			}
 		} catch (ParseException e) {
