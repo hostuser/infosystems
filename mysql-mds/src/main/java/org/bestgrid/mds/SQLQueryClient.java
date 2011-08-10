@@ -1059,8 +1059,8 @@ public class SQLQueryClient implements GridInfoInterface {
 			String queue = getSubmissionQueue(subLoc);
 			s = getStatement(query);
 			setString(s, 1, code);
-			setString(s, 3, hostname);
-			setString(s, 4, queue);
+			setString(s, 2, hostname);
+			setString(s, 3, queue);
 		}
 		String[] result = runQuery(s, "1");
 		return !((result == null) || (result.length == 0));
@@ -1094,8 +1094,8 @@ public class SQLQueryClient implements GridInfoInterface {
 			String queue = getSubmissionQueue(subLoc);
 			s = getStatement(query);
 			setString(s, 1, code);
-			setString(s, 3, hostname);
-			setString(s, 4, queue);
+			setString(s, 2, hostname);
+			setString(s, 3, queue);
 		}
 		String[] result = runQuery(s, "1");
 		return !((result == null) || (result.length == 0));
