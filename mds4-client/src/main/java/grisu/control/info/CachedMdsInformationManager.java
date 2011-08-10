@@ -47,7 +47,7 @@ public class CachedMdsInformationManager implements InformationManager {
 	public static final Long MAX_CACHE_LIFETIME_IN_MS = new Long(1000 * 60 * 10);
 
 	static final Logger myLogger = Logger
-	.getLogger(CachedMdsInformationManager.class.getName());
+			.getLogger(CachedMdsInformationManager.class.getName());
 
 	public static InformationManager getDefaultCachedMdsInformationManager(
 			String mdsCacheDirectory) {
@@ -115,12 +115,12 @@ public class CachedMdsInformationManager implements InformationManager {
 			System.out.println(app + ":");
 			System.out.println();
 			String[] allSubLocs = info
-			.getAllSubmissionLocationsForApplication(app);
+					.getAllSubmissionLocationsForApplication(app);
 			Set<String> allSites = new TreeSet<String>();
 			for (String subLoc : allSubLocs) {
 				String site = info
-				.getSiteForHostOrUrl(SubmissionLocationHelpers
-						.extractHost(subLoc));
+						.getSiteForHostOrUrl(SubmissionLocationHelpers
+								.extractHost(subLoc));
 				allSites.add(site);
 			}
 			System.out.println();
@@ -129,11 +129,11 @@ public class CachedMdsInformationManager implements InformationManager {
 					+ " submission queues on these sites: ");
 			for (String siteTemp : allSites) {
 				String[] allVersionsOnSite = info
-				.getVersionsOfApplicationOnSite(app, siteTemp);
+						.getVersionsOfApplicationOnSite(app, siteTemp);
 				String exe = null;
 				for (String version : allVersionsOnSite) {
 					Map<String, String> appDetails = info
-					.getApplicationDetails(app, version, siteTemp);
+							.getApplicationDetails(app, version, siteTemp);
 					exe = appDetails.get(Constants.MDS_EXECUTABLES_KEY);
 					if (exe.contains(",")) {
 						for (String exeTemp : exe.split(",")) {
@@ -304,15 +304,15 @@ public class CachedMdsInformationManager implements InformationManager {
 		// another alternative is to use java-xml binding (xmlbeans!)
 		Map<String, String[]> dataLocationsMap = new HashMap<String, String[]>();
 		it.infn.cnaf.forge.glueschema.spec.v12.r2.StorageElementType[] storageElements = (client)
-		.getStorageElementsForVO(fqan);
+				.getStorageElementsForVO(fqan);
 		if (storageElements != null) {
 			for (StorageElementType storageElement : storageElements) {
 				it.infn.cnaf.forge.glueschema.spec.v12.r2.SEAccessProtocolType[] accessProtocols = storageElement
-				.getAccessProtocolArray();
+						.getAccessProtocolArray();
 
 				// now get the storageAreas that VO fqan has access to
 				it.infn.cnaf.forge.glueschema.spec.v12.r2.StorageAreaType[] allStorageAreas = storageElement
-				.getStorageAreaArray();
+						.getStorageAreaArray();
 
 				java.util.List<String> voStorageAreaList = new java.util.ArrayList<String>();
 
@@ -345,7 +345,7 @@ public class CachedMdsInformationManager implements InformationManager {
 		if (queSepIndex < 1) {
 			throw new RuntimeException(
 					"Wrong submission location format. Queue missing in subLoc: "
-					+ subLoc);
+							+ subLoc);
 		}
 		String queueName = subLoc.substring(0, queSepIndex);
 		String contactString = "";
@@ -422,7 +422,7 @@ public class CachedMdsInformationManager implements InformationManager {
 			submissionLocationMap = new HashMap<String, GridResource>();
 
 			ComputingElementType[] ceTypes = client
-			.getComputingElementsForApplicationAndVO(null, null, null);
+					.getComputingElementsForApplicationAndVO(null, null, null);
 
 			for (ComputingElementType ceType : ceTypes) {
 
@@ -527,7 +527,7 @@ public class CachedMdsInformationManager implements InformationManager {
 				// OS from SubCluster
 
 				String subLoc = SubmissionLocationHelpers
-				.createSubmissionLocationString(gr);
+						.createSubmissionLocationString(gr);
 				submissionLocationMap.put(subLoc, gr);
 			}
 		}
@@ -712,21 +712,26 @@ public class CachedMdsInformationManager implements InformationManager {
 			String version, String subLoc) {
 		Map<String, String> codeDetails = new HashMap<String, String>();
 
-		codeDetails.put(Constants.MDS_MODULES_KEY, client
-				.getModuleNameOfCodeForSubmissionLocation(subLoc, application,
-						version));
-		codeDetails.put(Constants.MDS_SERIAL_AVAIL_KEY, Boolean.toString(client
-				.isSerialAvailForCodeForSubmissionLocation(subLoc, application,
-						version)));
-		codeDetails.put(Constants.MDS_PARALLEL_AVAIL_KEY, Boolean
-				.toString(client.isParallelAvailForCodeForSubmissionLocation(
-						subLoc, application, version)));
+		boolean allVersions = (Constants.NO_VERSION_INDICATOR_STRING
+				.equals(version));
+		if (!allVersions) {
+			codeDetails.put(Constants.MDS_MODULES_KEY, client
+					.getModuleNameOfCodeForSubmissionLocation(subLoc, application,
+							version));
+			codeDetails.put(Constants.MDS_SERIAL_AVAIL_KEY, Boolean
+					.toString(client.isSerialAvailForCodeForSubmissionLocation(
+							subLoc, application, version)));
+			codeDetails.put(Constants.MDS_PARALLEL_AVAIL_KEY, Boolean
+					.toString(client
+							.isParallelAvailForCodeForSubmissionLocation(
+									subLoc, application, version)));
+		}
 		String[] executables = client.getExeNameOfCodeForSubmissionLocation(
 				subLoc, application, version);
 		StringBuffer exeStrBuff = new StringBuffer();
 		for (int i = 0; i < executables.length; i++) {
 			exeStrBuff.append(executables[i]);
-			if (i < executables.length - 1) {
+			if (i < (executables.length - 1)) {
 				exeStrBuff.append(",");
 			}
 		}
@@ -739,7 +744,7 @@ public class CachedMdsInformationManager implements InformationManager {
 
 		if (cachedApplicationsPerExecutables.get(executable) == null) {
 			String[] apps = client
-			.getApplicationNamesThatProvideExecutable(executable);
+					.getApplicationNamesThatProvideExecutable(executable);
 			cachedApplicationsPerExecutables.put(executable, apps);
 		}
 		return cachedApplicationsPerExecutables.get(executable);
@@ -758,7 +763,7 @@ public class CachedMdsInformationManager implements InformationManager {
 					site, queues[j]);
 
 			for (int k = 0; (contactStrings != null)
-			&& (k < contactStrings.length); k++) {
+					&& (k < contactStrings.length); k++) {
 				// remove protocol and port number from the string
 				String hostname = contactStrings[k].substring(
 						contactStrings[k].indexOf("https://") != 0 ? 0 : 8,
@@ -800,7 +805,7 @@ public class CachedMdsInformationManager implements InformationManager {
 						queues[j]);
 
 				for (int k = 0; (contactStrings != null)
-				&& (k < contactStrings.length); k++) {
+						&& (k < contactStrings.length); k++) {
 					String hostname = contactStrings[k].substring(
 							contactStrings[k].indexOf("https://") != 0 ? 0 : 8,
 									contactStrings[k].indexOf(":8443"));
@@ -842,7 +847,7 @@ public class CachedMdsInformationManager implements InformationManager {
 						queues[j]);
 
 				for (int k = 0; (contactStrings != null)
-				&& (k < contactStrings.length); k++) {
+						&& (k < contactStrings.length); k++) {
 					String hostname = contactStrings[k].substring(
 							contactStrings[k].indexOf("https://") != 0 ? 0 : 8,
 									contactStrings[k].indexOf(":8443"));
@@ -882,7 +887,7 @@ public class CachedMdsInformationManager implements InformationManager {
 						queues[j]);
 
 				for (int k = 0; (contactStrings != null)
-				&& (k < contactStrings.length); k++) {
+						&& (k < contactStrings.length); k++) {
 					String hostname = contactStrings[k].substring(
 							contactStrings[k].indexOf("https://") != 0 ? 0 : 8,
 									contactStrings[k].indexOf(":8443"));
@@ -1016,7 +1021,7 @@ public class CachedMdsInformationManager implements InformationManager {
 			String application, String submissionLocation) {
 
 		String queue = SubmissionLocationHelpers
-		.extractQueue(submissionLocation);
+				.extractQueue(submissionLocation);
 		String host = SubmissionLocationHelpers.extractHost(submissionLocation);
 
 		String[] temp = client.getVersionsOfCodeForQueueAndContactString(queue,

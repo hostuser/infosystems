@@ -446,7 +446,7 @@ public class SQLQueryClient implements GridInfoInterface {
 			String applicationVersion = jobProperties.get(JobSubmissionProperty.APPLICATIONVERSION);
 			if (StringUtils.isNotBlank(applicationVersion)
 					&& !Constants.NO_VERSION_INDICATOR_STRING
-							.equals(applicationVersion.toLowerCase())
+					.equals(applicationVersion.toLowerCase())
 					&& !resource[13].equalsIgnoreCase(applicationVersion)) {
 				continue;
 			}
@@ -686,20 +686,38 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public String[] getExeNameOfCodeForSubmissionLocation(String subLoc,
 			String code, String version) {
-		String query = "SELECT exec.name FROM Sites AS s ,ComputeElements AS ce,Clusters AS "
-				+ " c ,SubClusters AS  sc,SoftwarePackages AS sp,SoftwareExecutables AS "
-				+ " exec WHERE c.id = ce.cluster_id AND s.id =  c.site_id AND c.id = "
-				+ " sc.cluster_id AND sc.id = sp.subcluster_id AND  exec.package_id = "
-				+ " sp.id AND ce.name=? AND "
-				+ " ce.hostname=? AND  sp.name=?  AND sp.version=?";
 
-		String hostname = getSubmissionHostName(subLoc);
-		String queue = getSubmissionQueue(subLoc);
-		PreparedStatement s = getStatement(query);
-		setString(s, 1, queue);
-		setString(s, 2, hostname);
-		setString(s, 3, code);
-		setString(s, 4, version);
+		PreparedStatement s = null;
+		if (!Constants.NO_VERSION_INDICATOR_STRING.equals(version)) {
+			String query = "SELECT exec.name FROM Sites AS s ,ComputeElements AS ce,Clusters AS "
+					+ " c ,SubClusters AS  sc,SoftwarePackages AS sp,SoftwareExecutables AS "
+					+ " exec WHERE c.id = ce.cluster_id AND s.id =  c.site_id AND c.id = "
+					+ " sc.cluster_id AND sc.id = sp.subcluster_id AND  exec.package_id = "
+					+ " sp.id AND ce.name=? AND "
+					+ " ce.hostname=? AND  sp.name=?  AND sp.version=?";
+			String hostname = getSubmissionHostName(subLoc);
+			String queue = getSubmissionQueue(subLoc);
+			s = getStatement(query);
+			setString(s, 1, queue);
+			setString(s, 2, hostname);
+			setString(s, 3, code);
+			setString(s, 4, version);
+		} else {
+			String query = "SELECT exec.name FROM Sites AS s ,ComputeElements AS ce,Clusters AS "
+					+ " c ,SubClusters AS  sc,SoftwarePackages AS sp,SoftwareExecutables AS "
+					+ " exec WHERE c.id = ce.cluster_id AND s.id =  c.site_id AND c.id = "
+					+ " sc.cluster_id AND sc.id = sp.subcluster_id AND  exec.package_id = "
+					+ " sp.id AND ce.name=? AND "
+					+ " ce.hostname=? AND  sp.name=?";
+			String hostname = getSubmissionHostName(subLoc);
+			String queue = getSubmissionQueue(subLoc);
+			s = getStatement(query);
+			setString(s, 1, queue);
+			setString(s, 2, hostname);
+			setString(s, 3, code);
+
+		}
+
 		return runQuery(s, "name");
 	}
 

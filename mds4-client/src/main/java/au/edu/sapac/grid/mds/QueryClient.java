@@ -628,11 +628,21 @@ public class QueryClient implements GridInfoInterface {
 
 		String xpathQuery;
 		try {
-			xpathQuery = transformer
-					.transform("get SoftwareExecutable where Site.Name='"
-							+ site + "' and ComputingElement.Name='" + queue
-							+ "' and SoftwarePackage.Version='" + version
-							+ "' and SoftwarePackage.Name='" + code + "'");
+
+			if (Constants.NO_VERSION_INDICATOR_STRING.equals(version)) {
+				xpathQuery = transformer
+						.transform("get SoftwareExecutable where Site.Name='"
+								+ site + "' and ComputingElement.Name='"
+								+ queue + "' and SoftwarePackage.Name='" + code
+								+ "'");
+			} else {
+				xpathQuery = transformer
+						.transform("get SoftwareExecutable where Site.Name='"
+								+ site + "' and ComputingElement.Name='"
+								+ queue + "' and SoftwarePackage.Version='"
+								+ version + "' and SoftwarePackage.Name='"
+								+ code + "'");
+			}
 			logger.debug("xpath: " + xpathQuery);
 
 			Element softwareExecutableEl;

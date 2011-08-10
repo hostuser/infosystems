@@ -52,7 +52,7 @@ public class SqlMDSInformationManager implements InformationManager {
 		for (GridResource resource : resources) {
 
 			String subLoc = SubmissionLocationHelpers
-			.createSubmissionLocationString(resource);
+					.createSubmissionLocationString(resource);
 			resourceMap.put(subLoc, resource);
 		}
 		return resourceMap;
@@ -134,21 +134,25 @@ public class SqlMDSInformationManager implements InformationManager {
 			String version, String subLoc) {
 		Map<String, String> codeDetails = new HashMap<String, String>();
 
-		codeDetails.put(Constants.MDS_MODULES_KEY, client
-				.getModuleNameOfCodeForSubmissionLocation(subLoc, application,
-						version));
-		codeDetails.put(Constants.MDS_SERIAL_AVAIL_KEY, Boolean.toString(client
-				.isSerialAvailForCodeForSubmissionLocation(subLoc, application,
-						version)));
-		codeDetails.put(Constants.MDS_PARALLEL_AVAIL_KEY, Boolean
-				.toString(client.isParallelAvailForCodeForSubmissionLocation(
-						subLoc, application, version)));
+		boolean allVersions = (Constants.NO_VERSION_INDICATOR_STRING
+				.equals(version));
+		if (!allVersions) {
+			codeDetails.put(Constants.MDS_MODULES_KEY, client
+					.getModuleNameOfCodeForSubmissionLocation(subLoc, application,
+							version));
+			codeDetails.put(Constants.MDS_SERIAL_AVAIL_KEY, Boolean.toString(client
+					.isSerialAvailForCodeForSubmissionLocation(subLoc, application,
+							version)));
+			codeDetails.put(Constants.MDS_PARALLEL_AVAIL_KEY, Boolean
+					.toString(client.isParallelAvailForCodeForSubmissionLocation(
+							subLoc, application, version)));
+		}
 		String[] executables = client.getExeNameOfCodeForSubmissionLocation(
 				subLoc, application, version);
 		StringBuffer exeStrBuff = new StringBuffer();
 		for (int i = 0; i < executables.length; i++) {
 			exeStrBuff.append(executables[i]);
-			if (i < executables.length - 1) {
+			if (i < (executables.length - 1)) {
 				exeStrBuff.append(",");
 			}
 		}
@@ -268,7 +272,7 @@ public class SqlMDSInformationManager implements InformationManager {
 		if (queSepIndex < 1) {
 			throw new RuntimeException(
 					"Wrong submission location format. Queue missing in subLoc: "
-					+ subLoc);
+							+ subLoc);
 		}
 		String queueName = subLoc.substring(0, queSepIndex);
 		String contactString = "";
@@ -297,7 +301,7 @@ public class SqlMDSInformationManager implements InformationManager {
 			String application, String submissionLocation) {
 
 		String queue = SubmissionLocationHelpers
-		.extractQueue(submissionLocation);
+				.extractQueue(submissionLocation);
 		String host = SubmissionLocationHelpers.extractHost(submissionLocation);
 
 		String[] temp = client.getVersionsOfCodeForQueueAndContactString(queue,
