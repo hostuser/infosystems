@@ -565,7 +565,6 @@ public class SQLQueryClient implements GridInfoInterface {
 	
 	private int intOrZero(String i){
 		try{
-			System.out.println("bhahahhahaa " + i);
 			return  Integer.parseInt(i);
 		} catch (NumberFormatException ex){
 			return 0;
