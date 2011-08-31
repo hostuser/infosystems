@@ -398,8 +398,8 @@ public class SQLQueryClient implements GridInfoInterface {
 		List<GridResource> results = new LinkedList<GridResource>();
 
 		String query = "SELECT acls.vo fqan, contactString, gramVersion," +
-				" jobManager, ce.name queue, maxWalltime, v.freeJobSlots, " +
-				"v.runningJobs, v.waitingJobs, v.totalJobs, s.name site, " +
+				" jobManager, ce.name queue, maxWalltime, ce.freeJobSlots, " +
+				"ce.runningJobs, ce.waitingJobs, ce.totalJobs, s.name site, " +
 				"lattitude, longitude, sp.name sname ,sp.version  sversion" +
 				" FROM" +
 				" Sites s, SubClusters sc, Clusters c, ComputeElements ce, voViews v, " +
@@ -459,9 +459,9 @@ public class SQLQueryClient implements GridInfoInterface {
 			gr.setGRAMVersion(resource[2]);
 			gr.setJobManager(resource[3]);
 
-			gr.setFreeJobSlots(Integer.parseInt(resource[4]));
+			gr.setFreeJobSlots(intOrZero(resource[4]));
 
-			int maxWalltime = Integer.parseInt(resource[11]);
+			int maxWalltime = intOrZero(resource[11]);
 
 			if (maxWalltime < wallTimeRequirement) {
 				continue;
@@ -471,13 +471,13 @@ public class SQLQueryClient implements GridInfoInterface {
 				continue;
 			}
 
-			gr.setRunningJobs(Integer.parseInt(resource[5]));
-			gr.setWaitingJobs(Integer.parseInt(resource[6]));
-			gr.setTotalJobs(Integer.parseInt(resource[7]));
+			gr.setRunningJobs(intOrZero(resource[5]));
+			gr.setWaitingJobs(intOrZero(resource[6]));
+			gr.setTotalJobs(intOrZero(resource[7]));
 
 			gr.setSiteName(resource[8]);
-			gr.setSiteLatitude(Double.parseDouble(resource[9]));
-			gr.setSiteLongitude(Double.parseDouble(resource[10]));
+			gr.setSiteLatitude(doubleOrZero(resource[9]));
+			gr.setSiteLongitude(doubleOrZero(resource[10]));
 
 			gr.setApplicationName(applicationName);
 			gr.addAvailableApplicationVersion(applicationVersion);
@@ -547,10 +547,36 @@ public class SQLQueryClient implements GridInfoInterface {
 			gr.setGRAMVersion(results[i][1]);
 			gr.setJobManager(results[i][2]);
 			gr.setQueueName(results[i][3]);
+			
+			gr.setFreeJobSlots(intOrZero(results[i][4]));
+			gr.setRunningJobs(intOrZero(results[i][5]));
+			gr.setWaitingJobs(intOrZero(results[i][6]));
+			gr.setTotalJobs(intOrZero(results[i][7]));
+			
+			gr.setSiteName(results[i][8]);
+			gr.setSiteLatitude(doubleOrZero(results[i][9]));
+			gr.setSiteLongitude(doubleOrZero(results[i][10]));
+			
 			grs[i] = gr;
 		}
 
 		return grs;
+	}
+	
+	private int intOrZero(String i){
+		try{
+			return  Integer.parseInt(i);
+		} catch (NumberFormatException ex){
+			return 0;
+		}
+	}
+	
+	private double doubleOrZero(String d){
+		try{
+			return Double.parseDouble(d);
+		} catch (NumberFormatException e){
+			return 0;
+		}
 	}
 
 	public String[] getApplicationNamesThatProvideExecutable(String executable) {
