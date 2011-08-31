@@ -71,6 +71,7 @@
 		<module>mysql-mds</module>
 		<module>wikiOutputJava</module>
 		<module>mysql-mds-updater</module>
+		<module>simplinfo</module>
 	</modules>
 	<build>
 		<plugins>
