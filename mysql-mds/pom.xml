@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>infosystems</artifactId>
 		<groupId>au.org.arcs.infosystems</groupId>
-		<version>0.8.8-SNAPSHOT</version>
+		<version>0.8.8</version>
 	</parent>
 	<artifactId>mysql-mds</artifactId>
 
