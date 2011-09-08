@@ -3,36 +3,21 @@ package org.bestgrid.simplinfo;
 import grisu.jcommons.interfaces.GridResource;
 import grisu.jcommons.interfaces.InformationManager;
 
-import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.HierarchicalINIConfiguration;
-import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.NotImplementedException;
-import org.apache.commons.lang.StringUtils;
-
-import com.google.common.collect.Sets;
 
 public class SimplinfoManager implements InformationManager {
 
-	enum Section {
-		FILESYSTEM(),
-		GROUP();
-	}
 
-	private final HierarchicalINIConfiguration config;
+	SimplInfoQueryClient qc = null;
 
 	public SimplinfoManager() {
-
-		final File configDir = Environment.getConfigDirectory();
-		try {
-			this.config = new HierarchicalINIConfiguration(new File(configDir,
-					"info.config"));
-		} catch (ConfigurationException e) {
-			throw new RuntimeException(e);
-		}
+		qc = new SimplInfoQueryClient();
 	}
 
 	public String[] getAllApplicationsAtSite(String site) {
@@ -100,54 +85,50 @@ public class SimplinfoManager implements InformationManager {
 
 	public Map<String, String[]> getDataLocationsForVO(String fqan) {
 
-		Set<String> filesystemNames = getSectionItemNames(Section.FILESYSTEM);
+		Set<String> fss = qc.getGroupFileSystems(fqan);
 
-		for (String s : filesystemNames) {
-			System.out.println(s);
+		if ((fss == null) || (fss.size() == 0)) {
+			return new HashMap<String, String[]>();
 		}
 
-		return null;
+		Map<String, Set<String>> result = new TreeMap<String, Set<String>>();
+		for (String fs : fss) {
+			int i = fs.indexOf(":");
+			String filesystemname = fs.substring(0, i);
+			String host = qc.getHost(filesystemname);
+			String path = fs.substring(i + 1);
+
+			Set<String> pathSet = result.get(host);
+			if (pathSet == null) {
+				pathSet = new TreeSet<String>();
+				result.put(host, pathSet);
+			}
+			pathSet.add(path);
+		}
+
+		Map<String, String[]> temp = new TreeMap<String, String[]>();
+		for (String key : result.keySet()) {
+			String[] pathArray = result.get(key).toArray(new String[] {});
+			temp.put(key, pathArray);
+		}
+
+		return temp;
 
 	}
 
-	private SubnodeConfiguration getFileSystem(String fsName) {
-
-		SubnodeConfiguration fsSection = config.getSection(Section.FILESYSTEM
-				.toString().toLowerCase() + "_" + fsName);
-		return fsSection;
-	}
 
 	public GridResource getGridResource(String submissionLocation) {
 		throw new NotImplementedException();
 	}
 
+
+
 	public String getJobmanagerOfQueueAtSite(String site, String queue) {
 		throw new NotImplementedException();
 	}
 
-	private SubnodeConfiguration getSection(Section section, String name) {
 
-		SubnodeConfiguration sectionConf = config.getSection(section.toString()
-				.toLowerCase() + "_" + name);
-		return sectionConf;
 
-	}
-
-	private Set<String> getSectionItemNames(Section section) {
-
-		Set<String> result = Sets.newHashSet();
-		for (String name : getSections()) {
-
-			if (StringUtils.startsWith(name, section.toString().toLowerCase())) {
-				result.add(name.substring(section.toString().length()+1));
-			}
-		}
-		return result;
-	}
-
-	private Set<String> getSections() {
-		return config.getSections();
-	}
 
 	public String getSiteForHostOrUrl(String host_or_url) {
 		throw new NotImplementedException();
