@@ -1,30 +1,42 @@
 package org.bestgrid.simplinfo;
 
 import java.io.File;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.StringUtils;
+import org.bestgrid.simplinfo.model.Directory;
+import org.bestgrid.simplinfo.model.FileSystem;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 public class SimplInfoQueryClient {
 
 	enum Key {
-		FILESYSTEM,
+		DIRECTORY,
 		PORT,
 		PROTOCOL,
-		HOST;
+		HOST,
+		FILESYSTEM,
+		PATH,
+		FQAN;
 	}
 
 	enum Section {
 		FILESYSTEM,
-		GROUP;
+		DIRECTORY;
 	}
+
+	Cache eternal = CacheManager.getInstance().getCache("eternal");
 
 	private final HierarchicalINIConfiguration config;
 
@@ -38,37 +50,85 @@ public class SimplInfoQueryClient {
 		}
 	}
 
-	private SubnodeConfiguration getFileSystem(String fsName) {
+	public Set<Directory> getDirectories() {
 
-		SubnodeConfiguration fsSection = config.getSection(Section.FILESYSTEM
-				.toString().toLowerCase() + "_" + fsName);
-		return fsSection;
-	}
-
-	private SubnodeConfiguration getGroup(String groupName) {
-
-		SubnodeConfiguration fsSection = config.getSection(Section.GROUP
-				.toString().toLowerCase() + "_" + groupName);
-		return fsSection;
-	}
-
-	public Set<String> getGroupFileSystems(String groupname) {
-
-		Object value = getItem(Section.GROUP, groupname, Key.FILESYSTEM);
-
-		if (value == null) {
-			return null;
+		if (eternal.get("ALL_DIRECTORIES") != null) {
+			return (Set<Directory>) eternal.get("ALL_DIRECTORIES")
+					.getObjectValue();
 		}
 
-		Set<String> filesystems = new TreeSet<String>();
-		if (value instanceof String) {
-			filesystems.add((String) value);
-		} else {
-			filesystems.addAll((List<String>) value);
+		Set<Directory> result = Sets.newTreeSet();
+		for ( String name : getDirectoryNames() ) {
+			String fileSystem = (String)getItem(Section.DIRECTORY, name, Key.FILESYSTEM);
+			FileSystem fs = getFileSystem(fileSystem);
+			String path = (String) getItem(Section.DIRECTORY, name, Key.PATH);
+			String fqan = (String) getItem(Section.DIRECTORY, name, Key.FQAN);
+			Directory temp = new Directory(fs, path, fqan, name);
+			result.add(temp);
 		}
 
-		return filesystems;
+		eternal.put(new Element("ALL_DIRECTORIES", result));
 
+		return result;
+	}
+
+
+	public Set<Directory> getDirectories(String groupname) {
+
+		Set<Directory> result = new TreeSet<Directory>();
+
+		for (Directory d : getDirectories()) {
+			if (d.getFqan().equals(groupname)) {
+				result.add(d);
+			}
+		}
+
+		return result;
+
+	}
+
+	public Set<String> getDirectoryNames() {
+		return getSectionItemNames(Section.DIRECTORY);
+	}
+
+	public FileSystem getFileSystem(String fsName) {
+
+		return getFileSystems().get(fsName);
+	}
+
+	public Set<String> getFileSystemNames() {
+		return getSectionItemNames(Section.FILESYSTEM);
+	}
+
+	public Map<String, FileSystem> getFileSystems() {
+
+		if (eternal.get("ALL_FILESYSTEMS") != null) {
+			return (Map<String, FileSystem>) eternal.get("ALL_FILESYSTEMS")
+					.getObjectValue();
+		}
+
+		Map<String, FileSystem> result = Maps.newTreeMap();
+		for (String fsName : getFileSystemNames()) {
+			String host = getHost(fsName);
+			String prot = getProtocol(fsName);
+			Integer port = getPort(fsName);
+
+			FileSystem temp = new FileSystem(prot, host, port);
+			result.put(fsName, temp);
+		}
+
+		eternal.put(new Element("ALL_FILESYSTEMS", result));
+
+		return result;
+	}
+
+	public Set<FileSystem> getFileSystems(String groupname) {
+
+		Set<FileSystem> result = Sets.newTreeSet();
+		for (Directory d : getDirectories(groupname)) {
+			result.add(d.getFilesystem());
+		}
+		return result;
 	}
 
 	public String getHost(String filesystemname) {
@@ -93,6 +153,32 @@ public class SimplInfoQueryClient {
 
 		return sectionConf.getProperty(key.toString().toLowerCase());
 
+	}
+
+	public Integer getPort(String filesystemname) {
+
+		Object value = getItem(Section.FILESYSTEM, filesystemname, Key.PORT);
+
+		if (value == null) {
+			return null;
+		}
+		try {
+			return Integer.valueOf((String) value);
+		} catch (Exception e) {
+			return -1;
+		}
+
+	}
+
+	public String getProtocol(String filesystemname) {
+
+		Object value = getItem(Section.FILESYSTEM, filesystemname, Key.PROTOCOL);
+
+		if (value == null) {
+			return null;
+		}
+
+		return (String) value;
 	}
 
 	private SubnodeConfiguration getSection(Section section, String name) {

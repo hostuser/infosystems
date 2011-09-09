@@ -1,8 +1,10 @@
 package org.bestgrid.simplinfo;
 
-import java.util.Map;
+import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
+import org.bestgrid.simplinfo.model.Directory;
+import org.bestgrid.simplinfo.model.InfoManager;
+import org.bestgrid.simplinfo.model.InfoManagerImpl;
 
 public class TestClass {
 
@@ -11,13 +13,13 @@ public class TestClass {
 	 */
 	public static void main(String[] args) {
 
-		SimplinfoManager sim = new SimplinfoManager();
+		InfoManager im = new InfoManagerImpl();
 
-		Map<String, String[]> map = sim.getDataLocationsForVO("/nz/nesi");
+		Set<Directory> dirs = im.getDirectoriesForVO("/nz/nesi");
 
-		for ( String host : map.keySet() ) {
-			System.out.println("Host: "+host);
-			System.out.println("\t" + StringUtils.join(map.get(host), ", "));
+		for (Directory d : dirs) {
+			System.out.println("Host: " + d.getFilesystem().getHost());
+			System.out.println("\t" + d.toString());
 		}
 
 	}
