@@ -1,6 +1,7 @@
 package org.bestgrid.simplinfo.model;
 
 import static org.junit.Assert.assertEquals;
+import grisu.jcommons.model.info.FileSystem;
 
 import org.junit.Test;
 

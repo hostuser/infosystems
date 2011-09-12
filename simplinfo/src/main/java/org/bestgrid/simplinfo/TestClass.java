@@ -1,9 +1,10 @@
 package org.bestgrid.simplinfo;
 
+import grisu.jcommons.interfaces.InfoManager;
+import grisu.jcommons.model.info.Directory;
+
 import java.util.Set;
 
-import org.bestgrid.simplinfo.model.Directory;
-import org.bestgrid.simplinfo.model.InfoManager;
 import org.bestgrid.simplinfo.model.InfoManagerImpl;
 
 public class TestClass {

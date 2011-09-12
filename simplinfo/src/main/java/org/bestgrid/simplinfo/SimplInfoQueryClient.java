@@ -1,5 +1,8 @@
 package org.bestgrid.simplinfo;
 
+import grisu.jcommons.model.info.Directory;
+import grisu.jcommons.model.info.FileSystem;
+
 import java.io.File;
 import java.util.Map;
 import java.util.Set;
@@ -13,8 +16,6 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.StringUtils;
-import org.bestgrid.simplinfo.model.Directory;
-import org.bestgrid.simplinfo.model.FileSystem;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;

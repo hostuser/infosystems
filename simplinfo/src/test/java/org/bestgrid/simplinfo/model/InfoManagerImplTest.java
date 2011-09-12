@@ -1,5 +1,7 @@
 package org.bestgrid.simplinfo.model;
 
+import grisu.jcommons.model.info.Directory;
+
 import java.util.Set;
 
 import org.junit.Test;

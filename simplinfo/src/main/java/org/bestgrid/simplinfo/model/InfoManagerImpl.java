@@ -1,5 +1,9 @@
 package org.bestgrid.simplinfo.model;
 
+import grisu.jcommons.interfaces.InfoManager;
+import grisu.jcommons.model.info.Directory;
+import grisu.jcommons.model.info.FileSystem;
+
 import java.util.Set;
 import java.util.TreeSet;
 
