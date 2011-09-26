@@ -165,33 +165,7 @@
 					<target>1.5</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<configuration>
 
-							<descriptors>
-								<descriptor>mds4-client.assembly.xml</descriptor>
-							</descriptors>
-							<finalName>mds4-client-lib</finalName>
-							<appendAssemblyId>false</appendAssemblyId>
-							<archive>
-								<index>true</index>
-								<manifestEntries>
-									<Class-Path>bcprov.jar bcprov-jdk15-143.jar local-backend.jar grisu-client-library.jar
-									</Class-Path>
-								</manifestEntries>
-							</archive>
-
-						</configuration>
-						<goals>
-							<goal>attached</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 
 		</plugins>
 	</build>
