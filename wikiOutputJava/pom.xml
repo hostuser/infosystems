@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>infosystems</artifactId>
 		<groupId>au.org.arcs.infosystems</groupId>
-		<version>0.8.9-SNAPSHOT</version>
+		<version>0.8.9</version>
 
 	</parent>
 	<groupId>org.bestgrid.info</groupId>
@@ -12,13 +12,13 @@
 		<dependency>
 			<groupId>au.org.arcs.infosystems</groupId>
 			<artifactId>mysql-mds</artifactId>
-			<version>0.8.9-SNAPSHOT</version>
+			<version>0.8.9</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>au.org.arcs.infosystems</groupId>
 			<artifactId>mds4-client</artifactId>
-			<version>0.8.9-SNAPSHOT</version>
+			<version>0.8.9</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
