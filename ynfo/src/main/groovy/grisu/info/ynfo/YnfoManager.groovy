@@ -8,7 +8,7 @@ class YnfoManager implements InfoManager {
 
 	static void main (args) {
 
-		def ym = new YnfoManager('/home/markus/src/infosystems/ynfo/src/test/resources/default_config.groovy')
+		def ym = new YnfoManager('/home/markus/Desktop/default_config.groovy')
 
 		for ( d in ym.getDirectoriesForVO('/nz/nesi') ) {
 			println d
@@ -23,11 +23,14 @@ class YnfoManager implements InfoManager {
 	def filesystems = []
 	def directories = []
 
+	public YnfoManager(def pathToConfig) {
+
+		this(new ConfigSlurper().parse(new File(pathToConfig).toURL()))
+	}
 
 
-	public YnfoManager(String pathToConfig) {
+	public YnfoManager(ConfigObject config) {
 
-		ConfigObject config = new ConfigSlurper().parse(new File(pathToConfig).toURL())
 
 		for (def e in config) {
 
