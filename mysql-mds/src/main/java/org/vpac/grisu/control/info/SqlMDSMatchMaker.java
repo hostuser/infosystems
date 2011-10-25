@@ -11,16 +11,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.bestgrid.mds.SQLQueryClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 //import au.org.arcs.grid.sched.util.PluginLoader;
 
 public class SqlMDSMatchMaker implements MatchMaker {
 
-	static final Logger myLogger = Logger.getLogger(SqlMDSMatchMaker.class
-			.getName());
+	static final Logger myLogger = LoggerFactory
+			.getLogger(SqlMDSMatchMaker.class
+					.getName());
 
 	public static Map<JobSubmissionProperty, String> generatePropertiesMap(
 			Document jsdl) {

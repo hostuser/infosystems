@@ -25,7 +25,8 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -35,7 +36,7 @@ public class SQLQueryClient implements GridInfoInterface {
 
 	public final String VOLATILE="volatile";
 
-	static final Logger myLogger = Logger.getLogger(SQLQueryClient.class
+	static final Logger myLogger = LoggerFactory.getLogger(SQLQueryClient.class
 			.getName());
 
 	// public static void main(String[] args) throws ClassNotFoundException,
@@ -391,6 +392,14 @@ public class SQLQueryClient implements GridInfoInterface {
 		return map;
 	}
 
+	private double doubleOrZero(String d){
+		try{
+			return Double.parseDouble(d);
+		} catch (NumberFormatException e){
+			return 0;
+		}
+	}
+
 	public List<GridResource> findAllResourcesM(
 			Map<JobSubmissionProperty, String> jobProperties, String fqan,
 			boolean exclude) {
@@ -547,36 +556,20 @@ public class SQLQueryClient implements GridInfoInterface {
 			gr.setGRAMVersion(results[i][1]);
 			gr.setJobManager(results[i][2]);
 			gr.setQueueName(results[i][3]);
-			
+
 			gr.setFreeJobSlots(intOrZero(results[i][4]));
 			gr.setRunningJobs(intOrZero(results[i][5]));
 			gr.setWaitingJobs(intOrZero(results[i][6]));
 			gr.setTotalJobs(intOrZero(results[i][7]));
-			
+
 			gr.setSiteName(results[i][8]);
 			gr.setSiteLatitude(doubleOrZero(results[i][9]));
 			gr.setSiteLongitude(doubleOrZero(results[i][10]));
-			
+
 			grs[i] = gr;
 		}
 
 		return grs;
-	}
-	
-	private int intOrZero(String i){
-		try{
-			return  Integer.parseInt(i);
-		} catch (NumberFormatException ex){
-			return 0;
-		}
-	}
-	
-	private double doubleOrZero(String d){
-		try{
-			return Double.parseDouble(d);
-		} catch (NumberFormatException e){
-			return 0;
-		}
 	}
 
 	public String[] getApplicationNamesThatProvideExecutable(String executable) {
@@ -1055,6 +1048,14 @@ public class SQLQueryClient implements GridInfoInterface {
 		setString(s, 1, code);
 		setString(s, 2, fqan);
 		return runQuery(s, "version");
+	}
+
+	private int intOrZero(String i){
+		try{
+			return  Integer.parseInt(i);
+		} catch (NumberFormatException ex){
+			return 0;
+		}
 	}
 
 	public boolean isParallelAvailForCodeForSubmissionLocation(String subLoc,
