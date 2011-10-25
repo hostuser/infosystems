@@ -24,7 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import au.edu.sapac.grid.mds.QueryClient;
 
@@ -46,8 +47,8 @@ public class CachedMdsInformationManager implements InformationManager {
 
 	public static final Long MAX_CACHE_LIFETIME_IN_MS = new Long(1000 * 60 * 10);
 
-	static final Logger myLogger = Logger
-			.getLogger(CachedMdsInformationManager.class.getName());
+	static final Logger myLogger = LoggerFactory
+			.getLogger(CachedMdsInformationManager.class);
 
 	public static InformationManager getDefaultCachedMdsInformationManager(
 			String mdsCacheDirectory) {

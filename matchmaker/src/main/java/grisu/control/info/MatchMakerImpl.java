@@ -1,7 +1,5 @@
 package grisu.control.info;
 
-import grisu.control.info.GridResourceBackendImpl;
-import grisu.control.info.SimpleResourceRankingAlgorithm;
 import grisu.jcommons.constants.Constants;
 import grisu.jcommons.constants.JobSubmissionProperty;
 import grisu.jcommons.interfaces.GridResource;
@@ -22,8 +20,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.globus.common.CoGProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import au.edu.sapac.grid.mds.QueryClient;
@@ -31,8 +30,8 @@ import au.org.arcs.grid.sched.util.PluginLoader;
 
 public class MatchMakerImpl implements MatchMaker {
 
-	static final Logger myLogger = Logger.getLogger(MatchMakerImpl.class
-			.getName());
+	static final Logger myLogger = LoggerFactory
+			.getLogger(MatchMakerImpl.class);
 
 	public static Map<JobSubmissionProperty, String> generatePropertiesMap(
 			Document jsdl) {
@@ -88,7 +87,7 @@ public class MatchMakerImpl implements MatchMaker {
 			doc = db.parse(docFile);
 			List<GridResource> gridResources = new MatchMakerImpl(
 					System.getProperty("user.home")).findAvailableResources(
-					doc, "/ARCS/NGAdmin");
+							doc, "/ARCS/NGAdmin");
 			for (GridResource i : gridResources) {
 				System.out.println(i);
 			}
@@ -104,6 +103,23 @@ public class MatchMakerImpl implements MatchMaker {
 				.getImplementationClass("RankingAlgorithm"));
 	}
 
+	private static void test4() {
+
+		try {
+			Map<JobSubmissionProperty, String> jobProperties = new HashMap<JobSubmissionProperty, String>();
+			jobProperties.put(JobSubmissionProperty.APPLICATIONNAME, "java");
+
+			List<GridResource> gridResources = new MatchMakerImpl(
+					System.getProperty("user.home")).findAvailableResources(
+							jobProperties, "/ARCS/NGAdmin");
+			for (GridResource i : gridResources) {
+				System.out.println(i);
+			}
+		} catch (Exception e) {
+			System.out.print("Problem parsing the file.");
+		}
+	}
+
 	private static void test5() {
 
 		try {
@@ -113,7 +129,7 @@ public class MatchMakerImpl implements MatchMaker {
 
 			List<GridResource> gridResources = new MatchMakerImpl(
 					System.getProperty("user.home")).findAvailableResources(
-					jobProperties, "/ARCS/AuScope");
+							jobProperties, "/ARCS/AuScope");
 			for (GridResource i : gridResources) {
 				System.out.println(i);
 			}
@@ -121,28 +137,15 @@ public class MatchMakerImpl implements MatchMaker {
 			System.out.print("Problem parsing the file.");
 		}
 
-	}
-
-	private static void test4() {
-
-		try {
-			Map<JobSubmissionProperty, String> jobProperties = new HashMap<JobSubmissionProperty, String>();
-			jobProperties.put(JobSubmissionProperty.APPLICATIONNAME, "java");
-
-			List<GridResource> gridResources = new MatchMakerImpl(
-					System.getProperty("user.home")).findAvailableResources(
-					jobProperties, "/ARCS/NGAdmin");
-			for (GridResource i : gridResources) {
-				System.out.println(i);
-			}
-		} catch (Exception e) {
-			System.out.print("Problem parsing the file.");
-		}
 	}
 
 	private QueryClient mdsClient = null;
 
 	private RankingAlgorithm rankingAlgorithm = null;
+
+	public MatchMakerImpl(Map<String, String> params) {
+		this(params.get("mdsFileDir"));
+	}
 
 	public MatchMakerImpl(RankingAlgorithm rankingAlgorithm,
 			String mdsCacheDirectory) {
@@ -153,10 +156,6 @@ public class MatchMakerImpl implements MatchMaker {
 	// TODO: get PluginLoader working with MatchMaker and RankingAlgorithm
 	public MatchMakerImpl(String mdsCacheDirectory) {
 		this(new SimpleResourceRankingAlgorithm(), mdsCacheDirectory);
-	}
-
-	public MatchMakerImpl(Map<String, String> params) {
-		this(params.get("mdsFileDir"));
 	}
 
 	public List<GridResource> findAllResources(Document jsdl, String fqan) {
@@ -295,7 +294,7 @@ public class MatchMakerImpl implements MatchMaker {
 			// if software version is specified...
 			if (StringUtils.isNotBlank(applicationVersion)
 					&& !Constants.NO_VERSION_INDICATOR_STRING
-							.equals(applicationVersion)) {
+					.equals(applicationVersion)) {
 				gridResource.setDesiredSoftwareVersionInstalled(true);
 			}
 
