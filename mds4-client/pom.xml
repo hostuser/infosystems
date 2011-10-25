@@ -140,6 +140,12 @@
 			<artifactId>apacglue-transformer-ext</artifactId>
 			<version>0.8</version>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j</artifactId>
+					<groupId>log4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
