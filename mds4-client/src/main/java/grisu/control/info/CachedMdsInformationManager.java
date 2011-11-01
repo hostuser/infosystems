@@ -216,12 +216,14 @@ public class CachedMdsInformationManager implements InformationManager {
 		// client = new QueryClient(Environment.getGrisuDirectory().toString());
 		client = new QueryClient(mdsCacheFileDirectory);
 		lastUpdated = new Date();
-		new Thread() {
+		Thread t = new Thread() {
 			@Override
 			public void run() {
 				getAllStagingFileSystems();
 			}
-		}.start();
+		};
+		t.setName("infoGetAllStagingFileSystemsInBackground");
+		t.start();
 	}
 
 	private String[] calculateAllApplicationsAtSite(String site) {
@@ -1081,12 +1083,14 @@ public class CachedMdsInformationManager implements InformationManager {
 			cachedAllStagingFileSystems = null;
 
 			lastUpdated = new Date();
-			new Thread() {
+			Thread t = new Thread() {
 				@Override
 				public void run() {
 					getAllStagingFileSystems();
 				}
-			}.start();
+			};
+			t.setName("refreshStagingFileSystems()");
+			t.start();
 
 		}
 	}

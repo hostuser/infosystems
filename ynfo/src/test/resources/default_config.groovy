@@ -24,7 +24,13 @@ auckland_home = new Directory(
 auckland_tmp = new Directory(
 		filesystem:auckland_gram5,
 		fqan:"/nz/nesi",
-		path:"/tmp"
+		path:"/tmp",
+)
+
+auckland_dev = new Directory(
+	filesystem:auckland_gram5,
+	fqan:"/nz/grid-dev",
+	path:"/tmp",
 )
 
 canterbury_home = new Directory(

@@ -2,6 +2,7 @@ package grisu.info.ynfo
 
 import grisu.jcommons.interfaces.InfoManager
 import grisu.jcommons.model.info.Directory
+import grisu.jcommons.model.info.FileSystem
 
 class YnfoManager implements InfoManager {
 
@@ -40,10 +41,15 @@ class YnfoManager implements InfoManager {
 
 				case Directory.class:
 					directories.add(object)
-					object.alias = name
+					if (!object.alias) {
+						object.alias = name
+					}
 					break
 				case FileSystem.class:
 					filesystems.add(object)
+					if (!object.alias || object.alias == object.host) {
+						object.alias = name
+					}
 				default: break
 			}
 		}
