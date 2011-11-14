@@ -67,7 +67,6 @@
 		<!-- <module>glue-transformer</module> -->
 		<!-- <module>apacglue-transformer-ext</module> -->
 		<module>mds4-client</module>
-		<module>matchmaker</module>
 		<module>mysql-mds</module>
 		<module>wikiOutputJava</module>
 		<module>mysql-mds-updater</module>
