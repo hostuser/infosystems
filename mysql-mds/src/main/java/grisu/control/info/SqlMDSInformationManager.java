@@ -1,4 +1,4 @@
-package org.vpac.grisu.control.info;
+package grisu.control.info;
 
 import grisu.jcommons.constants.Constants;
 import grisu.jcommons.interfaces.GridResource;
