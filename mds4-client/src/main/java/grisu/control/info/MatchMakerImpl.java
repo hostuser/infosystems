@@ -5,6 +5,8 @@ import grisu.jcommons.constants.JobSubmissionProperty;
 import grisu.jcommons.interfaces.GridResource;
 import grisu.jcommons.interfaces.MatchMaker;
 import grisu.jcommons.interfaces.RankingAlgorithm;
+import grisu.jcommons.model.info.GridResourceBackendImpl;
+import grisu.jcommons.model.info.SimpleResourceRankingAlgorithm;
 import grisu.jcommons.utils.JsdlHelpers;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.CEVOViewType;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.ComputingElementType;

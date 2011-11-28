@@ -3,6 +3,7 @@ package grisu.control.info;
 import grisu.jcommons.constants.Constants;
 import grisu.jcommons.interfaces.GridResource;
 import grisu.jcommons.interfaces.InformationManager;
+import grisu.jcommons.model.info.GridResourceBackendImpl;
 import grisu.jcommons.utils.SubmissionLocationHelpers;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.ComputingElementType;
 import it.infn.cnaf.forge.glueschema.spec.v12.r2.SEAccessProtocolType;

@@ -1,10 +1,10 @@
 package grisu.control.info;
 
-import grisu.control.info.SimpleResourceRankingAlgorithm;
 import grisu.jcommons.constants.JobSubmissionProperty;
 import grisu.jcommons.interfaces.GridResource;
 import grisu.jcommons.interfaces.MatchMaker;
 import grisu.jcommons.interfaces.RankingAlgorithm;
+import grisu.jcommons.model.info.SimpleResourceRankingAlgorithm;
 import grisu.jcommons.utils.JsdlHelpers;
 
 import java.util.HashMap;

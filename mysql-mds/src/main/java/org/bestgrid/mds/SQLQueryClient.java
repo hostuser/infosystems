@@ -5,11 +5,11 @@
 
 package org.bestgrid.mds;
 
-import grisu.control.info.GridResourceBackendImpl;
 import grisu.jcommons.constants.Constants;
 import grisu.jcommons.constants.JobSubmissionProperty;
 import grisu.jcommons.interfaces.GridInfoInterface;
 import grisu.jcommons.interfaces.GridResource;
+import grisu.jcommons.model.info.GridResourceBackendImpl;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

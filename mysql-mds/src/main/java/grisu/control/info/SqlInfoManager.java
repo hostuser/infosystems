@@ -14,7 +14,18 @@ import com.google.common.collect.Sets;
 
 public class SqlInfoManager implements InfoManager {
 
+	public static void main(String[] args) {
+
+		SqlInfoManager im  = new SqlInfoManager();
+
+		for (Directory d : im.getDirectoriesForVO("/nz/nesi") ) {
+			System.out.println(d.getUrl());
+
+		}
+
+	}
 	private final Map<String, String> configuration;
+
 	private final SQLQueryClient client;
 
 	public SqlInfoManager() {
