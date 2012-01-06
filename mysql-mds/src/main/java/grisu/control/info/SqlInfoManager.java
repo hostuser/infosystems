@@ -30,7 +30,7 @@ public class SqlInfoManager implements InfoManager {
 
 	public SqlInfoManager() {
 		this(ImmutableMap.of("databaseUrl",
-				"jdbc:mysql://localhost/mds_test?autoReconnect=true", "user",
+				"jdbc:mysql://mysql-bg.ceres.auckland.ac.nz/mds_test?autoReconnect", "user",
 				"grisu_read", "password", "password"));
 	}
 
